@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, collection, addDoc, getDocs, query, where, limit } from 'firebase/firestore';
+import {
+	getAuth,
+	createUserWithEmailAndPassword,
+	signInWithEmailAndPassword
+} from "firebase/auth";
 import './App.css';
 
 // Setup de Firebase
@@ -18,6 +22,7 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const firebaseDb = getFirestore(firebaseApp);
 const firebaseAuth = getAuth(firebaseApp);
+const firebaseUsersCollection = collection(firebaseDb, 'users');
 
 // "enum" para guardar en qué página estamos
 // JS no soporta enums, así que solo usamos una
@@ -28,6 +33,12 @@ const Page = Object.freeze({
 	login: Symbol(),
 });
 
+const UserType = Object.freeze({
+	admin: Symbol(),
+	guide: Symbol(),
+	student: Symbol(),
+})
+
 function Footer() {
 	return <footer>
 		<h1 className="footer_title">Vive Ávila</h1>
@@ -35,7 +46,71 @@ function Footer() {
 	</footer>
 }
 
-function Register({ setPage, setUser, addErrNotification }) {
+function Login({ setPage, setUser, setUserType }) {
+	const [formEmail, setFormEmail] = useState('');
+	const [formPassword, setFormPassword] = useState('');
+
+	async function loginAccount(e) {
+		e.preventDefault();
+		signInWithEmailAndPassword(firebaseAuth, formEmail, formPassword)
+			.then(async (userCredential) => {
+				const user = userCredential.user;
+				// Esto técnicamente le pide al servidor 2 veces
+				// podría ser optimizado con Cloud Functions ???
+				const q = query(firebaseUsersCollection,
+					where("uid", "==", user.uid),
+					limit(1)
+				);
+				const querySnapshot = await getDocs(q);
+				querySnapshot.forEach(doc => {
+					switch (doc.get('userType')) {
+						case 'admin':
+							setUserType(UserType.admin);
+							break;
+						case 'guide':
+							setUserType(UserType.guide);
+							break;
+						case 'student':
+						default:
+							setUserType(UserType.student);
+							break;
+					}
+				});
+				setUser(user);
+				setPage(Page.start);
+			}).catch((e) => {
+				// TODO: handle firebase errors
+				console.log(e);
+			});
+	}
+
+	// TODO: add loading animation
+	return <>
+		<h1 className="login_title title">¡Bienvenido de nuevo!</h1>
+		<form onSubmit={loginAccount} className="login_form user_form">
+			<h2 className="login_subtitle subtitle">Inicio de Sesión</h2>
+			<div className="login_form_section_email login_form_section">
+				<h3 className="login_form_text">Correo Electrónico</h3>
+				<input type="email" id="login_email" name="login_email"
+					value={formEmail} onChange={(e) => setFormEmail(e.target.value)}
+					className="login_email login_field" required minLength="3" maxLength="40" />
+			</div>
+			<div className="login_form_section_password login_form_section">
+				<h3 className="login_form_text">Contraseña</h3>
+				<input type="password" id="login_password" name="login_password"
+					value={formPassword} onChange={(e) => setFormPassword(e.target.value)}
+					className="login_password login_field" required minLength="6" maxLength="40" />
+			</div>
+			<button type="submit" className="login_submit_button button_1">Iniciar Sesión</button>
+		</form>
+		<h2 className="login_to_register">
+			¿No tienes cuenta?
+			<a onClick={() => setPage(Page.register)}> Regístrate</a>
+		</h2 >
+		<Footer />
+	</>;
+}
+function Register({ setPage, setUser, setUserType, addErrNotification }) {
 	const [formUsername, setFormUsername] = useState('');
 	const [formPhone, setFormPhone] = useState('');
 	const [formEmail, setFormEmail] = useState('');
@@ -53,17 +128,22 @@ function Register({ setPage, setUser, addErrNotification }) {
 			!formPassword ||
 			!formPfpBase64) return;
 		createUserWithEmailAndPassword(firebaseAuth, formEmail, formPassword)
-			.then((userCredential) => {
+			.then(async (userCredential) => {
 				const user = userCredential.user;
-				setUser(user);
-				addDoc(collection(firebaseDb, "users"), {
+				// Esto técnicamente le pide al servidor 2 veces
+				// podría ser optimizado con Cloud Functions ???
+				await addDoc(firebaseUsersCollection, {
 					uid: user.uid,
 					username: formUsername,
 					phone: formPhone,
 					email: formEmail,
 					date: formDate,
+					userType: 'student',
 					pfp: formPfpBase64,
 				});
+				setUser(user);
+				setUserType(UserType.student);
+				setPage(Page.start);
 			}).catch((e) => {
 				switch (e.code) {
 					case 'auth/invalid-email':
@@ -103,6 +183,7 @@ function Register({ setPage, setUser, addErrNotification }) {
 		};
 	}
 
+	// TODO: add loading animation
 	return <>
 		<h1 className="register_title title">¡Únete a nuevas experiencias!</h1>
 		<form onSubmit={registerCreateAccount} className="register_form user_form">
@@ -172,8 +253,9 @@ function App() {
 	const [count, setCount] = useState(0);
 
 	// Cambiar página defecto
-	const [page, setPage] = useState(Page.register);
+	const [page, setPage] = useState(Page.login);
 	const [user, setUser] = useState();
+	const [userType, setUserType] = useState();
 	const [errNotifications, setErrNotifications] = useState([]);
 
 	const notificationDisplayMs = 2000;
@@ -194,12 +276,15 @@ function App() {
 					<ErrNofifications key={idx} text={n} />
 				)}
 				<Register setPage={setPage} setUser={setUser}
-					addErrNotification={addErrNotification} />
+					addErrNotification={addErrNotification} setUserType={setUserType} />
 			</>;
+		case Page.login:
+			return <Login setPage={setPage} setUser={setUser} setUserType={setUserType} />;
 		default:
 			// Placeholder
 			return <>
 				<h1>{count}</h1>
+				{user && <h1>Estás Registrado</h1>}
 				<button onClick={() => setCount((count) => count + 1)}>
 					Increment
 				</button>
