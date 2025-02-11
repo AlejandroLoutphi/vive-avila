@@ -35,7 +35,7 @@ function Footer() {
 	</footer>
 }
 
-function Register({ setPage, setUser }) {
+function Register({ setPage, setUser, addErrNotification }) {
 	const [formUsername, setFormUsername] = useState('');
 	const [formPhone, setFormPhone] = useState('');
 	const [formEmail, setFormEmail] = useState('');
@@ -65,8 +65,18 @@ function Register({ setPage, setUser }) {
 					pfp: formPfpBase64,
 				});
 			}).catch((e) => {
-				// TODO: handle firebase errors
-				console.log(e);
+				switch (e.code) {
+					case 'auth/invalid-email':
+						addErrNotification('Error: el email es inválido');
+						return;
+					case 'auth/email-already-in-use':
+						addErrNotification('Error: ese email ya ha sido registrado');
+						return;
+					default:
+						addErrNotification('Error al comunicarse con el servidor');
+						console.log(e);
+						return;
+				}
 			});
 	}
 
@@ -81,8 +91,7 @@ function Register({ setPage, setUser }) {
 		reader.onload = () => {
 			setFormButtonDisabled(false);
 			if (reader.result.length >= 1000000) {
-				// TODO: handle img too big error
-				console.log('Error: Imagen muy grande');
+				addErrNotification('Error: la imagen es muy grande');
 				return;
 			}
 			setFormPfp(URL.createObjectURL(file));
@@ -90,7 +99,7 @@ function Register({ setPage, setUser }) {
 		};
 		reader.onerror = () => {
 			setFormButtonDisabled(false);
-			// TODO: handle file conversion error
+			addErrNotification('Error al subir imagen');
 		};
 	}
 
@@ -146,10 +155,16 @@ function Register({ setPage, setUser }) {
 		</form>
 		<h2 className="register_to_login">
 			¿Ya tienes cuenta?
-			<a className="selfLink" onClick={() => setPage(Page.login)}> Inicia Sesión</a>
+			<a className="self_link" onClick={() => setPage(Page.login)}> Inicia Sesión</a>
 		</h2 >
 		<Footer />
 	</>;
+}
+
+function ErrNofifications({ text }) {
+	return <div id="err_notification" className="err_notification notification">
+		{text}
+	</ div>
 }
 
 function App() {
@@ -159,12 +174,28 @@ function App() {
 	// Cambiar página defecto
 	const [page, setPage] = useState(Page.register);
 	const [user, setUser] = useState();
+	const [errNotifications, setErrNotifications] = useState([]);
+
+	const notificationDisplayMs = 2000;
+	function addErrNotification(n) {
+		setErrNotifications(errNotifications => [...errNotifications, n]);
+		setTimeout(() =>
+			setErrNotifications(errNotifications =>
+				errNotifications.slice(1, undefined)
+			), notificationDisplayMs);
+	};
 
 	// Para mostrar una página, solo hacemos un switch sobre todas
 	// las páginas posibles y retornamos ese componente
 	switch (page) {
 		case Page.register:
-			return <Register setPage={setPage} setUser={setUser} />;
+			return <>
+				{errNotifications.length > 0 && errNotifications.map((n, idx) =>
+					<ErrNofifications key={idx} text={n} />
+				)}
+				<Register setPage={setPage} setUser={setUser}
+					addErrNotification={addErrNotification} />
+			</>;
 		default:
 			// Placeholder
 			return <>
