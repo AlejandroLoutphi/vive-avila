@@ -104,9 +104,15 @@ function Register({ setPage, setUser, addErrNotification }) {
 	}
 
 	return <>
-		<h1 className="register_title title">¡Únete a nuevas experiencias!</h1>
+		<div className="register_container">
+		<div className="register_content">
 		<form onSubmit={registerCreateAccount} className="register_form user_form">
+			<section>
+			<div className="Center">
+			<h1 className="register_title title">¡Únete a nuevas experiencias!</h1>
 			<h2 className="register_subtitle subtitle">Registrar Usuario</h2>
+			</div>
+			<div className="Divisor">
 			<div className="register_form_section_name register_form_section">
 				<h3 className="register_form_text">Nombre Completo</h3>
 				<input type="text" id="register_name" name="register_name"
@@ -152,11 +158,16 @@ function Register({ setPage, setUser, addErrNotification }) {
 				className="register_submit_button button_1">
 				Crear Cuenta
 			</button>
+			</div>
+			</section>
 		</form>
 		<h2 className="register_to_login">
 			¿Ya tienes cuenta?
 			<a className="self_link" onClick={() => setPage(Page.login)}> Inicia Sesión</a>
 		</h2 >
+		</div>
+		<img className="register_img" />
+		</div>
 		<Footer />
 	</>;
 }
