@@ -4,6 +4,91 @@ button {
 	padding: 10px;
 }
 
-.register_to_login>a {
+a {
 	cursor: pointer;
+}
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Roboto', sans-serif;
+}	
+
+body {
+	background-color: #1e1e1e;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	width: 100%;
+}
+
+.root {
+	display: flex;
+	flex-direction: column;
+	background: white;
+	border-radius: 10px;
+	overflow: hidden;
+	box-shadow: 0 4px rgba(0, 0, 0, 0.3);
+	max-width: 900px;
+	width: 100%;
+}
+
+.top-section {
+	display: flex;
+	width: 100%;
+}
+
+.register_form { 
+	padding: 30px;
+	background: #2e7d32;
+	color: white;
+	width: 100%;
+}
+
+.register_form_section {
+	margin-bottom: 10%;
+}
+
+.register_form_section> input {
+	width: 100%;
+	padding: 8px;
+	border: none;
+	border-radius: 5px;
+}
+
+.button_1 {
+	width: 100%;
+	padding: 10px;
+	background: #fffeb33b;
+	border: none;
+	color: black;
+	font-weight: 5px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.register_form_section_pfp {
+	width: 50%;
+	background-image: url('https://cerroelavila.com/wp-content/uploads/2017/07/foto-6-1024x768.jpg');
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	height: 500px; /* Etablecer una altura fija */
+}
+
+footer {
+	background: black;
+	color: white;
+	text-align: center;
+	padding: 20px;
+}
+footer a {
+	color: #ffeb3b;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.footer_text {
+	margin-top: 10px;
+	font-size: 14px;
 }
