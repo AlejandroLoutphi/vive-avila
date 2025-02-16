@@ -33,6 +33,32 @@ export const UserType = Object.freeze({
 	student: Symbol(),
 })
 
+export function Navbar({ setPage }) {
+	return <nav className="navbar">
+		<img
+			loading="lazy"
+			src="/nav-logo.png"
+			className="nav-logo"
+			alt="Navigation logo"
+		/>
+		<div className="nav-links">
+			<a onClick={() => setPage(Page.start)} className="nav-item">Inicio</a>
+			<a onClick={() => setPage(Page.start)} className="nav-item">Guia</a>
+			<a onClick={() => setPage(Page.start)} className="nav-item">Excursiones</a>
+			<a onClick={() => setPage(Page.start)} className="nav-item">Foro</a>
+			<a onClick={() => setPage(Page.start)} className="nav-item">Sobre Nosotros</a>
+			<div class="nav-dropdown-container">
+				<a className="nav-item">Perfil</a>
+				<div className="nav-dropdown">
+					<a onClick={() => setPage(Page.start)} className="nav-item">Mi Perfil</a>
+					<a onClick={() => setPage(Page.start)} className="nav-item">Editar Perfil</a>
+					<a onClick={() => setPage(Page.login)} className="nav-item">Cerrar Sesión</a>
+				</div>
+			</div>
+		</div>
+	</nav>
+}
+
 export function Footer() {
 	return <footer>
 		<div className="footer_content">

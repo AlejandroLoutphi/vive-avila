@@ -23,8 +23,6 @@ function Login({ setPage, setUser, setUserType, addErrNotification }) {
 		signInWithEmailAndPassword(firebaseAuth, formEmail, formPassword)
 			.then(async (userCredential) => {
 				const user = userCredential.user;
-				// Esto técnicamente le pide al servidor 2 veces
-				// podría ser optimizado con Cloud Functions ???
 				const q = query(firebaseUsersCollection,
 					where("uid", "==", user.uid),
 					limit(1)
@@ -97,7 +95,6 @@ function Register({ setPage, setUser, setUserType, addErrNotification }) {
 	const [formDate, setFormDate] = useState('2005-01-01');
 	const [formPfp, setFormPfp] = useState();
 	const [formPfpBase64, setFormPfpBase64] = useState();
-	const [formButtonDisabled, setFormButtonDisabled] = useState(false);
 
 	async function registerCreateAccount(e) {
 		e.preventDefault();
@@ -109,8 +106,6 @@ function Register({ setPage, setUser, setUserType, addErrNotification }) {
 		createUserWithEmailAndPassword(firebaseAuth, formEmail, formPassword)
 			.then(async (userCredential) => {
 				const user = userCredential.user;
-				// Esto técnicamente le pide al servidor 2 veces
-				// podría ser optimizado con Cloud Functions ???
 				await addDoc(firebaseUsersCollection, {
 					uid: user.uid,
 					username: formUsername,
@@ -140,15 +135,14 @@ function Register({ setPage, setUser, setUserType, addErrNotification }) {
 	}
 
 	async function pfpChange(e) {
-		setFormButtonDisabled(true);
-		setFormPfp();
 		// TODO: placeholder image
 		// setFormPfp(idk some placeholder image);
+		setFormPfp();
+		setFormPfpBase64();
 		const file = e.target.files[0];
 		const reader = new FileReader();
 		reader.readAsDataURL(file);
 		reader.onload = () => {
-			setFormButtonDisabled(false);
 			if (reader.result.length >= 1000000) {
 				addErrNotification('Error: la imagen es muy grande');
 				return;
@@ -157,7 +151,6 @@ function Register({ setPage, setUser, setUserType, addErrNotification }) {
 			setFormPfpBase64(reader.result);
 		};
 		reader.onerror = () => {
-			setFormButtonDisabled(false);
 			addErrNotification('Error al subir imagen');
 		};
 	}
@@ -167,59 +160,57 @@ function Register({ setPage, setUser, setUserType, addErrNotification }) {
 		<div className="register_container">
 			<div className="register_content">
 				<form onSubmit={registerCreateAccount} className="register_form user_form">
-					<section>
-						<div className="Center">
-							<h1 className="register_title title">¡Únete a nuevas experiencias!</h1>
-							<h2 className="register_subtitle subtitle">Registrar Usuario</h2>
+					<div className="center">
+						<h1 className="register_title title">¡Únete a nuevas experiencias!</h1>
+						<h2 className="register_subtitle subtitle">Registrar Usuario</h2>
+					</div>
+					<div className="divisor">
+						<div className="register_form_section_name register_form_section">
+							<label className="register_form_text" htmlFor="register_name">Nombre Completo</label>
+							<input type="text" id="register_name" name="register_name"
+								value={formUsername} onChange={(e) => setFormUsername(e.target.value)}
+								className="register_name register_field" required minLength="3" maxLength="40" />
 						</div>
-						<div className="Divisor">
-							<div className="register_form_section_name register_form_section">
-								<h3 className="register_form_text">Nombre Completo</h3>
-								<input type="text" id="register_name" name="register_name"
-									value={formUsername} onChange={(e) => setFormUsername(e.target.value)}
-									className="register_name register_field" required minLength="3" maxLength="40" />
-							</div>
-							{/* existe el type="tel", pero idk si lo queremos usar */}
-							<div className="register_form_section_phone register_form_section">
-								<h3 className="register_form_text">Número de Teléfono</h3>
-								<input type="number" id="register_phone" name="register_phone"
-									value={formPhone} onChange={(e) => setFormPhone(e.target.value)}
-									className="register_phone register_field" required minLength="3" maxLength="40" />
-							</div>
-							<div className="register_form_section_email register_form_section">
-								<h3 className="register_form_text">Correo Electrónico</h3>
-								<input type="email" id="register_email" name="register_email"
-									value={formEmail} onChange={(e) => setFormEmail(e.target.value)}
-									className="register_email register_field" required minLength="3" maxLength="40" />
-							</div>
-							<div className="register_form_section_password register_form_section">
-								<h3 className="register_form_text">Contraseña</h3>
-								<input type="password" id="register_password" name="register_password"
-									value={formPassword} onChange={(e) => setFormPassword(e.target.value)}
-									className="register_password register_field" required minLength="6" maxLength="40" />
-							</div>
-							<div className="register_form_section_date register_form_section">
-								<h3 className="register_form_text">Fecha de Nacimiento</h3>
-								<input type="date" id="register_date" name="register_date"
-									value={formDate} onChange={(e) => setFormDate(e.target.value)}
-									className="register_date register_field" required
-									max={new Date().toISOString().slice(0, 10)} />
-							</div>
-							<div className="register_form_section_pfp register_form_section">
-								<h3 className="register_form_text">Foto de Perfil</h3>
-								{/* si subes una img con error, aún aparece que la has subido
+						{/* existe el type="tel", pero idk si lo queremos usar */}
+						<div className="register_form_section_phone register_form_section">
+							<label className="register_form_text" htmlFor="register_phone">Número de Teléfono</label>
+							<input type="number" id="register_phone" name="register_phone"
+								value={formPhone} onChange={(e) => setFormPhone(e.target.value)}
+								className="register_phone register_field" required minLength="3" maxLength="40" />
+						</div>
+						<div className="register_form_section_email register_form_section">
+							<label className="register_form_text" htmlFor="register_email">Correo Electrónico</label>
+							<input type="email" id="register_email" name="register_email"
+								value={formEmail} onChange={(e) => setFormEmail(e.target.value)}
+								className="register_email register_field" required minLength="3" maxLength="40" />
+						</div>
+						<div className="register_form_section_password register_form_section">
+							<label className="register_form_text" htmlFor="register_password">Contraseña</label>
+							<input type="password" id="register_password" name="register_password"
+								value={formPassword} onChange={(e) => setFormPassword(e.target.value)}
+								className="register_password register_field" required minLength="6" maxLength="40" />
+						</div>
+						<div className="register_form_section_date register_form_section">
+							<label className="register_form_text" htmlFor="register_date">Fecha de Nacimiento</label>
+							<input type="date" id="register_date" name="register_date"
+								value={formDate} onChange={(e) => setFormDate(e.target.value)}
+								className="register_date register_field" required
+								max={new Date().toISOString().slice(0, 10)} />
+						</div>
+						<div className="register_form_section_pfp register_form_section">
+							<label className="register_form_text" htmlFor="register_pfp">Foto de Perfil</label>
+							{/* si subes una img con error, aún aparece que la has subido
 				asumo que ocultaremos eso igual, pero por ahora está raro */}
-								<input type="file" id="register_pfp" name="register_pfp" onChange={pfpChange}
-									className="register_date register_field" required accept="image/*" />
-								<img id="register_pfp_preview" name="register_pfp_preview"
-									className="register_pfp_preview pfp_preview" src={formPfp} />
-							</div>
-							<button type="submit" disabled={formButtonDisabled}
-								className="register_submit_button button_1">
-								Crear Cuenta
-							</button>
+							<input type="file" id="register_pfp" name="register_pfp" onChange={pfpChange}
+								className="register_date register_field" required accept="image/*" />
+							<img id="register_pfp_preview" name="register_pfp_preview"
+								className="register_pfp_preview pfp_preview" src={formPfp} />
 						</div>
-					</section>
+						<button type="submit" disabled={!formPfpBase64}
+							className="register_submit_button button_1">
+							Crear Cuenta
+						</button>
+					</div>
 				</form>
 				<h2 className="register_to_login">
 					¿Ya tienes cuenta?
@@ -268,7 +259,7 @@ function App() {
 					setUserType={setUserType} addErrNotification={addErrNotification} />;
 			</>
 		case Page.start:
-			return <MainPage />;
+			return <MainPage setPage={setPage} />;
 		default:
 			// Placeholder
 			return <>
@@ -279,4 +270,5 @@ function App() {
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(React.createElement(App, { key: "app" }));
+window.onbeforeunload = () => window.scrollTo(0, 0);
 //<iframe width="1460" height="610" frameborder="0" marginheight="0" marginwidth="0" id="gmap_canvas" src="https://maps.google.com/maps?width=1460&amp;height=610&amp;hl=en&amp;q=Universidad%20Metropolitana%20de%20Caracas%20Caracas+(Universidad%20Metropolitana%20de%20Caracas)&amp;t=k&amp;z=16&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe><script type='text/javascript' src='https://embedmaps.com/google-maps-authorization/script.js?id=ea2f4b417aa47ec70adcc844a9ef3dc3a996e900'></script>

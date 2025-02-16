@@ -1,36 +1,37 @@
 import React from 'react';
-import { Footer } from './Global';
+import { Footer, Navbar } from './Global';
 
-export function MainPage() {
+export function MainPage({ setPage }) {
     return <>
-        <div className="home-page">
-            <div className="hero-section">
+        <Navbar setPage={setPage} />
+        <div className="start_home-page">
+            <div className="start_hero-section">
                 <img
                     loading="lazy"
                     src="/hero-background.png"
-                    className="hero-background"
+                    className="start_hero-background"
                     alt="Hero background"
                 />
-                <div className="hero-content">
-                    <div className="hero-layout">
-                        <div className="logo-column">
-                            <div className="logo-container">
+                <div className="start_hero-content">
+                    <div className="start_hero-layout">
+                        <div className="start_logo-column">
+                            <div className="start_logo-container">
                                 <img
                                     loading="lazy"
                                     src="/logo-image.png"
-                                    className="logo-image"
+                                    className="start_logo-image"
                                     alt="Logo"
                                 />
                             </div>
                         </div>
-                        <div className="text-column">
-                            <div className="text-container">
-                                <h1 className="main-title">
+                        <div className="start_text-column">
+                            <div className="start_text-container">
+                                <h1 className="start_main-title">
                                     VIVIR UNA
                                     <br />
                                     NUEVA AVENTURA
                                 </h1>
-                                <h2 className="subtitle">
+                                <h2 className="start_subtitle">
                                     NUNCA HABÍA SIDO TAN FÁCIL
                                 </h2>
                             </div>
@@ -38,102 +39,86 @@ export function MainPage() {
                     </div>
                 </div>
             </div>
-            <nav className="navbar">
-                <img
-                    loading="lazy"
-                    src="/nav-logo.png"
-                    className="nav-logo"
-                    alt="Navigation logo"
-                />
-                <div className="nav-links">
-                    <a href="#inicio" className="nav-item">Inicio</a>
-                    <a href="#guia" className="nav-item">Guia</a>
-                    <a href="#excursiones" className="nav-item">Excursiones</a>
-                    <a href="#foro" className="nav-item">Foro</a>
-                    <a href="#sobre-nosotros" className="nav-item">Sobre Nosotros</a>
-                    <a href="#perfil" className="nav-item">Perfil</a>
-                </div>
-            </nav>
-            <div className="main-content">
-                <div className="content-layout">
-                    <div className="activities-column">
-                        <div className="activities-frame">
-                            <div className="image-placeholder"></div>
-                            <div className="activities-grid">
-                                <div className="activity-item">
-                                    <div className="activity-circle">
+            <div className="start_main-content">
+                <div className="start_content-layout">
+                    <div className="start_activities-column">
+                        <div className="start_activities-frame">
+                            <div className="start_image-placeholder"></div>
+                            <div className="start_activities-grid">
+                                <div className="start_activity-item">
+                                    <div className="start_activity-circle">
                                         <img
                                             loading="lazy"
                                             src="/explora-icon.png"
-                                            className="activity-icon"
+                                            className="start_activity-icon"
                                             alt="Explora icon"
                                         />
-                                        <div className="activity-text">EXPLORA</div>
+                                        <div className="start_activity-text">EXPLORA</div>
                                     </div>
                                 </div>
-                                <div className="activity-item">
-                                    <div className="activity-circle">
+                                <div className="start_activity-item">
+                                    <div className="start_activity-circle">
                                         <img
                                             loading="lazy"
                                             src="/rutas.png"
-                                            className="activity-icon"
+                                            className="start_activity-icon"
                                             alt="Rutas icon"
                                         />
-                                        <div className="activity-text">RUTAS</div>
+                                        <div className="start_activity-text">RUTAS</div>
                                     </div>
                                 </div>
-                                <div className="activity-item">
-                                    <div className="activity-circle">
+                                <div className="start_activity-item">
+                                    <div className="start_activity-circle">
                                         <img
                                             loading="lazy"
                                             src="/aventura-icon.png"
-                                            className="activity-icon"
+                                            className="start_activity-icon"
                                             alt="Aventura icon"
                                         />
-                                        <div className="activity-text">AVENTURA</div>
+                                        <div className="start_activity-text">AVENTURA</div>
                                     </div>
                                 </div>
-                                <div className="activity-item">
-                                    <div className="activity-circle">
+                                <div className="start_activity-item">
+                                    <div className="start_activity-circle">
                                         <img
                                             loading="lazy"
                                             src="/naturaleza.png"
-                                            className="activity-icon"
+                                            className="start_activity-icon"
                                             alt="Naturaleza icon"
                                         />
-                                        <div className="activity-text">NATURALEZA</div>
+                                        <div className="start_activity-text">NATURALEZA</div>
                                     </div>
                                 </div>
                             </div>
                             <img
                                 loading="lazy"
                                 src="/humboldt.png"
-                                className="divider-image"
+                                className="start_divider-image"
                                 alt="Divider"
                             />
-                            <div className="features-grid">
-                                <div className="feature-item">
-                                    <div className="feature-text">QUEBRADAS</div>
+                            <div className="start_features-grid">
+                                <div className="start_feature-item">
+                                    <div className="start_feature-text">QUEBRADAS</div>
                                 </div>
-                                <div className="feature-item">
-                                    <div className="feature-text">PICOS</div>
+                                <div className="start_feature-item">
+                                    <div className="start_feature-text">PICOS</div>
                                 </div>
-                                <div className="feature-item">
-                                    <div className="feature-text">Y MÁS</div>
+                                <div className="start_feature-item">
+                                    <div className="start_feature-text">Y MÁS</div>
                                 </div>
                             </div>
                             <img
                                 loading="lazy"
                                 src="/landscape.png"
-                                className="divider-image"
+                                className="start_divider-image"
                                 alt="Divider"
                             />
                         </div>
                     </div>
-                    <div className="info-column">
-                        <div className="info-card">
-                            <h2 className="info-title">WARAIRAREPANO</h2>
-                            <p className="info-description">
+                    <div className="start_info-column">
+                        <div className="start_info-card">
+                            <h2 className="start_info-title">WARAIRAREPANO</h2>
+                            <p className="start_info-description">
                                 El parque nacional El Ávila, oficialmente Waraira Repano, es un
                                 <a href="https://es.wikipedia.org/wiki/Parque_nacional" target="_blank" rel="noopener noreferrer">
                                     parque nacional
@@ -164,7 +149,7 @@ export function MainPage() {
                                 </a>
                                 .
                             </p>
-                            <button className="read-more-btn">Leer más</button>
+                            <button className="start_read-more-btn">Leer más</button>
                         </div>
                     </div>
                 </div>

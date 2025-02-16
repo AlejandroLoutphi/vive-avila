@@ -1,12 +1,15 @@
-.home-page {
+.start_home-page {
 	background-color: #d9d9d9;
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
+	position: relative;
+	top: 0;
+	left: 0;
 	font-family: 'Jomhuria', cursive;
 }
 
-.hero-section {
+.start_hero-section {
 	position: relative;
 	min-height: 425px;
 	width: 100%;
@@ -16,7 +19,7 @@
 	padding: 127px 70px 45px;
 }
 
-.hero-background {
+.start_hero-background {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -25,7 +28,7 @@
 	object-fit: cover;
 }
 
-.hero-content {
+.start_hero-content {
 	position: relative;
 	background-color: rgba(0, 0, 0, 0.65);
 	width: 100%;
@@ -33,120 +36,94 @@
 	padding: 40px;
 }
 
-.hero-layout {
+.start_hero-layout {
 	display: flex;
 	gap: 20px;
 }
 
-.logo-column {
+.start_logo-column {
 	flex: 0 0 44%;
 }
 
-.logo-container {
+.start_logo-container {
 	background-color: #fff;
 	padding: 11px 15px;
 	margin-top: -73px;
 }
 
-.logo-image {
+.start_logo-image {
 	width: 100%;
 	height: auto;
 }
 
-.text-column {
+.start_text-column {
 	flex: 0 0 56%;
 }
 
-.text-container {
+.start_text-container {
 	color: #fff;
 	text-align: center;
 }
 
-.main-title {
+.start_main-title {
 	font-size: 96px;
 	line-height: 1;
 	margin: 0;
 }
 
-.subtitle {
-	font-family: 'Josefin Slab', serif;
+.start_subtitle {
 	font-size: 24px;
 	margin-top: -16px;
 }
 
-.navbar {
-	background-color: #64966d;
-	display: flex;
-	align-items: center;
-	padding: 4px 80px 4px 0;
-	color: #fff;
-}
-
-.nav-logo {
-	width: 204px;
-	height: auto;
-}
-
-.nav-links {
-	display: flex;
-	gap: 60px;
-	margin-left: auto;
-}
-
-.nav-item {
-	color: #fff;
-	text-decoration: none;
-	font-size: 40px;
-}
-
-.main-content {
+.start_main-content {
 	display: flex;
 	padding: 40px;
 }
 
-.content-layout {
+.start_content-layout {
 	display: flex;
 	gap: 20px;
 }
 
-.activities-column {
+.start_activities-column {
 	flex: 0 0 73%;
 }
 
-.activities-frame {
+.start_activities-frame {
 	display: flex;
 	flex-direction: column;
 }
 
-.image-placeholder {
+.start_image-placeholder {
 	background-color: #ccc;
 	height: 200px;
 }
 
-.activities-grid {
+.start_activities-grid {
 	display: flex;
 	justify-content: space-around;
 	padding: 83px 70px;
 }
 
-.activity-item {
+.start_activity-item {
 	text-align: center;
 }
 
-.activity-circle {
+.start_activity-circle {
 	position: relative;
 	width: 217px;
 	height: 217px;
 }
 
-.activity-icon {
+.start_activity-icon {
 	width: 100%;
 	height: 100%;
 	border-radius: 50%;
 	object-fit: cover;
 }
 
-.activity-text {
+.start_activity-text {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -161,18 +138,18 @@
 	font-size: 40px;
 }
 
-.divider-image {
+.start_divider-image {
 	width: 100%;
 	height: auto;
 }
 
-.features-grid {
+.start_features-grid {
 	display: flex;
 	justify-content: space-around;
 	padding: 63px 70px;
 }
 
-.feature-item {
+.start_feature-item {
 	width: 228px;
 	height: 228px;
 	display: flex;
@@ -183,30 +160,30 @@
 	font-size: 40px;
 }
 
-.info-column {
+.start_info-column {
 	flex: 0 0 27%;
 }
 
-.info-card {
+.start_info-card {
 	background-color: #64966d;
 	color: #fff;
 	padding: 66px 40px;
 	margin-top: 751px;
 }
 
-.info-title {
+.start_info-title {
 	font-size: 64px;
 	margin: 0;
 }
 
-.info-description {
+.start_info-description {
 	font-family: 'Josefin Slab', serif;
 	font-size: 24px;
 	text-align: justify;
 	margin-top: 37px;
 }
 
-.read-more-btn {
+.start_read-more-btn {
 	background-color: #765d4e;
 	color: #fff;
 	border: none;
@@ -220,55 +197,48 @@
 
 @media (max-width: 991px) {
 
-	.hero-section,
-	.navbar,
-	.main-content {
+	.start_hero-section,
+	.start_main-content {
 		padding-left: 20px;
 		padding-right: 20px;
 	}
 
-	.hero-layout,
-	.content-layout {
+	.start_hero-layout,
+	.start_content-layout {
 		flex-direction: column;
 	}
 
-	.logo-column,
-	.text-column,
-	.activities-column,
-	.info-column {
+	.start_logo-column,
+	.start_text-column,
+	.start_activities-column,
+	.start_info-column {
 		flex: 1 1 auto;
 		width: 100%;
 	}
 
-	.nav-links {
+	.start_activities-grid,
+	.start_features-grid {
 		flex-wrap: wrap;
 		gap: 20px;
 	}
 
-	.activities-grid,
-	.features-grid {
-		flex-wrap: wrap;
-		gap: 20px;
-	}
-
-	.info-card {
+	.start_info-card {
 		margin-top: 40px;
 	}
 
-	.main-title {
+	.start_main-title {
 		font-size: 60px;
 	}
 
-	.subtitle,
-	.nav-item,
-	.activity-text,
-	.feature-item,
-	.info-description,
-	.read-more-btn {
+	.start_subtitle,
+	.start_activity-text,
+	.start_feature-item,
+	.start_info-description,
+	.start_read-more-btn {
 		font-size: 20px;
 	}
 
-	.info-title {
+	.start_info-title {
 		font-size: 40px;
 	}
 }
