@@ -14,7 +14,7 @@ import { MainPage } from "./MainPage";
 import "./App.css";
 import './MainPage.css';
 
-function Login({ setPage, setUser, setUserType, addErrNotification }) {
+function Login({ setPage, setUser, addErrNotification }) {
 	const [formEmail, setFormEmail] = useState('');
 	const [formPassword, setFormPassword] = useState('');
 
@@ -22,26 +22,13 @@ function Login({ setPage, setUser, setUserType, addErrNotification }) {
 		e.preventDefault();
 		signInWithEmailAndPassword(firebaseAuth, formEmail, formPassword)
 			.then(async (userCredential) => {
-				const user = userCredential.user;
+				const userAuth = userCredential.user;
 				const q = query(firebaseUsersCollection,
-					where("uid", "==", user.uid),
+					where("uid", "==", userAuth.uid),
 					limit(1)
 				);
 				const querySnapshot = await getDocs(q);
-				querySnapshot.forEach(doc => {
-					switch (doc.get('userType')) {
-						case 'admin':
-							setUserType(UserType.admin);
-							break;
-						case 'guide':
-							setUserType(UserType.guide);
-							break;
-						case 'student':
-						default:
-							setUserType(UserType.student);
-							break;
-					}
-				});
+				const user = { ...querySnapshot.docs[0].data(), auth: userAuth };
 				setUser(user);
 				setPage(Page.start);
 			}).catch((e) => {
@@ -87,7 +74,7 @@ function Login({ setPage, setUser, setUserType, addErrNotification }) {
 	</>;
 }
 
-function Register({ setPage, setUser, setUserType, addErrNotification }) {
+function Register({ setPage, setUser, addErrNotification }) {
 	const [formUsername, setFormUsername] = useState('');
 	const [formPhone, setFormPhone] = useState('');
 	const [formEmail, setFormEmail] = useState('');
@@ -105,18 +92,19 @@ function Register({ setPage, setUser, setUserType, addErrNotification }) {
 			!formPfpBase64) return;
 		createUserWithEmailAndPassword(firebaseAuth, formEmail, formPassword)
 			.then(async (userCredential) => {
-				const user = userCredential.user;
-				await addDoc(firebaseUsersCollection, {
-					uid: user.uid,
+				const userAuth = userCredential.user;
+				const dbUser = {
+					uid: userAuth.uid,
 					username: formUsername,
 					phone: formPhone,
 					email: formEmail,
 					date: formDate,
-					userType: 'student',
+					type: 'student',
 					pfp: formPfpBase64,
-				});
+				};
+				await addDoc(firebaseUsersCollection, dbUser);
+				const user = { ...dbUser, auth: userAuth, type: UserType.student };
 				setUser(user);
-				setUserType(UserType.student);
 				setPage(Page.start);
 			}).catch((e) => {
 				switch (e.code) {
@@ -227,7 +215,6 @@ function App() {
 	// Cambiar página defecto
 	const [page, setPage] = useState(Page.register);
 	const [user, setUser] = useState();
-	const [userType, setUserType] = useState();
 	const [errNotifications, setErrNotifications] = useState([]);
 
 	const notificationDisplayMs = 2000;
@@ -248,7 +235,7 @@ function App() {
 					<ErrNofification key={idx} text={n} />
 				)}
 				<Register setPage={setPage} setUser={setUser}
-					addErrNotification={addErrNotification} setUserType={setUserType} />
+					addErrNotification={addErrNotification} />
 			</>;
 		case Page.login:
 			return <>
@@ -256,7 +243,7 @@ function App() {
 					<ErrNofification key={idx} text={n} />
 				)}
 				<Login setPage={setPage} setUser={setUser}
-					setUserType={setUserType} addErrNotification={addErrNotification} />;
+					addErrNotification={addErrNotification} />;
 			</>
 		case Page.start:
 			return <MainPage setPage={setPage} />;

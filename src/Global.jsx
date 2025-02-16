@@ -28,9 +28,9 @@ export const Page = Object.freeze({
 });
 
 export const UserType = Object.freeze({
-	admin: Symbol(),
-	guide: Symbol(),
-	student: Symbol(),
+	admin: 'admin',
+	guide: 'guide',
+	student: 'student',
 })
 
 export function Navbar({ setPage }) {
@@ -47,7 +47,7 @@ export function Navbar({ setPage }) {
 			<a onClick={() => setPage(Page.start)} className="nav-item">Excursiones</a>
 			<a onClick={() => setPage(Page.start)} className="nav-item">Foro</a>
 			<a onClick={() => setPage(Page.start)} className="nav-item">Sobre Nosotros</a>
-			<div class="nav-dropdown-container">
+			<div className="nav-dropdown-container">
 				<a className="nav-item">Perfil</a>
 				<div className="nav-dropdown">
 					<a onClick={() => setPage(Page.start)} className="nav-item">Mi Perfil</a>
