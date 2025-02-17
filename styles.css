@@ -1,0 +1,189 @@
+
+.sobreNosotros{
+    font-family: "Jomhuria";
+
+}
+.parteSuperior__contenedor-título{
+    margin-left: 5%;
+    padding-top: 0%;
+    color: white;
+    font-size: 170%;
+
+}
+
+.parteSuperior__contenedor-texto{
+    color: white;
+    margin-left: 5%;
+
+}
+.parteSuperior{
+    background-color: #24892f;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 5%;
+}
+.parteSuperior__contenido{
+    font-size: 190%;
+
+}
+.parteSuperior__img{
+    width: 720px;
+    height: 500px;
+
+}
+.parteCentral{
+    background-color: #d9d9d9;
+    display: flex;
+    align-items: stretch;
+    gap: 3%;
+    height: 900%;
+}
+.parteCentral__der{
+    display: block;
+    align-items: flex-end;
+    justify-content: start;
+
+}
+.parteCentral__izq{
+    display: block;
+    align-self: flex-start;
+    justify-content: end;
+    margin-left: 10%;
+}
+.parteCentral__der-título{
+    justify-content: center;
+    font-size: 300%;
+    color: black;
+    margin-left: 45%;
+}
+.parteCentral__der-subtítulo{
+    justify-content: center;
+    font-size: 210%;
+    color: black;
+    margin-left: 46%;
+}
+.parteCentral__der-inferior{
+    display: flex;
+    flex: row;
+    font-size: 210%;
+    color: black;
+    gap: 5%;
+    margin-left: 30%;
+}
+.parteCentral__der-input{
+    width: 90%;
+    height: 31%;
+    border: none;
+}
+.parteCentral__der-texto{
+    font-size: 210%;
+    color: black;
+    margin-left: 30%;
+}
+.parteCentral__izq-texto{
+    font-size: 220%;
+    color: black;
+    margin-left: 15%;
+}
+.parteCentral__izq-título1{
+    margin-left: 26%;
+}
+.parteCentral__izq-título2{
+    margin-left: 34%;
+}
+.parteCentral__izq-img{
+    padding-top: 7%;
+    margin-left: 5%;
+}
+.parteInferior{
+    background-color: #64966d;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    padding: 1% 1%;
+
+}
+.parteInferior__título{
+    margin: 1%;
+    color: white;
+    font-size: 370%;
+    justify-content: center;
+    display: flex;
+}
+.button1{
+    background-color: black;
+    border: none;
+    width: 4%;
+    height: 25px;
+    padding-top: 1%;
+    margin-top: 6%;
+}
+.button2{
+    background-color: black;
+    font-family: "Jomhuria";
+    margin-left: 725px;
+    margin-bottom: 7%;
+    font-size: 200%;
+    height: 7%;
+    width: 18%;
+    color: white;
+    border: none;
+    padding: 0%;
+    border-radius: 50px;}
+
+button:hover {
+    background-color: #24892f;
+}
+.main-footer {
+    background-color: #212121;
+    color: #fff;
+    padding: 43px 80px 112px;
+  }
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+.footer-title-container {
+    display: flex;
+    align-items: center;
+    gap: 44px;
+  }
+.footer-line {
+    flex-grow: 1;
+    height: 1px;
+    background-color: #fff;
+  }
+.footer-title {
+    font-size: 40px;
+    margin: 0;
+  }
+.footer-info {
+    font-size: 200%;
+    margin-top: 37px;
+    text-align: center;
+  }
+.navbar {
+    background-color: #64966d;
+    display: flex;
+    align-items: center;
+    padding: 4px 80px 4px 0;
+    color: #fff;
+  }
+  
+.nav-logo {
+    width: 204px;
+    height: auto;
+  }
+  
+.nav-links {
+    display: flex;
+    gap: 60px;
+    margin-left: auto;
+  }
+  
+.nav-item {
+    color: #fff;
+    text-decoration: none;
+    font-size: 210%;
+  }
