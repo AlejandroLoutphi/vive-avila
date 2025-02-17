@@ -26,6 +26,7 @@ export const Page = Object.freeze({
 	start: Symbol(),
 	register: Symbol(),
 	login: Symbol(),
+	aboutUs: Symbol(),
 });
 
 export const UserType = Object.freeze({

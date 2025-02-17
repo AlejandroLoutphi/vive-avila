@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import { addDoc, getDocs, query, where, limit } from "firebase/firestore";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import {
 	firebaseAuth,
 	firebaseUsersCollection,
@@ -12,8 +12,10 @@ import {
 	firebaseGoogleProvider
 } from "./Global";
 import { MainPage } from "./MainPage";
+import { AboutUs } from "./AboutUs";
 import "./App.css";
 import './MainPage.css';
+import './AboutUs.css';
 
 function Login({ setPage, setUser, addErrNotification }) {
 	const [formEmail, setFormEmail] = useState('');
@@ -288,7 +290,7 @@ function Register({ setPage, setUser, addErrNotification }) {
 
 function App() {
 	// Cambiar página defecto
-	const [page, setPage] = useState(Page.register);
+	const [page, setPage] = useState(Page.aboutUs);
 	const [user, setUser] = useState();
 	const [errNotifications, setErrNotifications] = useState([]);
 
@@ -322,6 +324,8 @@ function App() {
 			</>
 		case Page.start:
 			return <MainPage setPage={setPage} />;
+		case Page.aboutUs:
+			return <AboutUs setPage={setPage} />;
 		default:
 			// Placeholder
 			return <>
