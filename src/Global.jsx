@@ -1,7 +1,7 @@
 import React from "react";
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 // Setup de Firebase
 const firebaseConfig = {
@@ -15,8 +15,9 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 export const firebaseDb = getFirestore(firebaseApp);
-export const firebaseAuth = getAuth(firebaseApp);
 export const firebaseUsersCollection = collection(firebaseDb, 'users');
+export const firebaseAuth = getAuth(firebaseApp);
+export const firebaseGoogleProvider = new GoogleAuthProvider();
 
 // "enum" para guardar en qué página estamos
 // JS no soporta enums, así que solo usamos una

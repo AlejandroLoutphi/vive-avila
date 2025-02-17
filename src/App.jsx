@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import { addDoc, getDocs, query, where, limit } from "firebase/firestore";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import {
 	firebaseAuth,
 	firebaseUsersCollection,
 	Page,
 	UserType,
 	Footer,
-	ErrNofification
+	ErrNofification,
+	firebaseGoogleProvider
 } from "./Global";
 import { MainPage } from "./MainPage";
 import "./App.css";
@@ -28,8 +29,8 @@ function Login({ setPage, setUser, addErrNotification }) {
 					limit(1)
 				);
 				const querySnapshot = await getDocs(q);
-				const user = { ...querySnapshot.docs[0].data(), auth: userAuth };
-				setUser(user);
+				const dbUser = querySnapshot.docs[0].data();
+				setUser({ ...dbUser, auth: userAuth, type: dbUser.type });
 				setPage(Page.start);
 			}).catch((e) => {
 				switch (e.code) {
@@ -44,6 +45,35 @@ function Login({ setPage, setUser, addErrNotification }) {
 						console.log(e);
 						return;
 				}
+			});
+	}
+
+	async function googleLogIn(e) {
+		e.preventDefault();
+		signInWithPopup(firebaseAuth, firebaseGoogleProvider)
+			.then(async (result) => {
+				const userAuth = result.user;
+				console.log(userAuth);
+				let dbUser = {
+					uid: userAuth.uid,
+					username: userAuth.displayName,
+					email: userAuth.email,
+					type: 'student',
+					provider: 'google',
+				};
+				if (userAuth.phoneNumber) dbUser.phone = userAuth.phoneNumber;
+				if (userAuth.photoURL) dbUser.pfp = userAuth.photoURL;
+				await addDoc(firebaseUsersCollection, dbUser);
+				setUser({ ...dbUser, auth: userAuth, type: UserType.student });
+				setPage(Page.start);
+			}).catch((e) => {
+				switch (e.code) {
+					case 'auth/popup-closed-by-user':
+					case 'auth/cancelled-popup-request':
+					case 'auth/user-cancelled':
+						return;
+				}
+				console.log(e);
 			});
 	}
 
@@ -66,6 +96,12 @@ function Login({ setPage, setUser, addErrNotification }) {
 			</div>
 			<button type="submit" className="login_submit_button button_1">Iniciar Sesión</button>
 		</form>
+		<div className="divisor">
+			<button type="button" onClick={googleLogIn}
+				className="register_google_button button_1">
+				Registrarse con Google
+			</button>
+		</div>
 		<h2 className="login_to_register">
 			¿No tienes cuenta?
 			<a onClick={() => setPage(Page.register)}> Regístrate</a>
@@ -103,8 +139,7 @@ function Register({ setPage, setUser, addErrNotification }) {
 					pfp: formPfpBase64,
 				};
 				await addDoc(firebaseUsersCollection, dbUser);
-				const user = { ...dbUser, auth: userAuth, type: UserType.student };
-				setUser(user);
+				setUser({ ...dbUser, auth: userAuth, type: UserType.student });
 				setPage(Page.start);
 			}).catch((e) => {
 				switch (e.code) {
@@ -141,6 +176,35 @@ function Register({ setPage, setUser, addErrNotification }) {
 		reader.onerror = () => {
 			addErrNotification('Error al subir imagen');
 		};
+	}
+
+	async function googleSignIn(e) {
+		e.preventDefault();
+		signInWithPopup(firebaseAuth, firebaseGoogleProvider)
+			.then(async (result) => {
+				const userAuth = result.user;
+				console.log(userAuth);
+				let dbUser = {
+					uid: userAuth.uid,
+					username: userAuth.displayName,
+					email: userAuth.email,
+					type: 'student',
+					provider: 'google',
+				};
+				if (userAuth.phoneNumber) dbUser.phone = userAuth.phoneNumber;
+				if (userAuth.photoURL) dbUser.pfp = userAuth.photoURL;
+				await addDoc(firebaseUsersCollection, dbUser);
+				setUser({ ...dbUser, auth: userAuth, type: UserType.student });
+				setPage(Page.start);
+			}).catch((e) => {
+				switch (e.code) {
+					case 'auth/popup-closed-by-user':
+					case 'auth/cancelled-popup-request':
+					case 'auth/user-cancelled':
+						return;
+				}
+				console.log(e);
+			});
 	}
 
 	// TODO: add loading animation
@@ -185,7 +249,8 @@ function Register({ setPage, setUser, addErrNotification }) {
 								Foto de Perfil
 								<br />
 								<img id="register_pfp_preview" name="register_pfp_preview"
-									className="register_pfp_preview pfp_preview" src={formPfp ? formPfp : 'avatar-icon-vector-illustration.jpg'} />
+									className="register_pfp_preview pfp_preview"
+									src={formPfp ? formPfp : 'avatar-icon-vector-illustration.jpg'} />
 							</label>
 							{/* si subes una img con error, aún aparece que la has subido
 				asumo que ocultaremos eso igual, pero por ahora está raro */}
@@ -205,6 +270,12 @@ function Register({ setPage, setUser, addErrNotification }) {
 						</button>
 					</div>
 				</form>
+				<div className="divisor">
+					<button type="button" onClick={googleSignIn}
+						className="register_google_button button_1">
+						Registrarse con Google
+					</button>
+				</div>
 				<h2 className="register_to_login">¿Ya tienes cuenta? <a
 					className="self_link" onClick={() => setPage(Page.login)}> Inicia Sesión</a>
 				</h2 >
