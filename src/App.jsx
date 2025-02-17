@@ -147,11 +147,11 @@ function Register({ setPage, setUser, addErrNotification }) {
 	return <>
 		<div className="register_container">
 			<div className="register_content">
+				<div className="center">
+					<h1 className="register_title title">¡Únete a nuevas experiencias!</h1>
+					<h2 className="register_subtitle subtitle">Registrar Usuario</h2>
+				</div>
 				<form onSubmit={registerCreateAccount} className="register_form user_form">
-					<div className="center">
-						<h1 className="register_title title">¡Únete a nuevas experiencias!</h1>
-						<h2 className="register_subtitle subtitle">Registrar Usuario</h2>
-					</div>
 					<div className="divisor">
 						<div className="register_form_section_name register_form_section">
 							<label className="register_form_text" htmlFor="register_name">Nombre Completo</label>
@@ -178,6 +178,20 @@ function Register({ setPage, setUser, addErrNotification }) {
 								value={formPassword} onChange={(e) => setFormPassword(e.target.value)}
 								className="register_password register_field" required minLength="6" maxLength="40" />
 						</div>
+					</div>
+					<div className="divisor">
+						<div className="register_form_section_pfp register_form_section">
+							<label className="register_form_text_pfp register_form_text" htmlFor="register_pfp">
+								Foto de Perfil
+								<br />
+								<img id="register_pfp_preview" name="register_pfp_preview"
+									className="register_pfp_preview pfp_preview" src={formPfp ? formPfp : 'avatar-icon-vector-illustration.jpg'} />
+							</label>
+							{/* si subes una img con error, aún aparece que la has subido
+				asumo que ocultaremos eso igual, pero por ahora está raro */}
+							<input type="file" id="register_pfp" name="register_pfp" onChange={pfpChange}
+								className="register_pfp register_field" required accept="image/*" />
+						</div>
 						<div className="register_form_section_date register_form_section">
 							<label className="register_form_text" htmlFor="register_date">Fecha de Nacimiento</label>
 							<input type="date" id="register_date" name="register_date"
@@ -185,24 +199,14 @@ function Register({ setPage, setUser, addErrNotification }) {
 								className="register_date register_field" required
 								max={new Date().toISOString().slice(0, 10)} />
 						</div>
-						<div className="register_form_section_pfp register_form_section">
-							<label className="register_form_text" htmlFor="register_pfp">Foto de Perfil</label>
-							{/* si subes una img con error, aún aparece que la has subido
-				asumo que ocultaremos eso igual, pero por ahora está raro */}
-							<input type="file" id="register_pfp" name="register_pfp" onChange={pfpChange}
-								className="register_date register_field" required accept="image/*" />
-							<img id="register_pfp_preview" name="register_pfp_preview"
-								className="register_pfp_preview pfp_preview" src={formPfp} />
-						</div>
 						<button type="submit" disabled={!formPfpBase64}
 							className="register_submit_button button_1">
 							Crear Cuenta
 						</button>
 					</div>
 				</form>
-				<h2 className="register_to_login">
-					¿Ya tienes cuenta?
-					<a className="self_link" onClick={() => setPage(Page.login)}> Inicia Sesión</a>
+				<h2 className="register_to_login">¿Ya tienes cuenta? <a
+					className="self_link" onClick={() => setPage(Page.login)}> Inicia Sesión</a>
 				</h2 >
 			</div>
 			<img className="register_img" />
@@ -217,7 +221,7 @@ function App() {
 	const [user, setUser] = useState();
 	const [errNotifications, setErrNotifications] = useState([]);
 
-	const notificationDisplayMs = 2000;
+	const notificationDisplayMs = 5000;
 	function addErrNotification(n) {
 		setErrNotifications(errNotifications => [...errNotifications, n]);
 		setTimeout(() =>
