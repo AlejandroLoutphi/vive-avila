@@ -17,6 +17,7 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 export const firebaseDb = getFirestore(firebaseApp);
 export const firebaseUsersCollection = collection(firebaseDb, 'users');
+export const firebaseContactMessagesCollection = collection(firebaseDb, 'contactMessages');
 export const firebaseAuth = getAuth(firebaseApp);
 export const firebaseGoogleProvider = new GoogleAuthProvider();
 

@@ -1,7 +1,25 @@
-import React from 'react';
-import { Footer, Navbar } from './Global';
+import React, { useState } from 'react';
+import { Footer, Navbar, firebaseContactMessagesCollection } from './Global';
+import { addDoc } from "firebase/firestore";
 
-export function AboutUs({ setPage }) {
+export function AboutUs({ setPage, addNotification }) {
+    const [formEmail, setFormEmail] = useState('');
+    const [formName, setFormName] = useState('');
+    const [formPhone, setFormPhone] = useState('');
+    const [formMessage, setFormMessage] = useState('');
+    const [formCheckbox, setFormCheckbox] = useState(false);
+
+    async function sendForm(e) {
+        e.preventDefault();
+        await addDoc(firebaseContactMessagesCollection, {
+            email: formEmail,
+            name: formName,
+            phone: formPhone,
+            message: formMessage,
+        });
+        addNotification('Mensaje enviado');
+    }
+
     return <>
         <Navbar setPage={setPage} />
         <div className="aboutus_parteSuperior">
@@ -48,25 +66,32 @@ export function AboutUs({ setPage }) {
                         Rellene los siguientes campos
                     </p>
                 </div>
-                <div className="aboutus_parteCentral__der-texto">
-                    <p>Email</p>
-                    <input className="aboutus_parteCentral__der-input"
-                        type="text" />
-                    <p>Nombre y apellido</p>
-                    <input className="aboutus_parteCentral__der-input"
-                        type="text" />
-                    <p>Número de teléfono</p>
-                    <input className="aboutus_parteCentral__der-input"
-                        type="text" />
-                    <p>Mensaje</p>
-                    <input className="aboutus_parteCentral__der-input"
-                        type="text" />
-                </div>
-                <div className="aboutus_parteCentral__der-inferior">
-                    <button className="aboutus_button1" />
-                    <p>Acepto términos y condiciones</p>
-                </div>
-                <button className="aboutus_button2">Enviar</button>
+                <form onSubmit={sendForm} className="login_form user_form">
+                    <div className="aboutus_parteCentral__der-texto">
+                        <p>Email</p>
+                        <input type="email" id="aboutus_email" name="aboutus_email"
+                            value={formEmail} onChange={(e) => setFormEmail(e.target.value)}
+                            className="aboutus_parteCentral__der-input" required minLength="3" maxLength="40" />
+                        <p>Nombre y apellido</p>
+                        <input type="text" id="aboutus_name" name="aboutus_name"
+                            value={formName} onChange={(e) => setFormName(e.target.value)}
+                            className="aboutus_parteCentral__der-input" required minLength="3" maxLength="40" />
+                        <p>Número de teléfono</p>
+                        <input type="number" id="aboutus_phone" name="aboutus_phone"
+                            value={formPhone} onChange={(e) => setFormPhone(e.target.value)}
+                            className="aboutus_parteCentral__der-input" required minLength="3" maxLength="40" />
+                        <p>Mensaje</p>
+                        <input type="text" id="aboutus_message" name="aboutus_message"
+                            value={formMessage} onChange={(e) => setFormMessage(e.target.value)}
+                            className="aboutus_parteCentral__der-input" required minLength="3" maxLength="40" />
+                    </div>
+                    <div className="aboutus_parteCentral__der-inferior">
+                        <input type="checkbox" className="aboutus_button1" required
+                            checked={formCheckbox} onChange={() => setFormCheckbox((b) => !b)} />
+                        <p>Acepto términos y condiciones</p>
+                    </div>
+                    <button className="aboutus_button2">Enviar</button>
+                </form>
             </div>
         </div>
         <div className="aboutus_parteInferior">

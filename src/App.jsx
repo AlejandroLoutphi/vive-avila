@@ -344,7 +344,7 @@ function Register({ setPage, setUser, addNotification, googleSignIn }) {
 
 function App() {
 	// Cambiar página defecto
-	const [page, setPage] = useState(Page.login);
+	const [page, setPage] = useState(Page.aboutUs);
 	const [user, setUser] = useState();
 	const [errNotifications, setErrNotifications] = useState([]);
 
@@ -421,6 +421,7 @@ function App() {
 				<Register setPage={setPage} setUser={setUser}
 					addNotification={addNotification} googleSignIn={googleSignIn} />
 			</>;
+
 		case Page.editProfile:
 			if (user.provider) break;
 			return <>
@@ -430,6 +431,7 @@ function App() {
 				<EditProfile setPage={setPage} user={user} setUser={setUser}
 					addNotification={addNotification} />
 			</>;
+
 		case Page.login:
 			return <>
 				{errNotifications.length > 0 && errNotifications.map((n, idx) =>
@@ -438,10 +440,23 @@ function App() {
 				<Login setPage={setPage} setUser={setUser}
 					addNotification={addNotification} googleSignIn={googleSignIn} />
 			</>;
+
 		case Page.start:
-			return <MainPage setPage={setPage} />;
+			return <>
+				{errNotifications.length > 0 && errNotifications.map((n, idx) =>
+					<Notification key={idx} text={n} />
+				)}
+				<MainPage setPage={setPage} />
+			</>;
+
 		case Page.aboutUs:
-			return <AboutUs setPage={setPage} />;
+			return <>
+				{errNotifications.length > 0 && errNotifications.map((n, idx) =>
+					<Notification key={idx} text={n} />
+				)}
+				<AboutUs setPage={setPage} addNotification={addNotification} />
+			</>;
+
 	}
 	// Placeholder
 	return <>
