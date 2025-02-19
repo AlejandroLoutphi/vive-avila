@@ -1,7 +1,8 @@
 import React from "react";
 import { initializeApp } from "firebase/app";
+// NOTE: use firestore lite?
 import { getFirestore, collection } from "firebase/firestore";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signOut } from "firebase/auth";
 
 // Setup de Firebase
 const firebaseConfig = {
@@ -25,6 +26,7 @@ export const firebaseGoogleProvider = new GoogleAuthProvider();
 export const Page = Object.freeze({
 	start: Symbol(),
 	register: Symbol(),
+	editProfile: Symbol(),
 	login: Symbol(),
 	aboutUs: Symbol(),
 });
@@ -34,6 +36,11 @@ export const UserType = Object.freeze({
 	guide: 'guide',
 	student: 'student',
 })
+
+export const UserProvider = Object.freeze({
+	viveAvila: undefined,
+	google: 'google',
+});
 
 export function Navbar({ setPage }) {
 	return <nav className="navbar">
@@ -48,13 +55,16 @@ export function Navbar({ setPage }) {
 			<a onClick={() => setPage(Page.start)} className="nav-item">Guia</a>
 			<a onClick={() => setPage(Page.start)} className="nav-item">Excursiones</a>
 			<a onClick={() => setPage(Page.start)} className="nav-item">Foro</a>
-			<a onClick={() => setPage(Page.start)} className="nav-item">Sobre Nosotros</a>
+			<a onClick={() => setPage(Page.aboutUs)} className="nav-item">Sobre Nosotros</a>
 			<div className="nav-dropdown-container">
 				<a className="nav-item">Perfil</a>
 				<div className="nav-dropdown">
 					<a onClick={() => setPage(Page.start)} className="nav-item">Mi Perfil</a>
-					<a onClick={() => setPage(Page.start)} className="nav-item">Editar Perfil</a>
-					<a onClick={() => setPage(Page.login)} className="nav-item">Cerrar Sesión</a>
+					<a onClick={() => setPage(Page.editProfile)} className="nav-item">Editar Perfil</a>
+					<a onClick={() => {
+						signOut(firebaseAuth);
+						setPage(Page.login);
+					}} className="nav-item">Cerrar Sesión</a>
 				</div>
 			</div>
 		</div>
@@ -79,7 +89,7 @@ export function Footer() {
 }
 
 
-export function ErrNofification({ text }) {
+export function Notification({ text }) {
 	return <div id="err_notification" className="err_notification notification">
 		{text}
 	</ div>
