@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { addDoc, getDocs, setDoc, query, where, limit, getCountFromServer } from "firebase/firestore";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, onAuthStateChanged } from "firebase/auth";
+import {
+	createUserWithEmailAndPassword,
+	signInWithEmailAndPassword,
+	signInWithPopup,
+	onAuthStateChanged,
+	updatePassword
+} from "firebase/auth";
 import {
 	firebaseAuth,
 	firebaseUsersCollection,
@@ -79,8 +85,7 @@ function EditProfile({ setPage, user, setUser, addNotification }) {
 	const [formUsername, setFormUsername] = useState(user.username);
 	const [formPhone, setFormPhone] = useState(user.phone);
 	const [formDate, setFormDate] = useState(user.date);
-	// TODO: Implementar Password
-	//const [formPassword, setFormPassword] = useState(user.);
+	const [formPassword, setFormPassword] = useState('');
 	const [formPfp, setFormPfp] = useState();
 	const [formPfpBase64, setFormPfpBase64] = useState(user.pfp);
 
@@ -88,7 +93,6 @@ function EditProfile({ setPage, user, setUser, addNotification }) {
 		e.preventDefault();
 		if (!formUsername ||
 			!formPhone ||
-			//!formPassword ||
 			!formPfpBase64) return;
 		const q = query(firebaseUsersCollection,
 			where("uid", "==", user.uid),
@@ -102,11 +106,10 @@ function EditProfile({ setPage, user, setUser, addNotification }) {
 			phone: formPhone,
 			pfp: formPfpBase64,
 		};
-		setDoc(querySnapshot.docs[0].ref, dbUser)
-			.then(() => {
-				addNotification('Usuario modificado');
-				setUser({ ...dbUser, auth: userAuth, type: dbUser.type });
-			});
+		await setDoc(querySnapshot.docs[0].ref, dbUser)
+		if (formPassword) await updatePassword(user.auth, formPassword);
+		addNotification('Usuario modificado');
+		setUser({ ...dbUser, auth: userAuth, type: dbUser.type });
 	}
 
 	async function pfpChange(e) {
@@ -150,14 +153,13 @@ function EditProfile({ setPage, user, setUser, addNotification }) {
 								value={formPhone} onChange={(e) => setFormPhone(e.target.value)}
 								className="register_phone register_field" required minLength="3" maxLength="40" />
 						</div>
-						{/*
 						<div className="register_form_section_password register_form_section">
 							<label className="register_form_text" htmlFor="editProfile_password">Contraseña</label>
 							<input type="password" id="editProfile_password" name="register_password"
 								value={formPassword} onChange={(e) => setFormPassword(e.target.value)}
-								className="register_password register_field" required minLength="6" maxLength="40" />
+								className="register_password register_field" minLength="6" maxLength="40"
+								placeholder="(sin cambios)" />
 						</div>
-						*/}
 					</div>
 					<div className="divisor">
 						<div className="register_form_section_pfp register_form_section">
