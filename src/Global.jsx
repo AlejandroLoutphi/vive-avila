@@ -18,6 +18,7 @@ const firebaseApp = initializeApp(firebaseConfig);
 export const firebaseDb = getFirestore(firebaseApp);
 export const firebaseUsersCollection = collection(firebaseDb, 'users');
 export const firebaseContactMessagesCollection = collection(firebaseDb, 'contactMessages');
+export const firebaseToursCollection = collection(firebaseDb, 'tours');
 export const firebaseAuth = getAuth(firebaseApp);
 export const firebaseGoogleProvider = new GoogleAuthProvider();
 
@@ -30,7 +31,6 @@ export const Page = Object.freeze({
 	editProfile: Symbol(),
 	login: Symbol(),
 	aboutUs: Symbol(),
-	guideHome: Symbol(),
 });
 
 export const UserType = Object.freeze({

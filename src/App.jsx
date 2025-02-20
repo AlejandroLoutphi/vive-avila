@@ -443,6 +443,14 @@ function App() {
 			</>;
 
 		case Page.start:
+			if (user && user.type === UserType.guide) {
+				return <>
+					{errNotifications.length > 0 && errNotifications.map((n, idx) =>
+						<Notification key={idx} text={n} />
+					)}
+					<GuideHome user={user} setPage={setPage} />
+				</>;
+			}
 			return <>
 				{errNotifications.length > 0 && errNotifications.map((n, idx) =>
 					<Notification key={idx} text={n} />
@@ -457,14 +465,6 @@ function App() {
 				)}
 				<AboutUs setPage={setPage} addNotification={addNotification} />
 			</>;
-		case Page.guideHome:
-			return <>
-				{errNotifications.length > 0 && errNotifications.map((n, idx) =>
-					<Notification key={idx} text={n} />
-				)}
-				<GuideHome setPage={setPage} />
-			</>;
-
 	}
 	// Placeholder
 	return <>

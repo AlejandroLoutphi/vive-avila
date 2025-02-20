@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './GuideHome.css';
-import { Navbar, Footer } from './Global';
+import { Navbar, Footer, firebaseToursCollection } from './Global';
+import { query, getDocs, where } from 'firebase/firestore';
 
-function GuideHome({ setPage }) {
+function GuideHome({ user, setPage }) {
   // Datos de prueba para la tabla:
-  const pendingTrips = [
-    { titular: 'Carlos Pérez', personas: 5, ruta: 'Sabas Nieves', fecha: '2025-05-10', telefono: '0412-1234567' },
-    { titular: 'María García', personas: 3, ruta: 'Los Venados', fecha: '2025-05-12', telefono: '0414-6543210' },
-    { titular: 'Juan Rodríguez', personas: 10, ruta: 'El Marqués', fecha: '2025-05-15', telefono: '0424-1112223' },
-  ];
-
+  const [pendingTrips, setPendingTrips] = useState([]);
+  async function loadTours() {
+    const q = query(firebaseToursCollection,
+      where("guide", "==", user.uid),
+    );
+    const querySnapshot = await getDocs(q);
+    let o = [];
+    for (let i = 0; i < querySnapshot.docs.length; i++) {
+      o = [...o, querySnapshot.docs[i].data()];
+    }
+    setPendingTrips(o);
+  }
+  loadTours();
   const handleCancel = (trip) => {
     alert(`Cancelar viaje de: ${trip.titular}`);
     // Aquí pondríamos la lógica real para cancelar:
@@ -60,7 +68,7 @@ function GuideHome({ setPage }) {
                   <td>{trip.personas}</td>
                   <td>{trip.ruta}</td>
                   <td>{trip.fecha}</td>
-                  <td>{trip.telefono}</td>
+                  <td>{trip.phone}</td>
                   <td>
                     <button
                       className="cancel-button"
