@@ -8,6 +8,9 @@ import {
 	signInWithEmailAndPassword
 } from "firebase/auth";
 import './App.css';
+import GuideHome from './GuideHome'; 
+
+
 
 // Setup de Firebase
 const firebaseConfig = {
@@ -280,7 +283,7 @@ function App() {
 
 	// Para mostrar una página, solo hacemos un switch sobre todas
 	// las páginas posibles y retornamos ese componente
-	switch (page) {
+	/*switch (page) {
 		case Page.register:
 			return <>
 				{errNotifications.length > 0 && errNotifications.map((n, idx) =>
@@ -299,9 +302,30 @@ function App() {
 				<button onClick={() => setCount((count) => count + 1)}>
 					Increment
 				</button>
-			</>;
+			</>; 
 	}
-}
+} */
+	switch (page) {
+		case Page.login:
+		  return <Login setPage={setPage} setUser={setUser} setUserType={setUserType} />;
+		case Page.register:
+		  return <Register setPage={setPage} setUser={setUser} setUserType={setUserType} />;
+		default:
+		  // Si ya está logueado y es guia => muestra la vista de guía
+		  if (user && userType === UserType.guide) {
+			return <GuideHome />;
+		  }
+		  // Si está logueado pero no es guia => muestra la vista que quieras para usuario normal
+		  if (user) {
+			return <h1>Pantalla principal de usuario normal</h1>;
+		  }
+		  // Si no hay user => login
+		  return <Login setPage={setPage} setUser={setUser} setUserType={setUserType} />;
+	  }
+	  
+
+  
+  
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(React.createElement(App, { key: "app" }));
