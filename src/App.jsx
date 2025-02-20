@@ -23,6 +23,7 @@ import { AboutUs } from "./AboutUs";
 import "./App.css";
 import './MainPage.css';
 import './AboutUs.css';
+import GuideHome from './GuideHome';
 
 function Login({ setPage, addNotification, googleSignIn }) {
 	const [formEmail, setFormEmail] = useState('');
@@ -344,7 +345,7 @@ function Register({ setPage, setUser, addNotification, googleSignIn }) {
 
 function App() {
 	// Cambiar página defecto
-	const [page, setPage] = useState(Page.aboutUs);
+	const [page, setPage] = useState(Page.start);
 	const [user, setUser] = useState();
 	const [errNotifications, setErrNotifications] = useState([]);
 
@@ -456,6 +457,13 @@ function App() {
 				)}
 				<AboutUs setPage={setPage} addNotification={addNotification} />
 			</>;
+		case Page.guideHome:
+			return <>
+				{errNotifications.length > 0 && errNotifications.map((n, idx) =>
+					<Notification key={idx} text={n} />
+				)}
+				<GuideHome setPage={setPage} />
+			</>;
 
 	}
 	// Placeholder
@@ -463,7 +471,6 @@ function App() {
 		<h1>{user ? 'Estás Registrado' : 'No está registrado'}</h1>
 	</>;
 }
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(React.createElement(App, { key: "app" }));
 window.onbeforeunload = () => {

@@ -30,6 +30,7 @@ export const Page = Object.freeze({
 	editProfile: Symbol(),
 	login: Symbol(),
 	aboutUs: Symbol(),
+	guideHome: Symbol(),
 });
 
 export const UserType = Object.freeze({
