@@ -1,9 +1,9 @@
 import React from 'react';
 import { Footer, Navbar } from './Global';
 
-export function MainPage({ setPage }) {
+export function MainPage({ setPage, user }) {
     return <>
-        <Navbar setPage={setPage} />
+        <Navbar setPage={setPage} user={user} />
         <div className="start_home-page">
             <div className="start_hero-section">
                 <img

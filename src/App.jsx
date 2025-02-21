@@ -20,10 +20,11 @@ import {
 } from "./Global";
 import { MainPage } from "./MainPage";
 import { AboutUs } from "./AboutUs";
+import { GuideHome } from './GuideHome';
 import "./App.css";
 import './MainPage.css';
 import './AboutUs.css';
-import GuideHome from './GuideHome';
+import './GuideHome.css';
 
 function Login({ setPage, addNotification, googleSignIn }) {
 	const [formEmail, setFormEmail] = useState('');
@@ -448,14 +449,14 @@ function App() {
 					{errNotifications.length > 0 && errNotifications.map((n, idx) =>
 						<Notification key={idx} text={n} />
 					)}
-					<GuideHome user={user} setPage={setPage} />
+					<GuideHome user={user} setPage={setPage} addNotification={addNotification} />
 				</>;
 			}
 			return <>
 				{errNotifications.length > 0 && errNotifications.map((n, idx) =>
 					<Notification key={idx} text={n} />
 				)}
-				<MainPage setPage={setPage} />
+				<MainPage setPage={setPage} user={user} />
 			</>;
 
 		case Page.aboutUs:
@@ -463,7 +464,7 @@ function App() {
 				{errNotifications.length > 0 && errNotifications.map((n, idx) =>
 					<Notification key={idx} text={n} />
 				)}
-				<AboutUs setPage={setPage} addNotification={addNotification} />
+				<AboutUs setPage={setPage} addNotification={addNotification} user={user} />
 			</>;
 	}
 	// Placeholder

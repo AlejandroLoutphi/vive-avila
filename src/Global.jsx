@@ -18,7 +18,7 @@ const firebaseApp = initializeApp(firebaseConfig);
 export const firebaseDb = getFirestore(firebaseApp);
 export const firebaseUsersCollection = collection(firebaseDb, 'users');
 export const firebaseContactMessagesCollection = collection(firebaseDb, 'contactMessages');
-export const firebaseToursCollection = collection(firebaseDb, 'tours');
+export const firebasePendingTripsCollection = collection(firebaseDb, 'pendingTrips');
 export const firebaseAuth = getAuth(firebaseApp);
 export const firebaseGoogleProvider = new GoogleAuthProvider();
 
@@ -44,31 +44,35 @@ export const UserProvider = Object.freeze({
 	google: 'google',
 });
 
-export function Navbar({ setPage }) {
+export function Navbar({ setPage, user }) {
 	return <nav className="navbar">
-		<img
-			loading="lazy"
-			src="/nav-logo.png"
-			className="nav-logo"
-			alt="Navigation logo"
-		/>
+		<img loading="lazy" src="/nav-logo.png" className="nav-logo" alt="Navigation logo" />
 		<div className="nav-links">
 			<a onClick={() => setPage(Page.start)} className="nav-item">Inicio</a>
-			<a onClick={() => setPage(Page.start)} className="nav-item">Guia</a>
-			<a onClick={() => setPage(Page.start)} className="nav-item">Excursiones</a>
-			<a onClick={() => setPage(Page.start)} className="nav-item">Foro</a>
-			<a onClick={() => setPage(Page.aboutUs)} className="nav-item">Sobre Nosotros</a>
-			<div className="nav-dropdown-container">
-				<a className="nav-item">Perfil</a>
-				<div className="nav-dropdown">
-					<a onClick={() => setPage(Page.start)} className="nav-item">Mi Perfil</a>
-					<a onClick={() => setPage(Page.editProfile)} className="nav-item">Editar Perfil</a>
-					<a onClick={() => {
-						signOut(firebaseAuth);
-						setPage(Page.login);
-					}} className="nav-item">Cerrar Sesión</a>
-				</div>
-			</div>
+			{(!user || user.type == UserType.student) && <>
+				<a onClick={() => setPage(Page.start)} className="nav-item">Guia</a>
+				<a onClick={() => setPage(Page.start)} className="nav-item">Excursiones</a>
+				<a onClick={() => setPage(Page.start)} className="nav-item">Foro</a>
+				<a onClick={() => setPage(Page.aboutUs)} className="nav-item">Sobre Nosotros</a>
+			</>}
+			{user ?
+				<div className="nav-dropdown-container">
+					<a className="nav-item">Perfil</a>
+					<div className="nav-dropdown">
+						<a onClick={() => setPage(Page.start)} className="nav-item">Mi Perfil</a>
+						{user.provider &&
+							<a onClick={() => setPage(Page.editProfile)} className="nav-item">
+								Editar Perfil
+							</a>
+						}
+						<a onClick={() => {
+							signOut(firebaseAuth);
+							setPage(Page.login);
+						}} className="nav-item">Cerrar Sesión</a>
+					</div>
+				</div> :
+				<a onClick={() => setPage(Page.login)} className="nav-item">Iniciar Sesión</a>
+			}
 		</div>
 	</nav>
 }

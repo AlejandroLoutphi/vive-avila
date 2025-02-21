@@ -1,47 +1,28 @@
-import React, { useState } from 'react';
-import './GuideHome.css';
-import { Navbar, Footer, firebaseToursCollection } from './Global';
-import { query, getDocs, where } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { Navbar, Footer, firebasePendingTripsCollection } from './Global';
+import { query, getDocs, where, deleteDoc } from 'firebase/firestore';
 
-function GuideHome({ user, setPage }) {
-  // Datos de prueba para la tabla:
+export function GuideHome({ user, setPage, addNotification }) {
   const [pendingTrips, setPendingTrips] = useState([]);
+
   async function loadTours() {
-    const q = query(firebaseToursCollection,
-      where("guide", "==", user.uid),
-    );
+    const q = query(firebasePendingTripsCollection, where("guide", "==", user.uid));
     const querySnapshot = await getDocs(q);
-    let o = [];
-    for (let i = 0; i < querySnapshot.docs.length; i++) {
-      o = [...o, querySnapshot.docs[i].data()];
-    }
-    setPendingTrips(o);
+    setPendingTrips(querySnapshot.docs.map((doc) => ({ ...doc.data(), docRef: doc.ref })));
   }
-  loadTours();
-  const handleCancel = (trip) => {
-    alert(`Cancelar viaje de: ${trip.titular}`);
-    // Aquí pondríamos la lógica real para cancelar:
-    // * Borrar en Firestore
-    // * Actualizar estado, etc.
-  };
+
+  async function cancelTrip(trip) {
+    if (!window.confirm("Cancelar viaje de: " + trip.titular)) return;
+    await deleteDoc(trip.docRef);
+    addNotification('Viaje cancelado');
+    loadTours();
+  }
+
+  useEffect(() => { loadTours(); }, []);
 
   return (
     <div className="guide-page-container">
-      <Navbar setPage={setPage} />
-      {/*
-      <header className="guide-header">
-        <img
-          className="guide-logo"
-          src="logo-image.png" // Ajusta la ruta si es diferente
-          alt="Logo Vive Ávila"
-        />
-        <nav className="guide-nav">
-          <a href="#inicio">Inicio</a>
-          <a href="#perfil">Perfil</a>
-        </nav>
-      </header>
-      */}
-
+      <Navbar setPage={setPage} user={user} />
       <section className="guide-main-banner">
         <h1 className="guide-title">HAS INICIADO SESIÓN COMO GUÍA</h1>
       </section>
@@ -70,11 +51,8 @@ function GuideHome({ user, setPage }) {
                   <td>{trip.fecha}</td>
                   <td>{trip.phone}</td>
                   <td>
-                    <button
-                      className="cancel-button"
-                      onClick={() => handleCancel(trip)}
-                    >
-                      Cancelar <span className="cancel-icon">✖</span>
+                    <button className="guide-cancel-button" onClick={() => cancelTrip(trip)} >
+                      Cancelar <span className="guide-cancel-icon">✖</span>
                     </button>
                   </td>
                 </tr>
@@ -88,5 +66,3 @@ function GuideHome({ user, setPage }) {
     </div>
   );
 }
-
-export default GuideHome;
