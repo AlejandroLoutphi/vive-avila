@@ -1,20 +1,8 @@
 import React, { useState } from "react";
-import {
-	signInWithEmailAndPassword,
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { firebaseAuth, Page, Footer } from "./App";
 
-} from "firebase/auth";
-import {
-	firebaseAuth,
-	Page,
-	Footer,
-
-} from "./Global";
-import "./App.css";
-import './MainPage.css';
-import './AboutUs.css';
-import './GuideHome.css';
-
-function Login({ setPage, addNotification, googleSignIn }) {
+export function Login({ setPage, addNotification, googleSignIn }) {
     const [formEmail, setFormEmail] = useState('');
     const [formPassword, setFormPassword] = useState('');
 

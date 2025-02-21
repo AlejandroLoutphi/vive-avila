@@ -1,24 +1,10 @@
 import React, { useState } from "react";
 import { addDoc } from "firebase/firestore";
-import {
-	createUserWithEmailAndPassword,
-} from "firebase/auth";
-import {
-	firebaseAuth,
-	firebaseUsersCollection,
-	Page,
-	UserType,
-	Footer,
-} from "./Global";
-import "./App.css";
-import './MainPage.css';
-import './AboutUs.css';
-import './GuideHome.css';
-import React from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { firebaseAuth, firebaseUsersCollection, Page, UserType, Footer } from "./App";
+import './Register.css';
 
-
-
-function Register({ setPage, setUser, addNotification, googleSignIn }) {
+export function Register({ setPage, setUser, addNotification, googleSignIn }) {
     const [formUsername, setFormUsername] = useState('');
     const [formPhone, setFormPhone] = useState('');
     const [formEmail, setFormEmail] = useState('');

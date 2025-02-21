@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Navbar, Footer, firebasePendingTripsCollection } from './Global';
+import { Navbar, Footer, firebasePendingTripsCollection } from './App';
 import { query, getDocs, where, deleteDoc } from 'firebase/firestore';
+import './GuideHome.css';
 
 export function GuideHome({ user, setPage, addNotification }) {
   const [pendingTrips, setPendingTrips] = useState([]);

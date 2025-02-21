@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Footer, Navbar, firebaseContactMessagesCollection } from './Global';
 import { addDoc } from "firebase/firestore";
+import { Footer, Navbar, firebaseContactMessagesCollection } from './App';
+import './AboutUs.css';
 
 export function AboutUs({ setPage, addNotification, user }) {
     const [formEmail, setFormEmail] = useState('');

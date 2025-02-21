@@ -1,22 +1,10 @@
 import React, { useState } from "react";
 import { getDocs, setDoc, query, where, limit } from "firebase/firestore";
-import {
-	updatePassword
-} from "firebase/auth";
-import {
-	firebaseUsersCollection,
-	Page,
-	Footer,
-} from "./Global";
-import "./App.css";
-import './MainPage.css';
-import './AboutUs.css';
-import './GuideHome.css';
-import React from "react";
+import { updatePassword } from "firebase/auth";
+import { firebaseUsersCollection, Page, Footer } from "./App";
+// Edit Profile (por ahora) reusa Register.css
 
-
-
-function EditProfile({ setPage, user, setUser, addNotification }) {
+export function EditProfile({ setPage, user, setUser, addNotification }) {
     const [formUsername, setFormUsername] = useState(user.username);
     const [formPhone, setFormPhone] = useState(user.phone);
     const [formDate, setFormDate] = useState(user.date);

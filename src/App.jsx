@@ -1,33 +1,34 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
-import { addDoc, getDocs, query, where, limit, getCountFromServer } from "firebase/firestore";
+import { initializeApp } from "firebase/app";
+// NOTE: use firestore lite?
+import {
+	getFirestore,
+	collection,
+	addDoc,
+	getDocs,
+	query,
+	where,
+	limit,
+	getCountFromServer
+} from "firebase/firestore";
 import {
 	signInWithPopup,
 	onAuthStateChanged,
+	getAuth,
+	GoogleAuthProvider,
+	signOut
 } from "firebase/auth";
-import {
-	firebaseAuth,
-	firebaseUsersCollection,
-	Page,
-	UserType,
-	UserProvider,
-	Footer,
-	Notification,
-	firebaseGoogleProvider
-} from "./Global";
 import { MainPage } from "./MainPage";
 import { AboutUs } from "./AboutUs";
 import { GuideHome } from './GuideHome';
+import { EditProfile } from './EditProfile';
+import { Register } from './Register';
+import { Login } from './Login';
 import "./App.css";
 import './MainPage.css';
 import './AboutUs.css';
 import './GuideHome.css';
-import React from "react";
-import { initializeApp } from "firebase/app";
-// NOTE: use firestore lite?
-import { getFirestore, collection } from "firebase/firestore";
-import { getAuth, GoogleAuthProvider, signOut } from "firebase/auth";
-
 
 // Setup de Firebase
 const firebaseConfig = {
