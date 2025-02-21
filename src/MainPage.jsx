@@ -1,5 +1,6 @@
 import React from 'react';
-import { Footer, Navbar } from './Global';
+import { Footer, Navbar } from './App';
+import './MainPage.css';
 
 export function MainPage({ setPage, user }) {
     return <>
