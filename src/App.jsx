@@ -131,7 +131,7 @@ export function Notification({ text }) {
 
 function App() {
 	// Cambiar página defecto
-	const [page, setPage] = useState(Page.start);
+	const [page, setPage] = useState(Page.register);
 	const [user, setUser] = useState();
 	const [errNotifications, setErrNotifications] = useState([]);
 
