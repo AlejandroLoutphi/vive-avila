@@ -29,6 +29,9 @@ export function Login({ setPage, addNotification, googleSignIn }) {
 
     // TODO: add loading animation
     return <>
+        <div className="Login_container">
+
+        
         <h1 className="login_title title">¡Bienvenido de nuevo!</h1>
         <form onSubmit={loginAccount} className="login_form user_form">
             <h2 className="login_subtitle subtitle">Inicio de Sesión</h2>
@@ -56,6 +59,7 @@ export function Login({ setPage, addNotification, googleSignIn }) {
             ¿No tienes cuenta?
             <a onClick={() => setPage(Page.register)}> Regístrate</a>
         </h2 >
+        </div>
         <Footer />
     </>;
 }
