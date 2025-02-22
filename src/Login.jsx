@@ -61,5 +61,6 @@ export function Login({ setPage, addNotification, googleSignIn }) {
         </h2 >
         </div>
         <Footer />
+        <img className="register_img" />
     </>;
 }
