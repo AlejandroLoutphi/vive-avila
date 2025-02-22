@@ -20,15 +20,13 @@ import {
 	signOut
 } from "firebase/auth";
 import { MainPage } from "./MainPage";
+import { BlogGuide } from "./BlogGuide";
 import { AboutUs } from "./AboutUs";
 import { GuideHome } from './GuideHome';
 import { EditProfile } from './EditProfile';
 import { Register } from './Register';
 import { Login } from './Login';
 import "./App.css";
-import './MainPage.css';
-import './AboutUs.css';
-import './GuideHome.css';
 
 // Setup de Firebase
 const firebaseConfig = {
@@ -45,6 +43,7 @@ export const firebaseDb = getFirestore(firebaseApp);
 export const firebaseUsersCollection = collection(firebaseDb, 'users');
 export const firebaseContactMessagesCollection = collection(firebaseDb, 'contactMessages');
 export const firebasePendingTripsCollection = collection(firebaseDb, 'pendingTrips');
+export const firebaseBlogArticlesCollection = collection(firebaseDb, 'blogArticles');
 export const firebaseAuth = getAuth(firebaseApp);
 export const firebaseGoogleProvider = new GoogleAuthProvider();
 
@@ -57,13 +56,14 @@ export const Page = Object.freeze({
 	editProfile: Symbol(),
 	login: Symbol(),
 	aboutUs: Symbol(),
+	blogGuide: Symbol(),
 });
 
 export const UserType = Object.freeze({
 	admin: 'admin',
 	guide: 'guide',
 	student: 'student',
-})
+});
 
 export const UserProvider = Object.freeze({
 	viveAvila: undefined,
@@ -76,7 +76,7 @@ export function Navbar({ setPage, user }) {
 		<div className="nav-links">
 			<a onClick={() => setPage(Page.start)} className="nav-item">Inicio</a>
 			{(!user || user.type == UserType.student) && <>
-				<a onClick={() => setPage(Page.start)} className="nav-item">Guia</a>
+				<a onClick={() => setPage(Page.blogGuide)} className="nav-item">Guia</a>
 				<a onClick={() => setPage(Page.start)} className="nav-item">Excursiones</a>
 				<a onClick={() => setPage(Page.start)} className="nav-item">Foro</a>
 				<a onClick={() => setPage(Page.aboutUs)} className="nav-item">Sobre Nosotros</a>
@@ -120,14 +120,11 @@ export function Footer() {
 	</footer>
 }
 
-
 export function Notification({ text }) {
 	return <div id="err_notification" className="err_notification notification">
 		{text}
 	</ div>
 }
-
-
 
 function App() {
 	// Cambiar página defecto
@@ -251,14 +248,22 @@ function App() {
 				)}
 				<AboutUs setPage={setPage} addNotification={addNotification} user={user} />
 			</>;
+
+		case Page.blogGuide:
+			return <>
+				{errNotifications.length > 0 && errNotifications.map((n, idx) =>
+					<Notification key={idx} text={n} />
+				)}
+				<BlogGuide setPage={setPage} user={user} />
+			</>;
 	}
 	// Placeholder
 	return <>
 		<h1>{user ? 'Estás Registrado' : 'No está registrado'}</h1>
 	</>;
 }
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(React.createElement(App, { key: "app" }));
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 window.onbeforeunload = () => {
 	window.scrollTo(0, 0);
 }
