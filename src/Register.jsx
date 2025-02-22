@@ -18,8 +18,11 @@ export function Register({ setPage, setUser, addNotification, googleSignIn }) {
         if (!formUsername ||
             !formPhone ||
             !formEmail ||
-            !formPassword ||
-            !formPfpBase64) return;
+            !formPassword) return;
+        if (!formPfpBase64) {
+            addNotification("Debe subir una foto de perfil");
+            return;
+        }
         createUserWithEmailAndPassword(firebaseAuth, formEmail, formPassword)
             .then(async (userCredential) => {
                 const userAuth = userCredential.user;
@@ -120,7 +123,7 @@ export function Register({ setPage, setUser, addNotification, googleSignIn }) {
                             {/* si subes una img con error, aún aparece que la has subido
                 asumo que ocultaremos eso igual, pero por ahora está raro */}
                             <input type="file" id="register_pfp" name="register_pfp" onChange={pfpChange}
-                                className="register_pfp register_field" required accept="image/*" />
+                                className="register_pfp register_field" accept="image/*" />
                         </div>
                         <div className="register_form_section_date register_form_section">
                             <label className="register_form_text" htmlFor="register_date">Fecha de Nacimiento</label>
@@ -129,8 +132,7 @@ export function Register({ setPage, setUser, addNotification, googleSignIn }) {
                                 className="register_date register_field" required
                                 max={new Date().toISOString().slice(0, 10)} />
                         </div>
-                        <button type="submit" disabled={!formPfpBase64}
-                            className="register_submit_button button_1">
+                        <button type="submit" className="register_submit_button button_1">
                             Crear Cuenta
                         </button>
                     </div>

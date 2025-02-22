@@ -39,7 +39,7 @@ const firebaseConfig = {
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
-export const firebaseDb = getFirestore(firebaseApp);
+const firebaseDb = getFirestore(firebaseApp);
 export const firebaseUsersCollection = collection(firebaseDb, 'users');
 export const firebaseContactMessagesCollection = collection(firebaseDb, 'contactMessages');
 export const firebasePendingTripsCollection = collection(firebaseDb, 'pendingTrips');
@@ -51,12 +51,12 @@ export const firebaseGoogleProvider = new GoogleAuthProvider();
 // JS no soporta enums, así que solo usamos una
 // colección constante de valores inmutables
 export const Page = Object.freeze({
-	start: Symbol(),
-	register: Symbol(),
-	editProfile: Symbol(),
-	login: Symbol(),
-	aboutUs: Symbol(),
-	blogGuide: Symbol(),
+	start: "start",
+	register: "register",
+	editProfile: "editProfile",
+	login: "login",
+	aboutUs: "aboutUs",
+	blogGuide: "blogGuide",
 });
 
 export const UserType = Object.freeze({
@@ -120,17 +120,25 @@ export function Footer() {
 	</footer>
 }
 
-export function Notification({ text }) {
-	return <div id="err_notification" className="err_notification notification">
+function Notification({ text }) {
+	return <div className="notification">
 		{text}
 	</ div>
 }
 
+function NotificationContainer({ notifications }) {
+	return <>
+		{notifications.length > 0 && notifications.map((n, idx) =>
+			<Notification key={idx} text={n} />
+		)}
+	</>
+}
+
 function App() {
 	// Cambiar página defecto
-	const [page, setPage] = useState(Page.start);
+	const [page, setPage] = useState(Page.register);
 	const [user, setUser] = useState();
-	const [errNotifications, setErrNotifications] = useState([]);
+	const [notifications, setNotifications] = useState([]);
 
 	useEffect(() => onAuthStateChanged(firebaseAuth, async (userAuth) => {
 		if (!userAuth) {
@@ -187,10 +195,10 @@ function App() {
 
 	const notificationDisplayMs = 5000;
 	function addNotification(n) {
-		setErrNotifications(errNotifications => [...errNotifications, n]);
+		setNotifications(notifications => [...notifications, n]);
 		setTimeout(() =>
-			setErrNotifications(errNotifications =>
-				errNotifications.slice(1, undefined)
+			setNotifications(notifications =>
+				notifications.slice(1, undefined)
 			), notificationDisplayMs);
 	};
 
@@ -199,9 +207,7 @@ function App() {
 	switch (page) {
 		case Page.register:
 			return <>
-				{errNotifications.length > 0 && errNotifications.map((n, idx) =>
-					<Notification key={idx} text={n} />
-				)}
+				<NotificationContainer notifications={notifications} />
 				<Register setPage={setPage} setUser={setUser}
 					addNotification={addNotification} googleSignIn={googleSignIn} />
 			</>;
@@ -209,18 +215,14 @@ function App() {
 		case Page.editProfile:
 			if (user.provider) break;
 			return <>
-				{errNotifications.length > 0 && errNotifications.map((n, idx) =>
-					<Notification key={idx} text={n} />
-				)}
+				<NotificationContainer notifications={notifications} />
 				<EditProfile setPage={setPage} user={user} setUser={setUser}
 					addNotification={addNotification} />
 			</>;
 
 		case Page.login:
 			return <>
-				{errNotifications.length > 0 && errNotifications.map((n, idx) =>
-					<Notification key={idx} text={n} />
-				)}
+				<NotificationContainer notifications={notifications} />
 				<Login setPage={setPage} setUser={setUser}
 					addNotification={addNotification} googleSignIn={googleSignIn} />
 			</>;
@@ -228,32 +230,24 @@ function App() {
 		case Page.start:
 			if (user && user.type === UserType.guide) {
 				return <>
-					{errNotifications.length > 0 && errNotifications.map((n, idx) =>
-						<Notification key={idx} text={n} />
-					)}
+					<NotificationContainer notifications={notifications} />
 					<GuideHome user={user} setPage={setPage} addNotification={addNotification} />
 				</>;
 			}
 			return <>
-				{errNotifications.length > 0 && errNotifications.map((n, idx) =>
-					<Notification key={idx} text={n} />
-				)}
+				<NotificationContainer notifications={notifications} />
 				<MainPage setPage={setPage} user={user} />
 			</>;
 
 		case Page.aboutUs:
 			return <>
-				{errNotifications.length > 0 && errNotifications.map((n, idx) =>
-					<Notification key={idx} text={n} />
-				)}
+				<NotificationContainer notifications={notifications} />
 				<AboutUs setPage={setPage} addNotification={addNotification} user={user} />
 			</>;
 
 		case Page.blogGuide:
 			return <>
-				{errNotifications.length > 0 && errNotifications.map((n, idx) =>
-					<Notification key={idx} text={n} />
-				)}
+				<NotificationContainer notifications={notifications} />
 				<BlogGuide setPage={setPage} user={user} />
 			</>;
 	}
@@ -267,4 +261,3 @@ ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 window.onbeforeunload = () => {
 	window.scrollTo(0, 0);
 }
-//<iframe width="1460" height="610" frameborder="0" marginheight="0" marginwidth="0" id="gmap_canvas" src="https://maps.google.com/maps?width=1460&amp;height=610&amp;hl=en&amp;q=Universidad%20Metropolitana%20de%20Caracas%20Caracas+(Universidad%20Metropolitana%20de%20Caracas)&amp;t=k&amp;z=16&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe><script type='text/javascript' src='https://embedmaps.com/google-maps-authorization/script.js?id=ea2f4b417aa47ec70adcc844a9ef3dc3a996e900'></script>

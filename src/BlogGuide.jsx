@@ -35,7 +35,8 @@ export function BlogGuide({ setPage, user }) {
 
     useEffect(() => { loadBlogArticles(); }, []);
     useEffect(() => {
-        setArticleCount(getCountFromServer(query(firebaseBlogArticlesCollection)));
+        getCountFromServer(query(firebaseBlogArticlesCollection))
+            .then((querySnapshot) => setArticleCount(querySnapshot.data().count));
     }, []);
 
     const blogArticlesJsx = blogArticles.map((text, idx) =>

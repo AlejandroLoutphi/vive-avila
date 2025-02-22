@@ -56,5 +56,6 @@ export function Login({ setPage, addNotification, googleSignIn }) {
             <a onClick={() => setPage(Page.register)}> Regístrate</a>
         </h2 >
         <Footer />
+        <img className="register_img" />
     </>;
 }
