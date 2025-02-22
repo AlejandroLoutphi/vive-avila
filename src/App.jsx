@@ -136,7 +136,7 @@ function NotificationContainer({ notifications }) {
 
 function App() {
 	// Cambiar página defecto
-	const [page, setPage] = useState(Page.register);
+	const [page, setPage] = useState(Page.start);
 	const [user, setUser] = useState();
 	const [notifications, setNotifications] = useState([]);
 
