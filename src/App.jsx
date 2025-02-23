@@ -2,23 +2,10 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { initializeApp } from "firebase/app";
 // NOTE: use firestore lite?
-import {
-	getFirestore,
-	collection,
-	addDoc,
-	getDocs,
-	query,
-	where,
-	limit,
-	getCountFromServer
-} from "firebase/firestore";
-import {
-	signInWithPopup,
-	onAuthStateChanged,
-	getAuth,
-	GoogleAuthProvider,
-	signOut
-} from "firebase/auth";
+import { getFirestore, collection, addDoc, getDocs, query, where, limit, getCountFromServer }
+	from "firebase/firestore";
+import { signInWithPopup, onAuthStateChanged, getAuth, GoogleAuthProvider, signOut }
+	from "firebase/auth";
 import { MainPage } from "./MainPage";
 import { BlogGuide } from "./BlogGuide";
 import { AboutUs } from "./AboutUs";
@@ -51,18 +38,19 @@ export const firebaseGoogleProvider = new GoogleAuthProvider();
 // JS no soporta enums, así que solo usamos una
 // colección constante de valores inmutables
 export const Page = Object.freeze({
-	start: "start",
-	register: "register",
-	editProfile: "editProfile",
-	login: "login",
-	aboutUs: "aboutUs",
-	blogGuide: "blogGuide",
+	start: () => MainPage,
+	register: () => Register,
+	editProfile: () => EditProfile,
+	login: () => Login,
+	aboutUs: () => AboutUs,
+	blogGuide: () => BlogGuide,
+	guideHome: () => GuideHome,
 });
 
 export const UserType = Object.freeze({
+	student: undefined,
 	admin: 'admin',
 	guide: 'guide',
-	student: 'student',
 });
 
 export const UserProvider = Object.freeze({
@@ -74,7 +62,14 @@ export function Navbar({ setPage, user }) {
 	return <nav className="navbar">
 		<img loading="lazy" src="/nav-logo.png" className="nav-logo" alt="Navigation logo" />
 		<div className="nav-links">
-			<a onClick={() => setPage(Page.start)} className="nav-item">Inicio</a>
+			<a className="nav-item" onClick={() => {
+				if (!user) { setPage(Page.start); return; }
+				switch (user.type) {
+					case UserType.student: setPage(Page.start); break;
+					case UserType.guide: setPage(Page.guideHome); break;
+					case UserType.admin: setPage(Page.start); break;
+				}
+			}}>Inicio</a>
 			{(!user || user.type == UserType.student) && <>
 				<a onClick={() => setPage(Page.blogGuide)} className="nav-item">Guia</a>
 				<a onClick={() => setPage(Page.start)} className="nav-item">Excursiones</a>
@@ -86,7 +81,7 @@ export function Navbar({ setPage, user }) {
 					<a className="nav-item">Perfil</a>
 					<div className="nav-dropdown">
 						<a onClick={() => setPage(Page.start)} className="nav-item">Mi Perfil</a>
-						{user.provider &&
+						{!user.provider &&
 							<a onClick={() => setPage(Page.editProfile)} className="nav-item">
 								Editar Perfil
 							</a>
@@ -120,31 +115,14 @@ export function Footer() {
 	</footer>
 }
 
-function Notification({ text }) {
-	return <div className="notification">
-		{text}
-	</ div>
-}
-
-function NotificationContainer({ notifications }) {
-	return <>
-		{notifications.length > 0 && notifications.map((n, idx) =>
-			<Notification key={idx} text={n} />
-		)}
-	</>
-}
-
 function App() {
 	// Cambiar página defecto
-	const [page, setPage] = useState(Page.start);
+	const [PageComponent, setPage] = useState(Page.start);
 	const [user, setUser] = useState();
 	const [notifications, setNotifications] = useState([]);
 
 	useEffect(() => onAuthStateChanged(firebaseAuth, async (userAuth) => {
-		if (!userAuth) {
-			setUser();
-			return;
-		}
+		if (!userAuth) { setUser(); return; }
 		const q = query(firebaseUsersCollection,
 			where("uid", "==", userAuth.uid),
 			limit(1)
@@ -152,7 +130,8 @@ function App() {
 		const querySnapshot = await getDocs(q);
 		if (!querySnapshot.docs[0]) return;
 		const dbUser = querySnapshot.docs[0].data();
-		setUser({ ...dbUser, auth: userAuth, type: dbUser.type });
+		if (dbUser.type === UserType.guide) setPage(Page.guideHome);
+		setUser({ ...dbUser, auth: userAuth });
 	}), []);
 
 	async function googleSignIn(e) {
@@ -173,13 +152,12 @@ function App() {
 					uid: userAuth.uid,
 					username: userAuth.displayName,
 					email: userAuth.email,
-					type: UserType.student,
 					provider: UserProvider.google,
 				};
 				if (userAuth.phoneNumber) dbUser.phone = userAuth.phoneNumber;
 				if (userAuth.photoURL) dbUser.pfp = userAuth.photoURL;
 				await addDoc(firebaseUsersCollection, dbUser);
-				setUser({ ...dbUser, auth: userAuth, type: UserType.student });
+				setUser({ ...dbUser, auth: userAuth });
 				setPage(Page.start);
 			}).catch((e) => {
 				switch (e.code) {
@@ -202,62 +180,14 @@ function App() {
 			), notificationDisplayMs);
 	};
 
-	// Para mostrar una página, solo hacemos un switch sobre todas
-	// las páginas posibles y retornamos ese componente
-	switch (page) {
-		case Page.register:
-			return <>
-				<NotificationContainer notifications={notifications} />
-				<Register setPage={setPage} setUser={setUser}
-					addNotification={addNotification} googleSignIn={googleSignIn} />
-			</>;
-
-		case Page.editProfile:
-			if (user.provider) break;
-			return <>
-				<NotificationContainer notifications={notifications} />
-				<EditProfile setPage={setPage} user={user} setUser={setUser}
-					addNotification={addNotification} />
-			</>;
-
-		case Page.login:
-			return <>
-				<NotificationContainer notifications={notifications} />
-				<Login setPage={setPage} setUser={setUser}
-					addNotification={addNotification} googleSignIn={googleSignIn} />
-			</>;
-
-		case Page.start:
-			if (user && user.type === UserType.guide) {
-				return <>
-					<NotificationContainer notifications={notifications} />
-					<GuideHome user={user} setPage={setPage} addNotification={addNotification} />
-				</>;
-			}
-			return <>
-				<NotificationContainer notifications={notifications} />
-				<MainPage setPage={setPage} user={user} />
-			</>;
-
-		case Page.aboutUs:
-			return <>
-				<NotificationContainer notifications={notifications} />
-				<AboutUs setPage={setPage} addNotification={addNotification} user={user} />
-			</>;
-
-		case Page.blogGuide:
-			return <>
-				<NotificationContainer notifications={notifications} />
-				<BlogGuide setPage={setPage} user={user} />
-			</>;
-	}
-	// Placeholder
 	return <>
-		<h1>{user ? 'Estás Registrado' : 'No está registrado'}</h1>
-	</>;
+		{notifications.length > 0 && notifications.map((text, idx) =>
+			<div className="notification" key={idx}>{text}</div>
+		)}
+		<PageComponent setPage={setPage} user={user} setUser={setUser}
+			addNotification={addNotification} googleSignIn={googleSignIn} />
+	</>
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-window.onbeforeunload = () => {
-	window.scrollTo(0, 0);
-}
+window.onbeforeunload = () => window.scrollTo(0, 0);

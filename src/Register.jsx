@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { addDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { firebaseAuth, firebaseUsersCollection, Page, UserType, Footer } from "./App";
+import { firebaseAuth, firebaseUsersCollection, Page, Footer } from "./App";
 import './Register.css';
 
 export function Register({ setPage, setUser, addNotification, googleSignIn }) {
@@ -32,11 +32,10 @@ export function Register({ setPage, setUser, addNotification, googleSignIn }) {
                     phone: formPhone,
                     email: formEmail,
                     date: formDate,
-                    type: UserType.student,
                     pfp: formPfpBase64,
                 };
                 await addDoc(firebaseUsersCollection, dbUser);
-                setUser({ ...dbUser, auth: userAuth, type: UserType.student });
+                setUser({ ...dbUser, auth: userAuth });
                 setPage(Page.start);
             }).catch((e) => {
                 switch (e.code) {
