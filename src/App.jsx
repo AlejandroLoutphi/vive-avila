@@ -131,6 +131,7 @@ function App() {
 		if (!querySnapshot.docs[0]) return;
 		const dbUser = querySnapshot.docs[0].data();
 		if (dbUser.type === UserType.guide) setPage(Page.guideHome);
+		if (dbUser.type === UserType.student) setPage(Page.start);
 		setUser({ ...dbUser, auth: userAuth });
 	}), []);
 

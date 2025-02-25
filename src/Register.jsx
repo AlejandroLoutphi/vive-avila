@@ -36,7 +36,6 @@ export function Register({ setPage, setUser, addNotification, googleSignIn }) {
                 };
                 await addDoc(firebaseUsersCollection, dbUser);
                 setUser({ ...dbUser, auth: userAuth });
-                setPage(Page.start);
             }).catch((e) => {
                 switch (e.code) {
                     case 'auth/invalid-email':
@@ -46,7 +45,8 @@ export function Register({ setPage, setUser, addNotification, googleSignIn }) {
                         addNotification('Error: ese email ya ha sido registrado');
                         return;
                     default:
-                        addNotification('Error al comunicarse con el servidor');
+                        // TODO: quitar esto
+                        addNotification('Error genérico');
                         console.log(e);
                         return;
                 }
