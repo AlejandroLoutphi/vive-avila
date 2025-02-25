@@ -14,6 +14,7 @@
 .aboutus_parteSuperior__contenedor-texto {
 	color: white;
 	margin-left: 5%;
+	margin-right: 5%;
 
 }
 
@@ -23,6 +24,7 @@
 	justify-content: center;
 	align-items: stretch;
 	gap: 5%;
+	flex-wrap: wrap;
 }
 
 .aboutus_parteSuperior__contenido {
@@ -31,8 +33,9 @@
 }
 
 .aboutus_parteSuperior__img {
-	width: 720px;
-	height: 500px;
+	width: 100%;
+	max-width: 7 120px;
+	height: auto;
 
 }
 
@@ -41,75 +44,48 @@
 	display: flex;
 	align-items: stretch;
 	gap: 3%;
-	height: 900%;
+	flex-wrap: wrap;
 }
+
 
 .aboutus_parteCentral__der {
 	display: block;
-	align-items: flex-end;
-	justify-content: start;
+	width: 100%;
+	margin-left: 0;
+	text-align: center;
 
 }
 
 .aboutus_parteCentral__izq {
 	display: block;
-	align-self: flex-start;
-	justify-content: end;
-	margin-left: 10%;
+	width: 100%;
+	margin-left: 0;
+	text-align: center;
 }
 
-.aboutus_parteCentral__der-título {
-	justify-content: center;
-	font-size: 300%;
+.aboutus_parteCentral__der-título,
+.aboutus_parteCentral__der-subtítulo,
+.aboutus_parteCentral__der-texto,
+.aboutus_parteCentral__izq-texto,
+.aboutus_parteCentral__izq-título1,
+.aboutus_parteCentral__izq-título2,
+.aboutus_parteInferior__título {
+	font-size: 200%;
 	color: black;
-	margin-left: 45%;
-}
-
-.aboutus_parteCentral__der-subtítulo {
-	justify-content: center;
-	font-size: 210%;
-	color: black;
-	margin-left: 46%;
-}
-
-.aboutus_parteCentral__der-inferior {
-	display: flex;
-	flex: row;
-	font-size: 210%;
-	color: black;
-	gap: 5%;
-	margin-left: 30%;
+	margin: 0 auto;
 }
 
 .aboutus_parteCentral__der-input {
-	width: 90%;
-	height: 31%;
+	width: 50%;
+	height: 10%;
 	border: none;
-}
-
-.aboutus_parteCentral__der-texto {
-	font-size: 210%;
-	color: black;
-	margin-left: 30%;
-}
-
-.aboutus_parteCentral__izq-texto {
-	font-size: 220%;
-	color: black;
-	margin-left: 15%;
-}
-
-.aboutus_parteCentral__izq-título1 {
-	margin-left: 26%;
-}
-
-.aboutus_parteCentral__izq-título2 {
-	margin-left: 34%;
 }
 
 .aboutus_parteCentral__izq-img {
 	padding-top: 7%;
-	margin-left: 5%;
+	margin-left: 0;
+	width: 30%;
+	height: auto;
 }
 
 .aboutus_parteInferior {
@@ -118,41 +94,108 @@
 	display: flex;
 	flex-direction: column;
 	padding: 1% 1%;
-
 }
 
 .aboutus_parteInferior__título {
-	margin: 1%;
 	color: white;
-	font-size: 370%;
-	justify-content: center;
-	display: flex;
+	align-items: center;
+	margin-left: 42%;
 }
 
 .aboutus_button1 {
 	background-color: black;
 	border: none;
-	width: 4%;
-	height: 25px;
-	padding-top: 1%;
-	margin-top: 6%;
+	width: 3%;
+	height: auto;
+	color: white;
+	text-align: center;
+	padding: 10px;
+	border-radius: 0px;
+	margin-top: 0%;
+	margin-right: 2%;
+
+
 }
 
 .aboutus_button2 {
 	background-color: black;
-	font-family: "Jomhuria";
-	margin-left: 725px;
-	margin-bottom: 7%;
-	font-size: 200%;
-	height: 7%;
-	width: 18%;
-	color: white;
 	border: none;
-	padding: 0%;
+	width: 50%;
+	height: auto;
+	color: white;
+	text-align: center;
+	padding: 10px;
 	border-radius: 50px;
+	margin-top: 2%;
+	margin-bottom: 5%;
 }
 
-.aboutus_button1:hover,
 .aboutus_button2:hover {
 	background-color: #24892f;
+}
+
+@media (min-width: 800px) {
+
+	.aboutus_parteCentral__der,
+	.aboutus_parteCentral__izq {
+		width: 48%;
+		margin-top: 5%;
+	}
+
+	.aboutus_parteCentral__izq-img {
+		width: 40%;
+		height: auto;
+	}
+
+	.aboutus_parteCentral__der-título,
+	.aboutus_parteCentral__der-subtítulo,
+	.aboutus_parteCentral__der-inferior,
+	.aboutus_parteCentral__der-texto,
+	.aboutus_parteCentral__izq-texto,
+	.aboutus_parteInferior__título {
+		font-size: 300%;
+	}
+
+	.aboutus_button1,
+	.aboutus_button2 {
+		width: auto;
+	}
+
+	.aboutus_button2 {
+		background-color: black;
+		border: none;
+		font-size: 150%;
+		width: 50%;
+		height: auto;
+		color: white;
+		text-align: center;
+		padding: 10px;
+		border-radius: 50px;
+		margin-top: 2%;
+		margin-bottom: 5%;
+	}
+
+	.aboutus_parteCentral__izq-título1,
+	.aboutus_parteCentral__izq-título2 {
+		font-size: 150%;
+	}
+
+	.aboutus_parteSuperior__img {
+		width: 40%;
+		height: 90%;
+		margin-left: 31%;
+
+
+	}
+
+
+	.aboutus-parteCentral__der-inferior {
+		font-size: 250%;
+		color: black;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		margin-left: 22%;
+
+	}
 }

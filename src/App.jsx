@@ -176,9 +176,7 @@ function App() {
 	function addNotification(n) {
 		setNotifications(notifications => [...notifications, n]);
 		setTimeout(() =>
-			setNotifications(notifications =>
-				notifications.slice(1, undefined)
-			), notificationDisplayMs);
+			setNotifications(notifications => notifications.slice(1)), notificationDisplayMs);
 	};
 
 	return <>
