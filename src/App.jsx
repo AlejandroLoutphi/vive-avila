@@ -27,16 +27,17 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 const firebaseDb = getFirestore(firebaseApp);
+export const firebaseAuth = getAuth(firebaseApp);
+export const firebaseGoogleProvider = new GoogleAuthProvider();
+
+// Referencias a las colecciones de Firestore que usa la aplicación
 export const firebaseUsersCollection = collection(firebaseDb, 'users');
 export const firebaseContactMessagesCollection = collection(firebaseDb, 'contactMessages');
 export const firebasePendingTripsCollection = collection(firebaseDb, 'pendingTrips');
 export const firebaseBlogArticlesCollection = collection(firebaseDb, 'blogArticles');
-export const firebaseAuth = getAuth(firebaseApp);
-export const firebaseGoogleProvider = new GoogleAuthProvider();
 
-// "enum" para guardar en qué página estamos
-// JS no soporta enums, así que solo usamos una
-// colección constante de valores inmutables
+// Lista de todas las páginas
+// TODO: remove
 export const Page = Object.freeze({
 	start: () => MainPage,
 	register: () => Register,
@@ -47,17 +48,20 @@ export const Page = Object.freeze({
 	guideHome: () => GuideHome,
 });
 
+// Constantes que determinan cómo guardamos los tipos de usuario
 export const UserType = Object.freeze({
 	student: undefined,
 	admin: 'admin',
 	guide: 'guide',
 });
 
+// Constantes que determinan cómo guardamos los proveedores de usuario
 export const UserProvider = Object.freeze({
 	viveAvila: undefined,
 	google: 'google',
 });
 
+// Componente Navbar usado en toda la aplicación
 export function Navbar({ setPage, user }) {
 	return <nav className="navbar">
 		<img loading="lazy" src="/nav-logo.png" className="nav-logo" alt="Navigation logo" />
@@ -98,6 +102,7 @@ export function Navbar({ setPage, user }) {
 	</nav>
 }
 
+// Componente Footer usado en toda la aplicación
 export function Footer() {
 	return <footer>
 		<div className="footer_content">
@@ -122,7 +127,7 @@ function App() {
 	const [notifications, setNotifications] = useState([]);
 
 	useEffect(() => onAuthStateChanged(firebaseAuth, async (userAuth) => {
-		if (!userAuth) { setUser(); return; }
+		if (!userAuth || !userAuth.emailVerified) { setUser(); return; }
 		const q = query(firebaseUsersCollection,
 			where("uid", "==", userAuth.uid),
 			limit(1)
@@ -130,8 +135,12 @@ function App() {
 		const querySnapshot = await getDocs(q);
 		if (!querySnapshot.docs[0]) return;
 		const dbUser = querySnapshot.docs[0].data();
-		if (dbUser.type === UserType.guide) setPage(Page.guideHome);
-		if (dbUser.type === UserType.student) setPage(Page.start);
+		switch (dbUser.type) {
+			case UserType.student: setPage(Page.start); break;
+			case UserType.guide: setPage(Page.guideHome); break;
+			// TODO: admin home
+			case UserType.admin: setPage(Page.start); break;
+		}
 		setUser({ ...dbUser, auth: userAuth });
 	}), []);
 

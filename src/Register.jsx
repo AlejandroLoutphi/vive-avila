@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { addDoc } from "firebase/firestore";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { firebaseAuth, firebaseUsersCollection, Page, Footer } from "./App";
 import './Register.css';
 
@@ -23,34 +23,35 @@ export function Register({ setPage, setUser, addNotification, googleSignIn }) {
             addNotification("Debe subir una foto de perfil");
             return;
         }
-        createUserWithEmailAndPassword(firebaseAuth, formEmail, formPassword)
-            .then(async (userCredential) => {
-                const userAuth = userCredential.user;
-                const dbUser = {
-                    uid: userAuth.uid,
-                    username: formUsername,
-                    phone: formPhone,
-                    email: formEmail,
-                    date: formDate,
-                    pfp: formPfpBase64,
-                };
-                await addDoc(firebaseUsersCollection, dbUser);
-                setUser({ ...dbUser, auth: userAuth });
-            }).catch((e) => {
-                switch (e.code) {
-                    case 'auth/invalid-email':
-                        addNotification('Error: el email es inválido');
-                        return;
-                    case 'auth/email-already-in-use':
-                        addNotification('Error: ese email ya ha sido registrado');
-                        return;
-                    default:
-                        // TODO: quitar esto
-                        addNotification('Error genérico');
-                        console.log(e);
-                        return;
-                }
-            });
+        try {
+            const userCredential = await createUserWithEmailAndPassword(firebaseAuth, formEmail, formPassword);
+            const userAuth = userCredential.user;
+            const dbUser = {
+                uid: userAuth.uid,
+                username: formUsername,
+                phone: formPhone,
+                email: formEmail,
+                date: formDate,
+                pfp: formPfpBase64,
+            };
+            await addDoc(firebaseUsersCollection, dbUser);
+            await sendEmailVerification(userAuth);
+            addNotification('Email de verificación enviado');
+        } catch (e) {
+            switch (e.code) {
+                case 'auth/invalid-email':
+                    addNotification('Error: el email es inválido');
+                    return;
+                case 'auth/email-already-in-use':
+                    addNotification('Error: ese email ya ha sido registrado');
+                    return;
+                default:
+                    // TODO: quitar esto
+                    addNotification('Error genérico');
+                    console.log(e);
+                    return;
+            }
+        }
     }
 
     async function pfpChange(e) {
