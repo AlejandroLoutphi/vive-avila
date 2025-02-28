@@ -1,0 +1,46 @@
+
+.detalleexcursion-contenedor {
+    display: flex;
+    flex-direction: column;
+    background-color: #e0e0e0;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .detalleexcursion-contenido {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 8px;
+  }
+  
+  .detalleexcursion-imagen {
+    width: 100%;
+    border-radius: 8px;
+    margin: 20px 0;
+  }
+  
+  .detalleexcursion-info p {
+    font-size: 1.2rem;
+    margin: 10px 0;
+  }
+  
+  .detalleexcursion-acciones {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .detalleexcursion-acciones button {
+    background-color: #2e7d32;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .detalleexcursion-acciones button:hover {
+    opacity: 0.9;
+  }
+  

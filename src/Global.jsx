@@ -25,13 +25,17 @@ export const firebaseGoogleProvider = new GoogleAuthProvider();
 // JS no soporta enums, así que solo usamos una
 // colección constante de valores inmutables
 export const Page = Object.freeze({
-	start: Symbol(),
-	register: Symbol(),
-	editProfile: Symbol(),
+	inicio: Symbol(),
+	registro: Symbol(),
+	editarPerfil: Symbol(),
 	login: Symbol(),
-	aboutUs: Symbol(),
-	guideHome: Symbol(),
-});
+	sobreNosotros: Symbol(),
+	guia: Symbol(),
+	excursiones: Symbol(),       
+	galeria: Symbol(),           
+  });
+  
+  
 
 export const UserType = Object.freeze({
 	admin: 'admin',
