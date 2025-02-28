@@ -13,6 +13,8 @@ import { GuideHome } from './GuideHome';
 import { EditProfile } from './EditProfile';
 import { Register } from './Register';
 import { Login } from './Login';
+import { Excursiones } from "./Excursiones";
+import { DetalleExcursion } from "./DetalleExcursion";
 import "./App.css";
 
 // Setup de Firebase
@@ -46,6 +48,8 @@ export const Page = Object.freeze({
 	aboutUs: () => AboutUs,
 	blogGuide: () => BlogGuide,
 	guideHome: () => GuideHome,
+	excursiones: () => Excursiones,
+	detalleExcursion: () => DetalleExcursion,
 });
 
 // Constantes que determinan cómo guardamos los tipos de usuario
@@ -76,7 +80,7 @@ export function Navbar({ setPage, user }) {
 			}}>Inicio</a>
 			{(!user || user.type == UserType.student) && <>
 				<a onClick={() => setPage(Page.blogGuide)} className="nav-item">Guia</a>
-				<a onClick={() => setPage(Page.start)} className="nav-item">Excursiones</a>
+				<a onClick={() => setPage(Page.excursiones)} className="nav-item">Excursiones</a>
 				<a onClick={() => setPage(Page.start)} className="nav-item">Foro</a>
 				<a onClick={() => setPage(Page.aboutUs)} className="nav-item">Sobre Nosotros</a>
 			</>}
@@ -124,6 +128,7 @@ function App() {
 	// Cambiar página defecto
 	const [PageComponent, setPage] = useState(Page.start);
 	const [user, setUser] = useState();
+	const [excursionSeleccionada, setExcursionSeleccionada] = useState();
 	const [notifications, setNotifications] = useState([]);
 
 	useEffect(() => onAuthStateChanged(firebaseAuth, async (userAuth) => {
@@ -193,7 +198,9 @@ function App() {
 			<div className="notification" key={idx}>{text}</div>
 		)}
 		<PageComponent setPage={setPage} user={user} setUser={setUser}
-			addNotification={addNotification} googleSignIn={googleSignIn} />
+			addNotification={addNotification} googleSignIn={googleSignIn}
+			excursionSeleccionada={excursionSeleccionada}
+			setExcursionSeleccionada={setExcursionSeleccionada} />
 	</>
 }
 
