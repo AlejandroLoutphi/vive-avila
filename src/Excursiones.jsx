@@ -1,9 +1,9 @@
-// src/Excursiones.jsx
 import React from 'react';
-import { Navbar, Footer, Page } from './Global'; // 
-import './Excursiones.css'; // 
+import { Navbar, Footer, Page } from './App';
+import './Excursiones.css';
+import { DetalleExcursion } from './DetalleExcursion';
 
-export default function Excursiones({ setPage, setExcursionSeleccionada }) {
+export function Excursiones({ setPage, setExcursionSeleccionada }) {
   // Datos de ejemplo (simulados)
   const excursiones = [
     {

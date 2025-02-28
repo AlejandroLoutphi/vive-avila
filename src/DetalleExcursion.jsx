@@ -1,9 +1,8 @@
-
 import React from 'react';
-import { Navbar, Footer, Page } from './Global';
+import { Navbar, Footer, Page } from './App';
 import './DetalleExcursion.css';
 
-export default function DetalleExcursion({ setPage, excursionSeleccionada }) {
+export function DetalleExcursion({ setPage, excursionSeleccionada }) {
   if (!excursionSeleccionada) {
     return (
       <div>
