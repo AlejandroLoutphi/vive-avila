@@ -25,7 +25,7 @@ export function DetalleExcursion({ setPage, excursionSeleccionada }) {
         />
         <div className="detalleexcursion-info">
           <p><strong>Dificultad:</strong> {excursionSeleccionada.dificultad}</p>
-          <p><strong>Duración:</strong> {excursionSeleccionada.duracion}</p>
+          <p><strong>Duración:</strong> {excursionSeleccionada.duracion + ' horas'}</p>
           <p><strong>Descripción:</strong> {excursionSeleccionada.descripcion}</p>
           {/* Se podrán agregar más detalles en el futuro */}
         </div>

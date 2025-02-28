@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Navbar, Footer, firebasePendingTripsCollection } from './App';
-import { query, getDocs, where, deleteDoc } from 'firebase/firestore';
+import { query, getDocs, where, getDoc, setDoc, deleteDoc } from 'firebase/firestore';
 import './GuideHome.css';
 
 export function GuideHome({ user, setPage, addNotification }) {
   const [pendingTrips, setPendingTrips] = useState([]);
 
   async function loadTours() {
-    const q = query(firebasePendingTripsCollection, where("guide", "==", user.uid));
+    const q = query(firebasePendingTripsCollection, where("guide", "array-contains", user.uid));
     const querySnapshot = await getDocs(q);
     setPendingTrips(querySnapshot.docs.map((doc) => ({ ...doc.data(), docRef: doc.ref })));
   }
 
   async function cancelTrip(trip) {
     if (!window.confirm("Cancelar viaje de: " + trip.titular)) return;
-    await deleteDoc(trip.docRef);
+    const doc = await getDoc(trip.docRef);
+    const docData = doc.data();
+    docData.guide = docData.guide.filter(entry => entry !== user.uid);
+    await setDoc(trip.docRef, docData);
     addNotification('Viaje cancelado');
     loadTours();
   }
