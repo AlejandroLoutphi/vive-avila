@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Footer, Navbar, firebaseContactMessagesCollection } from './Global';
 import { addDoc } from "firebase/firestore";
+import { Footer, Navbar, firebaseContactMessagesCollection } from './App';
+import './AboutUs.css';
 
-export function AboutUs({ setPage, addNotification }) {
+export function AboutUs({ setPage, addNotification, user }) {
     const [formEmail, setFormEmail] = useState('');
     const [formName, setFormName] = useState('');
     const [formPhone, setFormPhone] = useState('');
@@ -21,7 +22,7 @@ export function AboutUs({ setPage, addNotification }) {
     }
 
     return <>
-        <Navbar setPage={setPage} />
+        <Navbar setPage={setPage} user={user} />
         <div className="aboutus_parteSuperior">
             <div className="aboutus_parteSuperior__contenido">
                 <p className="aboutus_parteSuperior__contenedor-título">Misión</p>
