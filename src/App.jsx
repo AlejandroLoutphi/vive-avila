@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { initializeApp } from "firebase/app";
 // NOTE: use firestore lite?
 import { getFirestore, collection, addDoc, getDocs, query, where, limit, getCountFromServer }
@@ -145,7 +145,7 @@ export function App() {
 			signOut(firebaseAuth);
 			try {
 				await sendEmailVerification(userAuth);
-				addNotification('Email de verificación enviado.');
+				addNotification('Email de verificación enviado. Puede iniciar sesión después de hacer click en el link dentro de este.');
 				return;
 			} catch (e) {
 				switch (e.code) {
@@ -157,29 +157,30 @@ export function App() {
 			}
 		}
 		const q = query(firebaseUsersCollection,
-			where("uid", "==", userAuth.uid),
+			where("email", "==", userAuth.email),
 			limit(1)
 		);
 		const querySnapshot = await getDocs(q);
-		if (!querySnapshot.docs[0]) return;
-		const dbUser = querySnapshot.docs[0].data();
+		const userDoc = querySnapshot.docs[0];
+		if (!userDoc) return;
+		const dbUser = userDoc.data();
 		switch (dbUser.type) {
 			case UserType.student: setPage(Page.start); break;
 			case UserType.guide: setPage(Page.guideHome); break;
 			// TODO: admin home
 			case UserType.admin: setPage(Page.start); break;
 		}
-		setUser({ ...dbUser, auth: userAuth });
+		setUser({ ...dbUser, auth: userAuth, docRef: userDoc.ref });
 	});
 	isFirstRender = false;
 
 	async function googleSignIn(e) {
 		e.preventDefault();
 		try {
-			await signInWithPopup(firebaseAuth, firebaseGoogleProvider);
+			const result = await signInWithPopup(firebaseAuth, firebaseGoogleProvider);
 			const userAuth = result.user;
 			const q = query(firebaseUsersCollection,
-				where("uid", "==", userAuth.uid),
+				where("email", "==", userAuth.email),
 				limit(1)
 			);
 			const querySnapshot = await getCountFromServer(q);
@@ -192,9 +193,8 @@ export function App() {
 			};
 			if (userAuth.phoneNumber) dbUser.phone = userAuth.phoneNumber;
 			if (userAuth.photoURL) dbUser.pfp = userAuth.photoURL;
-			await addDoc(firebaseUsersCollection, dbUser);
-			setUser({ ...dbUser, auth: userAuth });
 			setPage(Page.start);
+			addDoc(firebaseUsersCollection, dbUser);
 		} catch (e) {
 			switch (e.code) {
 				case 'auth/popup-closed-by-user':

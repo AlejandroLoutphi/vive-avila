@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getDocs, setDoc, query, where, limit } from "firebase/firestore";
+import { getDocs, setDoc, query, where, limit, updateDoc } from "firebase/firestore";
 import { updatePassword } from "firebase/auth";
 import { firebaseUsersCollection, Page, Footer } from "./App";
 // Edit Profile (por ahora) reusa Register.css
@@ -17,22 +17,15 @@ export function EditProfile({ setPage, user, setUser, addNotification }) {
         if (!formUsername ||
             !formPhone ||
             !formPfpBase64) return;
-        const q = query(firebaseUsersCollection,
-            where("uid", "==", user.uid),
-            limit(1)
-        );
-        const querySnapshot = await getDocs(q);
-        console.assert(querySnapshot.docs[0]);
-        const dbUser = {
-            ...querySnapshot.docs[0].data(),
+        const fieldsToUpdate = {
             username: formUsername,
             phone: formPhone,
             pfp: formPfpBase64,
         };
-        await setDoc(querySnapshot.docs[0].ref, dbUser)
+        await updateDoc(user.docRef, fieldsToUpdate);
         if (formPassword) await updatePassword(user.auth, formPassword);
         addNotification('Usuario modificado');
-        setUser({ ...dbUser, auth: userAuth, type: dbUser.type });
+        setUser({ ...user, ...fieldsToUpdate });
     }
 
     async function pfpChange(e) {

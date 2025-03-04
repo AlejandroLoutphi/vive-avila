@@ -4,7 +4,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { firebaseAuth, firebaseUsersCollection, Page, Footer } from "./App";
 import './Register.css';
 
-export function Register({ setPage, setUser, addNotification, googleSignIn }) {
+export function Register({ setPage, addNotification, googleSignIn }) {
     const [formUsername, setFormUsername] = useState('');
     const [formPhone, setFormPhone] = useState('');
     const [formEmail, setFormEmail] = useState('');
@@ -34,7 +34,8 @@ export function Register({ setPage, setUser, addNotification, googleSignIn }) {
                 date: formDate,
                 pfp: formPfpBase64,
             };
-            await addDoc(firebaseUsersCollection, dbUser);
+            addDoc(firebaseUsersCollection, dbUser);
+            setPage(Page.login);
         } catch (e) {
             switch (e.code) {
                 case 'auth/invalid-email':
