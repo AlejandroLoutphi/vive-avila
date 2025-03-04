@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { addDoc } from "firebase/firestore";
-import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { firebaseAuth, firebaseUsersCollection, Page, Footer } from "./App";
 import './Register.css';
 
@@ -35,8 +35,6 @@ export function Register({ setPage, setUser, addNotification, googleSignIn }) {
                 pfp: formPfpBase64,
             };
             await addDoc(firebaseUsersCollection, dbUser);
-            await sendEmailVerification(userAuth);
-            addNotification('Email de verificación enviado');
         } catch (e) {
             switch (e.code) {
                 case 'auth/invalid-email':

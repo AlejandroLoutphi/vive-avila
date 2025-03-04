@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom/client";
 import { initializeApp } from "firebase/app";
 // NOTE: use firestore lite?
 import { getFirestore, collection, addDoc, getDocs, query, where, limit, getCountFromServer }
 	from "firebase/firestore";
-import { signInWithPopup, onAuthStateChanged, getAuth, GoogleAuthProvider, signOut }
+import { signInWithPopup, onAuthStateChanged, getAuth, GoogleAuthProvider, sendEmailVerification, signOut }
 	from "firebase/auth";
 import { MainPage } from "./MainPage";
 import { BlogGuide } from "./BlogGuide";
@@ -16,6 +15,8 @@ import { Login } from './Login';
 import { Excursiones } from "./Excursiones";
 import { DetalleExcursion } from "./DetalleExcursion";
 import "./App.css";
+
+let isFirstRender = true;
 
 // Setup de Firebase
 const firebaseConfig = {
@@ -103,7 +104,7 @@ export function Navbar({ setPage, user }) {
 				<a onClick={() => setPage(Page.login)} className="nav-item">Iniciar Sesión</a>
 			}
 		</div>
-	</nav>
+	</nav>;
 }
 
 // Componente Footer usado en toda la aplicación
@@ -121,18 +122,40 @@ export function Footer() {
 				(+58)424_8014532
 			</div>
 		</div>
-	</footer>
+	</footer>;
 }
 
-function App() {
+export function App() {
 	// Cambiar página defecto
 	const [PageComponent, setPage] = useState(Page.start);
 	const [user, setUser] = useState();
 	const [excursionSeleccionada, setExcursionSeleccionada] = useState();
 	const [notifications, setNotifications] = useState([]);
 
-	useEffect(() => onAuthStateChanged(firebaseAuth, async (userAuth) => {
-		if (!userAuth || !userAuth.emailVerified) { setUser(); return; }
+	const notificationDisplayMs = 5000;
+	function addNotification(n) {
+		setNotifications(notifications => [...notifications, n]);
+		setTimeout(() =>
+			setNotifications(notifications => notifications.slice(1)), notificationDisplayMs);
+	};
+
+	if (isFirstRender) onAuthStateChanged(firebaseAuth, async (userAuth) => {
+		if (!userAuth) { setUser(); return; }
+		if (!userAuth.emailVerified) {
+			signOut(firebaseAuth);
+			try {
+				await sendEmailVerification(userAuth);
+				addNotification('Email de verificación enviado.');
+				return;
+			} catch (e) {
+				switch (e.code) {
+					case 'auth/too-many-requests':
+						addNotification('Error al comunicarse con el servidor');
+						return;
+				}
+				return;
+			}
+		}
 		const q = query(firebaseUsersCollection,
 			where("uid", "==", userAuth.uid),
 			limit(1)
@@ -147,62 +170,50 @@ function App() {
 			case UserType.admin: setPage(Page.start); break;
 		}
 		setUser({ ...dbUser, auth: userAuth });
-	}), []);
+	});
+	isFirstRender = false;
 
 	async function googleSignIn(e) {
 		e.preventDefault();
-		signInWithPopup(firebaseAuth, firebaseGoogleProvider)
-			.then(async (result) => {
-				const userAuth = result.user;
-				const q = query(firebaseUsersCollection,
-					where("uid", "==", userAuth.uid),
-					limit(1)
-				);
-				const querySnapshot = await getCountFromServer(q);
-				if (querySnapshot.data().count > 0) {
-					setPage(Page.start);
+		try {
+			await signInWithPopup(firebaseAuth, firebaseGoogleProvider);
+			const userAuth = result.user;
+			const q = query(firebaseUsersCollection,
+				where("uid", "==", userAuth.uid),
+				limit(1)
+			);
+			const querySnapshot = await getCountFromServer(q);
+			if (querySnapshot.data().count > 0) { setPage(Page.start); return; }
+			let dbUser = {
+				uid: userAuth.uid,
+				username: userAuth.displayName,
+				email: userAuth.email,
+				provider: UserProvider.google,
+			};
+			if (userAuth.phoneNumber) dbUser.phone = userAuth.phoneNumber;
+			if (userAuth.photoURL) dbUser.pfp = userAuth.photoURL;
+			await addDoc(firebaseUsersCollection, dbUser);
+			setUser({ ...dbUser, auth: userAuth });
+			setPage(Page.start);
+		} catch (e) {
+			switch (e.code) {
+				case 'auth/popup-closed-by-user':
+				case 'auth/cancelled-popup-request':
+				case 'auth/user-cancelled':
 					return;
-				}
-				let dbUser = {
-					uid: userAuth.uid,
-					username: userAuth.displayName,
-					email: userAuth.email,
-					provider: UserProvider.google,
-				};
-				if (userAuth.phoneNumber) dbUser.phone = userAuth.phoneNumber;
-				if (userAuth.photoURL) dbUser.pfp = userAuth.photoURL;
-				await addDoc(firebaseUsersCollection, dbUser);
-				setUser({ ...dbUser, auth: userAuth });
-				setPage(Page.start);
-			}).catch((e) => {
-				switch (e.code) {
-					case 'auth/popup-closed-by-user':
-					case 'auth/cancelled-popup-request':
-					case 'auth/user-cancelled':
-						return;
-					default:
-						console.log(e);
-				}
-			});
+				default:
+					console.log(e);
+			}
+		}
 	}
 
-	const notificationDisplayMs = 5000;
-	function addNotification(n) {
-		setNotifications(notifications => [...notifications, n]);
-		setTimeout(() =>
-			setNotifications(notifications => notifications.slice(1)), notificationDisplayMs);
-	};
-
 	return <>
-		{notifications.length > 0 && notifications.map((text, idx) =>
-			<div className="notification" key={idx}>{text}</div>
-		)}
 		<PageComponent setPage={setPage} user={user} setUser={setUser}
 			addNotification={addNotification} googleSignIn={googleSignIn}
 			excursionSeleccionada={excursionSeleccionada}
 			setExcursionSeleccionada={setExcursionSeleccionada} />
-	</>
+		{notifications.length > 0 && notifications.map((text, idx) =>
+			<div className="notification" key={idx}>{text}</div>
+		)}
+	</>;
 }
-
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-window.onbeforeunload = () => window.scrollTo(0, 0);

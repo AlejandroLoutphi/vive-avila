@@ -21,6 +21,9 @@ export function Login({ setPage, addNotification, googleSignIn }) {
                     case 'auth/network-request-failed':
                         addNotification('Error al comunicarse con el servidor');
                         return;
+                    case 'auth/quota-exceeded':
+                        addNotification('Error al comunicarse con el servidor');
+                        return;
                     default:
                         // TODO: quitar esto
                         addNotification('Error genérico');
