@@ -1,39 +1,84 @@
 
-.excursiones-contenedor {
+
+   .excursiones-contenedor {
     display: flex;
     flex-direction: column;
-    background-color: #e0e0e0;
+    margin: 0 auto;
     font-family: 'Roboto', sans-serif;
+    background-color: #f6f6f6; 
   }
   
+ 
   .excursiones-encabezado {
+    position: relative;
     text-align: center;
-    padding: 20px;
-    background-color: #2e7d32;
-    color: #fff;
+    padding: 80px 20px; 
+    background: url("tu-imagen-de-fondo.jpg") center center no-repeat;
+    background-size: cover;
+    color: #ffffff;
   }
   
+  .excursiones-encabezado h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  
+  .excursiones-encabezado p {
+    font-size: 1.4rem;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+
+  .excursiones-encabezado::before {
+    content: "";
+    position: absolute;
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4); 
+    z-index: 0;
+  }
+  
+  .excursiones-encabezado > * {
+    position: relative;
+    z-index: 1;
+  }
+  
+ 
   .excursiones-lista {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px;
+    display: grid; 
+    grid-template-columns: 1fr; 
+    gap: 30px;
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
   }
   
+
   .excursion-tarjeta {
     display: flex;
     flex-direction: row;
-    background-color: #fff;
+    background-color: #ffffff;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    transition: transform 0.2s ease-in-out;
   }
+  
+  .excursion-tarjeta:hover {
+    transform: translateY(-3px);
+  }
+  
   
   .excursion-imagen {
     width: 40%;
-    object-fit: cover;
+    object-fit: cover; 
   }
   
+
   .excursion-info {
     padding: 20px;
     flex: 1;
@@ -42,23 +87,51 @@
     justify-content: space-between;
   }
   
+  .excursion-info h2 {
+    margin: 0 0 10px 0;
+    font-size: 1.8rem;
+    color: #333;
+  }
+  
+  .excursion-info p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.4;
+  }
+  
+
   .excursion-acciones {
+    margin-top: 20px;
     display: flex;
     gap: 10px;
   }
   
+  
   .boton-detalles,
   .boton-galeria {
-    background-color: #2e7d32;
+    background-color: #24892f; 
     color: #fff;
     border: none;
     padding: 10px 15px;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
+    font-size: 1rem;
+    transition: opacity 0.2s ease-in-out;
   }
   
   .boton-detalles:hover,
   .boton-galeria:hover {
-    opacity: 0.9;
+    opacity: 0.85;
+  }
+  
+ 
+  @media (max-width: 768px) {
+    .excursion-tarjeta {
+      flex-direction: column;
+    }
+    .excursion-imagen {
+      width: 100%;
+      height: 200px;
+    }
   }
   
