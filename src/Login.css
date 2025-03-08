@@ -1,143 +1,137 @@
 .login_content {
-    padding: 20px;
-    background: #2e7d32;
-    color: white;
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	padding: 20px;
+	background: #2e7d32;
+	color: white;
+	width: 100%;
+	max-width: 400px;
+	margin: 0 auto;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .login_container {
-    display: flex;
-    align-items: center;
+	display: flex;
+	align-items: center;
 	gap: 20px;
 
 }
 
 .login_img {
-    width: 50%; 
-    height: auto; 
-    border-radius: 10px; 
-    object-fit: cover; 
+	width: 50%;
+	height: auto;
+	border-radius: 10px;
+	object-fit: cover;
 }
 
 .login_title {
-    font-size: xx-large;
-    text-align: center;
-    margin-bottom: 20px;
+	font-size: xx-large;
+	text-align: center;
+	margin-bottom: 20px;
 }
 
 .login_subtitle {
-    font-size: x-large;
-    text-align: center;
-    margin-bottom: 20px;
+	font-size: x-large;
+	text-align: center;
+	margin-bottom: 20px;
 }
 
 .login_form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
 }
 
 .login_form_section {
-    margin-bottom: 15px;
+	margin-bottom: 15px;
 }
 
 .login_form_text {
-    display: block;
-    font-size: 1em;
-    margin-bottom: 5px;
+	display: block;
+	font-size: 1em;
+	margin-bottom: 5px;
 }
 
 .login_form_section>input {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    box-sizing: border-box;
+	width: 100%;
+	padding: 10px;
+	border: none;
+	border-radius: 5px;
+	box-sizing: border-box;
 }
 
-.button_1 {
-    width: 100%;
-    padding: 10px;
-    background: #fffeb33b;
-    border: none;
-    color: black;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
+.login_button_1 {
+	width: 100%;
+	padding: 10px;
+	background: #fffeb33b;
+	border: none;
+	color: black;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 1em;
 }
 
 .login_submit_button {
-    width: 100%;
-    padding: 10px;
-    background: #4CAF50;
-    border: none;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
+	width: 100%;
+	padding: 10px;
+	background: #4CAF50;
+	border: none;
+	color: white;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 1em;
 }
 
-.register_google_button {
-    width: 100%;
-    padding: 10px;
-    background: white;
-    border: none;
-    color: black;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
+.login_google_button {
+	width: 100%;
+	padding: 10px;
+	background: white;
+	border: none;
+	color: black;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 1em;
 }
 
-.divisor {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    margin: 20px 0;
+.login_divisor {
+	display: flex;
+	align-items: center;
+	text-align: center;
+	margin: 20px 0;
 }
 
-.divisor::before, .divisor::after {
-    content: '';
-    flex: 1;
-    border-bottom: 1px solid #ccc;
+.login_divisor::before,
+.login_divisor::after {
+	content: '';
+	flex: 1;
+	border-bottom: 1px solid #ccc;
 }
 
-.divisor::before {
-    margin-right: 10px;
+.login_divisor::before {
+	margin-right: 10px;
 }
 
-.divisor::after {
-    margin-left: 10px;
+.login_divisor::after {
+	margin-left: 10px;
 }
 
 .login_to_register {
-    text-align: center;
-    margin-top: 20px;
+	text-align: center;
+	margin-top: 20px;
 }
 
 .login_to_register a {
-    color: #4CAF50;
-    text-decoration: none;
-    font-weight: bold;
+	color: #4CAF50;
+	text-decoration: none;
+	font-weight: bold;
 }
 
 .login_to_register a:hover {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
-.center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-.Login_container {
-    background: #2e7d32;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.login_big_container {
+	background: #2e7d32;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

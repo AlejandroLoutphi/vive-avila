@@ -36,7 +36,7 @@ export function Login({ setPage, addNotification, googleSignIn }) {
 
     // TODO: add loading animation
     return <>
-        <div className="Login_container">
+        <div className="login_big_container">
             <h1 className="login_title title">¡Bienvenido de nuevo!</h1>
             <form onSubmit={loginAccount} className="login_form user_form">
                 <h2 className="login_subtitle subtitle">Inicio de Sesión</h2>
@@ -54,9 +54,9 @@ export function Login({ setPage, addNotification, googleSignIn }) {
                 </div>
                 <button type="submit" className="login_submit_button button_1">Iniciar Sesión</button>
             </form>
-            <div className="divisor">
+            <div className="login_divisor">
                 <button type="button" onClick={googleSignIn}
-                    className="register_google_button button_1">
+                    className="login_google_button login_button_1">
                     Inicia Sesión con Google
                 </button>
             </div>
