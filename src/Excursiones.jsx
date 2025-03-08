@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Navbar, Footer, Page, firebasePendingTripsCollection } from './App';
+import { Navbar, Footer, firebasePendingTripsCollection } from './App';
 import { query, getDocs } from 'firebase/firestore';
 import './Excursiones.css';
+import { DetalleExcursion } from './DetalleExcursion';
+import { MainPage } from './MainPage';
 
 export function Excursiones({ setPage, setExcursionSeleccionada }) {
   // Datos de ejemplo (simulados)
@@ -15,15 +17,15 @@ export function Excursiones({ setPage, setExcursionSeleccionada }) {
 
   const verDetalles = (excursion) => {
     setExcursionSeleccionada(excursion);
-    setPage(Page.detalleExcursion);
+    setPage(() => DetalleExcursion);
   };
 
   const verGaleria = (excursion) => {
     setExcursionSeleccionada(excursion);
-    setPage(Page.galeria);
+    setPage(() => MainPage);
   };
 
-  useEffect(() => { loadTours(); }, []);
+  useEffect(() => void loadTours(), []);
 
   return (
     <div className="excursiones-contenedor">

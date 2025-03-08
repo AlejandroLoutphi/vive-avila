@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { getDocs, setDoc, query, where, limit, updateDoc } from "firebase/firestore";
+import { updateDoc } from "firebase/firestore";
 import { updatePassword } from "firebase/auth";
-import { firebaseUsersCollection, Page, Footer } from "./App";
+import { Footer } from "./App";
+import { MainPage } from "./MainPage";
 // Edit Profile (por ahora) reusa Register.css
 
-export function EditProfile({ setPage, user, setUser, addNotification }) {
+export function EditProfile({ setPage, user, setAndStoreUser, addNotification }) {
+    if (!user) return void setPage(() => MainPage);
     const [formUsername, setFormUsername] = useState(user.username);
     const [formPhone, setFormPhone] = useState(user.phone);
     const [formDate, setFormDate] = useState(user.date);
@@ -22,10 +24,13 @@ export function EditProfile({ setPage, user, setUser, addNotification }) {
             phone: formPhone,
             pfp: formPfpBase64,
         };
+        if (formPassword) {
+            if (!user.auth) return void addNotification('Error al comunicarse con el servidor');
+            await updatePassword(user.auth, formPassword);
+        }
         await updateDoc(user.docRef, fieldsToUpdate);
-        if (formPassword) await updatePassword(user.auth, formPassword);
         addNotification('Usuario modificado');
-        setUser({ ...user, ...fieldsToUpdate });
+        setAndStoreUser({ ...user, ...fieldsToUpdate });
     }
 
     async function pfpChange(e) {
@@ -34,23 +39,19 @@ export function EditProfile({ setPage, user, setUser, addNotification }) {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
-            if (reader.result.length >= 1000000) {
-                addNotification('Error: la imagen es muy grande');
-                return;
-            }
+            if (reader.result.length >= 1000000)
+                return void addNotification('Error: la imagen es muy grande');
             setFormPfp(URL.createObjectURL(file));
             setFormPfpBase64(reader.result);
         };
-        reader.onerror = () => {
-            addNotification('Error al subir imagen');
-        };
+        reader.onerror = () => void addNotification('Error al subir imagen');
     }
 
     // TODO: add loading animation
     return <>
         <div className="register_container">
             <div className="register_content">
-                <a className="register_back" onClick={() => setPage(Page.start)}>Atrás</a>
+                <a className="register_back" onClick={() => setPage(() => MainPage)}>Atrás</a>
                 <div className="center">
                     <h1 className="register_title title">Cambia los detalles de su perfil</h1>
                 </div>

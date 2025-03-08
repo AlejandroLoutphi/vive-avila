@@ -1,6 +1,8 @@
 import React from 'react';
-import { Navbar, Footer, Page } from './App';
+import { Navbar, Footer } from './App';
 import './DetalleExcursion.css';
+import { Excursiones } from './Excursiones';
+import { MainPage } from './MainPage';
 
 export function DetalleExcursion({ setPage, excursionSeleccionada }) {
   if (!excursionSeleccionada) {
@@ -30,10 +32,10 @@ export function DetalleExcursion({ setPage, excursionSeleccionada }) {
           {/* Se podrán agregar más detalles en el futuro */}
         </div>
         <div className="detalleexcursion-acciones">
-          <button onClick={() => setPage(Page.excursiones)}>
+          <button onClick={() => setPage(() => Excursiones)}>
             Volver a Excursiones
           </button>
-          <button onClick={() => setPage(Page.galeria)}>
+          <button onClick={() => setPage(() => MainPage)}>
             Ver galería
           </button>
         </div>

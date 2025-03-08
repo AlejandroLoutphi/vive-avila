@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { addDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { firebaseAuth, firebaseUsersCollection, Page, Footer } from "./App";
+import { firebaseAuth, firebaseUsersCollection, Footer } from "./App";
 import './Register.css';
+import { Login } from "./Login";
 
 export function Register({ setPage, addNotification, googleSignIn }) {
     const [formUsername, setFormUsername] = useState('');
@@ -15,14 +16,8 @@ export function Register({ setPage, addNotification, googleSignIn }) {
 
     async function registerCreateAccount(e) {
         e.preventDefault();
-        if (!formUsername ||
-            !formPhone ||
-            !formEmail ||
-            !formPassword) return;
-        if (!formPfpBase64) {
-            addNotification("Debe subir una foto de perfil");
-            return;
-        }
+        if (!formUsername || !formPhone || !formEmail || !formPassword) return;
+        if (!formPfpBase64) return void addNotification("Debe subir una foto de perfil");
         try {
             const userCredential = await createUserWithEmailAndPassword(firebaseAuth, formEmail, formPassword);
             const userAuth = userCredential.user;
@@ -35,7 +30,7 @@ export function Register({ setPage, addNotification, googleSignIn }) {
                 pfp: formPfpBase64,
             };
             addDoc(firebaseUsersCollection, dbUser);
-            setPage(Page.login);
+            setPage(() => Login);
         } catch (e) {
             switch (e.code) {
                 case 'auth/invalid-email':
@@ -62,16 +57,12 @@ export function Register({ setPage, addNotification, googleSignIn }) {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
-            if (reader.result.length >= 1000000) {
-                addNotification('Error: la imagen es muy grande');
-                return;
-            }
+            if (reader.result.length >= 1000000)
+                return void addNotification('Error: la imagen es muy grande');
             setFormPfp(URL.createObjectURL(file));
             setFormPfpBase64(reader.result);
         };
-        reader.onerror = () => {
-            addNotification('Error al subir imagen');
-        };
+        reader.onerror = () => void addNotification('Error al subir imagen');
     }
 
     // TODO: add loading animation
@@ -143,7 +134,7 @@ export function Register({ setPage, addNotification, googleSignIn }) {
                     </button>
                 </div>
                 <h2 className="register_to_login">¿Ya tienes cuenta? <a
-                    className="self_link" onClick={() => setPage(Page.login)}> Inicia Sesión</a>
+                    className="self_link" onClick={() => setPage(() => Login)}> Inicia Sesión</a>
                 </h2 >
             </div>
             <img className="register_img" />

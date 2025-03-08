@@ -20,7 +20,7 @@ export function GuideHome({ user, setPage, addNotification }) {
     loadTours();
   }
 
-  useEffect(() => { loadTours(); }, []);
+  useEffect(() => void loadTours(), []);
 
   return (
     <div className="guide-page-container">

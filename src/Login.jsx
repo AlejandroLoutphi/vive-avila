@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { firebaseAuth, Page, Footer } from "./App";
+import { firebaseAuth, Footer } from "./App";
 import './Login.css';
+import { Register } from "./Register";
 
 export function Login({ setPage, addNotification, googleSignIn }) {
     const [formEmail, setFormEmail] = useState('');
@@ -61,7 +62,7 @@ export function Login({ setPage, addNotification, googleSignIn }) {
             </div>
             <h2 className="login_to_register">
                 ¿No tienes cuenta?
-                <a onClick={() => setPage(Page.register)}> Regístrate</a>
+                <a onClick={() => setPage(() => Register)}> Regístrate</a>
             </h2 >
         </div>
         <Footer />

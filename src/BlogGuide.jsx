@@ -6,7 +6,7 @@ import './BlogGuide.css';
 export function BlogArticle({ text }) {
     const firstNewLineIndex = text.indexOf("\n");
     const title = firstNewLineIndex != -1 ? text.slice(0, firstNewLineIndex) : text;
-    const body = firstNewLineIndex != -1 ? text.slice(firstNewLineIndex, undefined) : '';
+    const body = firstNewLineIndex != -1 ? text.slice(firstNewLineIndex) : '';
     return <div className="blog_article">
         <h2 className="blog_article_title">{title}</h2>
         <p className="blog_article_body">{body}</p>
@@ -33,11 +33,9 @@ export function BlogGuide({ setPage, user }) {
         setShowMoreHidden(false);
     }
 
-    useEffect(() => { loadBlogArticles(); }, []);
-    useEffect(() => {
-        getCountFromServer(query(firebaseBlogArticlesCollection))
-            .then((querySnapshot) => setArticleCount(querySnapshot.data().count));
-    }, []);
+    useEffect(() => void loadBlogArticles(), []);
+    useEffect(() => void getCountFromServer(query(firebaseBlogArticlesCollection))
+        .then((querySnapshot) => void setArticleCount(querySnapshot.data().count)), []);
 
     const blogArticlesJsx = blogArticles.map((text, idx) =>
         <li className="li_unformatted" key={idx}><BlogArticle text={text} /> </li>

@@ -10,10 +10,8 @@ import { BlogGuide } from "./BlogGuide";
 import { AboutUs } from "./AboutUs";
 import { GuideHome } from './GuideHome';
 import { EditProfile } from './EditProfile';
-import { Register } from './Register';
 import { Login } from './Login';
 import { Excursiones } from "./Excursiones";
-import { DetalleExcursion } from "./DetalleExcursion";
 import "./App.css";
 
 let isFirstRender = true;
@@ -39,20 +37,6 @@ export const firebaseContactMessagesCollection = collection(firebaseDb, 'contact
 export const firebasePendingTripsCollection = collection(firebaseDb, 'pendingTrips');
 export const firebaseBlogArticlesCollection = collection(firebaseDb, 'blogArticles');
 
-// Lista de todas las páginas
-// TODO: remove
-export const Page = Object.freeze({
-	start: () => MainPage,
-	register: () => Register,
-	editProfile: () => EditProfile,
-	login: () => Login,
-	aboutUs: () => AboutUs,
-	blogGuide: () => BlogGuide,
-	guideHome: () => GuideHome,
-	excursiones: () => Excursiones,
-	detalleExcursion: () => DetalleExcursion,
-});
-
 // Constantes que determinan cómo guardamos los tipos de usuario
 export const UserType = Object.freeze({
 	student: undefined,
@@ -66,42 +50,46 @@ export const UserProvider = Object.freeze({
 	google: 'google',
 });
 
+// JSON del usuario guardado en Localstorage (valor inicial de usuario)
+const storedUser = window.localStorage.getItem("vive-avila-user");
+
+
 // Componente Navbar usado en toda la aplicación
 export function Navbar({ setPage, user }) {
 	return <nav className="navbar">
 		<img loading="lazy" src="/nav-logo.png" className="nav-logo" alt="Navigation logo" />
 		<div className="nav-links">
 			<a className="nav-item" onClick={() => {
-				if (!user) { setPage(Page.start); return; }
+				if (!user) return void setPage(() => MainPage);
 				switch (user.type) {
-					case UserType.student: setPage(Page.start); break;
-					case UserType.guide: setPage(Page.guideHome); break;
-					case UserType.admin: setPage(Page.start); break;
+					case UserType.student: setPage(() => MainPage); break;
+					case UserType.guide: setPage(() => GuideHome); break;
+					case UserType.admin: setPage(() => MainPage); break;
 				}
 			}}>Inicio</a>
 			{(!user || user.type == UserType.student) && <>
-				<a onClick={() => setPage(Page.blogGuide)} className="nav-item">Guia</a>
-				<a onClick={() => setPage(Page.excursiones)} className="nav-item">Excursiones</a>
-				<a onClick={() => setPage(Page.start)} className="nav-item">Foro</a>
-				<a onClick={() => setPage(Page.aboutUs)} className="nav-item">Sobre Nosotros</a>
+				<a onClick={() => setPage(() => BlogGuide)} className="nav-item">Guia</a>
+				<a onClick={() => setPage(() => Excursiones)} className="nav-item">Excursiones</a>
+				<a onClick={() => setPage(() => MainPage)} className="nav-item">Foro</a>
+				<a onClick={() => setPage(() => AboutUs)} className="nav-item">Sobre Nosotros</a>
 			</>}
 			{user ?
 				<div className="nav-dropdown-container">
 					<a className="nav-item">Perfil</a>
 					<div className="nav-dropdown">
-						<a onClick={() => setPage(Page.start)} className="nav-item">Mi Perfil</a>
+						<a onClick={() => setPage(() => MainPage)} className="nav-item">Mi Perfil</a>
 						{!user.provider &&
-							<a onClick={() => setPage(Page.editProfile)} className="nav-item">
+							<a onClick={() => setPage(() => EditProfile)} className="nav-item">
 								Editar Perfil
 							</a>
 						}
 						<a onClick={() => {
 							signOut(firebaseAuth);
-							setPage(Page.login);
+							setPage(() => Login);
 						}} className="nav-item">Cerrar Sesión</a>
 					</div>
 				</div> :
-				<a onClick={() => setPage(Page.login)} className="nav-item">Iniciar Sesión</a>
+				<a onClick={() => setPage(() => Login)} className="nav-item">Iniciar Sesión</a>
 			}
 		</div>
 	</nav>;
@@ -127,10 +115,19 @@ export function Footer() {
 
 export function App() {
 	// Cambiar página defecto
-	const [PageComponent, setPage] = useState(Page.start);
-	const [user, setUser] = useState();
+	const [PageComponent, setPage] = useState(() => MainPage);
+	const [user, setUser] = useState(storedUser && JSON.parse(storedUser));
 	const [excursionSeleccionada, setExcursionSeleccionada] = useState();
 	const [notifications, setNotifications] = useState([]);
+
+	function setAndStoreUser(user) {
+		if (!user) window.localStorage.removeItem("vive-avila-user");
+		else window.localStorage.setItem("vive-avila-user", JSON.stringify({
+			...user,
+			auth: undefined,
+		}));
+		setUser(user);
+	}
 
 	const notificationDisplayMs = 5000;
 	function addNotification(n) {
@@ -139,39 +136,41 @@ export function App() {
 			setNotifications(notifications => notifications.slice(1)), notificationDisplayMs);
 	};
 
-	if (isFirstRender) onAuthStateChanged(firebaseAuth, async (userAuth) => {
-		if (!userAuth) { setUser(); return; }
-		if (!userAuth.emailVerified) {
-			signOut(firebaseAuth);
-			try {
-				await sendEmailVerification(userAuth);
-				addNotification('Email de verificación enviado. Puede iniciar sesión después de hacer click en el link dentro de este.');
-				return;
-			} catch (e) {
-				switch (e.code) {
-					case 'auth/too-many-requests':
-						addNotification('Error al comunicarse con el servidor');
-						return;
+	if (isFirstRender) {
+		onAuthStateChanged(firebaseAuth, async (userAuth) => {
+			if (!userAuth) return void setAndStoreUser();
+			if (userAuth.uid == user?.uid) return void setAndStoreUser({ ...user, auth: userAuth });
+			if (!userAuth.emailVerified) {
+				signOut(firebaseAuth);
+				try {
+					await sendEmailVerification(userAuth);
+					addNotification('Email de verificación enviado. Puede iniciar sesión después de hacer click en el link dentro de este.');
+				} catch (e) {
+					switch (e.code) {
+						case 'auth/too-many-requests':
+							addNotification('Error al comunicarse con el servidor');
+							return;
+					}
 				}
 				return;
 			}
-		}
-		const q = query(firebaseUsersCollection,
-			where("email", "==", userAuth.email),
-			limit(1)
-		);
-		const querySnapshot = await getDocs(q);
-		const userDoc = querySnapshot.docs[0];
-		if (!userDoc) return;
-		const dbUser = userDoc.data();
-		switch (dbUser.type) {
-			case UserType.student: setPage(Page.start); break;
-			case UserType.guide: setPage(Page.guideHome); break;
-			// TODO: admin home
-			case UserType.admin: setPage(Page.start); break;
-		}
-		setUser({ ...dbUser, auth: userAuth, docRef: userDoc.ref });
-	});
+			const q = query(firebaseUsersCollection,
+				where("email", "==", userAuth.email),
+				limit(1)
+			);
+			const querySnapshot = await getDocs(q);
+			const userDoc = querySnapshot.docs[0];
+			if (!userDoc) return;
+			const dbUser = userDoc.data();
+			switch (dbUser.type) {
+				case UserType.student: setPage(() => MainPage); break;
+				case UserType.guide: setPage(() => GuideHome); break;
+				// TODO: admin home
+				case UserType.admin: setPage(() => MainPage); break;
+			}
+			setAndStoreUser({ ...dbUser, auth: userAuth, docRef: userDoc.ref });
+		});
+	}
 	isFirstRender = false;
 
 	async function googleSignIn(e) {
@@ -184,7 +183,7 @@ export function App() {
 				limit(1)
 			);
 			const querySnapshot = await getCountFromServer(q);
-			if (querySnapshot.data().count > 0) { setPage(Page.start); return; }
+			if (querySnapshot.data().count > 0) return void setPage(() => MainPage);
 			let dbUser = {
 				uid: userAuth.uid,
 				username: userAuth.displayName,
@@ -193,7 +192,7 @@ export function App() {
 			};
 			if (userAuth.phoneNumber) dbUser.phone = userAuth.phoneNumber;
 			if (userAuth.photoURL) dbUser.pfp = userAuth.photoURL;
-			setPage(Page.start);
+			setPage(() => MainPage);
 			addDoc(firebaseUsersCollection, dbUser);
 		} catch (e) {
 			switch (e.code) {
@@ -208,7 +207,7 @@ export function App() {
 	}
 
 	return <>
-		<PageComponent setPage={setPage} user={user} setUser={setUser}
+		<PageComponent setPage={setPage} user={user} setAndStoreUser={setAndStoreUser}
 			addNotification={addNotification} googleSignIn={googleSignIn}
 			excursionSeleccionada={excursionSeleccionada}
 			setExcursionSeleccionada={setExcursionSeleccionada} />

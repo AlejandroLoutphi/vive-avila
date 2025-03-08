@@ -43,12 +43,12 @@ export function Forum({ setPage, user }) {
       const querySnapshot = await getDocs(q);
       console.assert(querySnapshot.size == 1);
       docData[i].from = querySnapshot.docs[0].data().username;
-      docData[i].from=docData[i].from == user.uid ? "Tú" : querySnapshot.docs[0].data().username();
+      docData[i].from = docData[i].from == user.uid ? "Tú" : querySnapshot.docs[0].data().username();
     }
     setMessages(docData);
   }
 
-  useEffect(() => { loadMessages(); }, []);
+  useEffect(() => void loadMessages(), []);
 
   return (
     <div className="main-container__forum">
