@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { addDoc } from "firebase/firestore";
 import { Footer, Navbar, firebaseContactMessagesCollection } from './App';
 import './AboutUs.css';
 
 export function AboutUs({ setPage, addNotification, user }) {
+    useEffect(() => void window.history.pushState(null, "", "aboutUs"), []);
     const [formEmail, setFormEmail] = useState('');
     const [formName, setFormName] = useState('');
     const [formPhone, setFormPhone] = useState('');

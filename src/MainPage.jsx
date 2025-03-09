@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Footer, Navbar } from './App';
 import './MainPage.css';
 
 export function MainPage({ setPage, user }) {
+    useEffect(() => void window.history.pushState(null, "", ""), []);
     return <>
         <Navbar setPage={setPage} user={user} />
         <div className="start_home-page">

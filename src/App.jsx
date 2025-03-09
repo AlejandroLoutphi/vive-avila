@@ -6,15 +6,16 @@ import { getFirestore, collection, addDoc, getDocs, query, where, limit, getCoun
 import { signInWithPopup, onAuthStateChanged, getAuth, GoogleAuthProvider, sendEmailVerification, signOut }
 	from "firebase/auth";
 import { MainPage } from "./MainPage";
-import { BlogGuide } from "./BlogGuide";
-import { AboutUs } from "./AboutUs";
-import { GuideHome } from './GuideHome';
+import { Register } from './Register';
 import { EditProfile } from './EditProfile';
 import { Login } from './Login';
+import { AboutUs } from "./AboutUs";
+import { BlogGuide } from "./BlogGuide";
+import { GuideHome } from './GuideHome';
 import { Excursiones } from "./Excursiones";
+import { DetalleExcursion } from "./DetalleExcursion";
+import { Forum } from "./Forum";
 import "./App.css";
-
-let isFirstRender = true;
 
 // Setup de Firebase
 const firebaseConfig = {
@@ -27,7 +28,7 @@ const firebaseConfig = {
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
-const firebaseDb = getFirestore(firebaseApp);
+export const firebaseDb = getFirestore(firebaseApp);
 export const firebaseAuth = getAuth(firebaseApp);
 export const firebaseGoogleProvider = new GoogleAuthProvider();
 
@@ -36,6 +37,24 @@ export const firebaseUsersCollection = collection(firebaseDb, 'users');
 export const firebaseContactMessagesCollection = collection(firebaseDb, 'contactMessages');
 export const firebasePendingTripsCollection = collection(firebaseDb, 'pendingTrips');
 export const firebaseBlogArticlesCollection = collection(firebaseDb, 'blogArticles');
+export const firebaseForumMessagesCollection = collection(firebaseDb, 'forumMessages');
+
+// Cargar la página correcta dependiendo de la página en la URL bar
+// TODO: handle the starting page differently depending on UserType
+const pageList = Object.freeze({
+	"": () => MainPage,
+	register: () => Register,
+	editProfile: () => EditProfile,
+	login: () => Login,
+	aboutUs: () => AboutUs,
+	blogGuide: () => BlogGuide,
+	excursiones: () => Excursiones,
+	detalleExcursion: () => DetalleExcursion,
+	forum: () => Forum,
+});
+const pageString = window.location.pathname.split("/", 2)[1];
+const pageStartingValue = pageList[pageString]
+	?? (window.history.replaceState(null, "", ""), () => MainPage);
 
 // Constantes que determinan cómo guardamos los tipos de usuario
 export const UserType = Object.freeze({
@@ -50,9 +69,12 @@ export const UserProvider = Object.freeze({
 	google: 'google',
 });
 
-// JSON del usuario guardado en Localstorage (valor inicial de usuario)
+// JSON del usuario guardado en localStorage (valor inicial de usuario)
+// Esto lo usamos para cachear el objeto del usuario entre sesiones
 const storedUser = window.localStorage.getItem("vive-avila-user");
 
+// Flag para correr código solo durante el primer render
+let isFirstRender = true;
 
 // Componente Navbar usado en toda la aplicación
 export function Navbar({ setPage, user }) {
@@ -70,7 +92,7 @@ export function Navbar({ setPage, user }) {
 			{(!user || user.type == UserType.student) && <>
 				<a onClick={() => setPage(() => BlogGuide)} className="nav-item">Guia</a>
 				<a onClick={() => setPage(() => Excursiones)} className="nav-item">Excursiones</a>
-				<a onClick={() => setPage(() => MainPage)} className="nav-item">Foro</a>
+				<a onClick={() => setPage(() => Forum)} className="nav-item">Foro</a>
 				<a onClick={() => setPage(() => AboutUs)} className="nav-item">Sobre Nosotros</a>
 			</>}
 			{user ?
@@ -113,13 +135,27 @@ export function Footer() {
 	</footer>;
 }
 
+// Componente Top-level
 export function App() {
-	// Cambiar página defecto
-	const [PageComponent, setPage] = useState(() => MainPage);
-	const [user, setUser] = useState(storedUser && JSON.parse(storedUser));
-	const [excursionSeleccionada, setExcursionSeleccionada] = useState();
-	const [notifications, setNotifications] = useState([]);
+	// Variable que guarda el estado de qué página mostrar
+	// Esto emplea una versión del patrón "State"
+	// Como solo llamaríamos un método de las clases "State", guardamos las funciones directamente
+	// Para mostrar la página seleccionada, solo llamamos <Page />
+	// Cambiamos la página con setPage(() => MyPage)
+	// Con esto reemplazamos React Router sin usar switch's
+	const [Page, setPage] = useState(pageStartingValue);
 
+	// Objeto de usuario similar al usado en la DB
+	// También guarda un documentReference y una referencia a Firebase Auth
+	const [user, setUser] = useState(storedUser && JSON.parse(storedUser));
+
+	// Cuando hay un error, mostramos una notificación al usuario
+	const [notification, setNotification] = useState();
+
+	// Estado pasado entre páginas
+	const [excursionSeleccionada, setExcursionSeleccionada] = useState();
+
+	// Como usamos localStorage para cachear al usuario, tenemos una función para automatizar eso
 	function setAndStoreUser(user) {
 		if (!user) window.localStorage.removeItem("vive-avila-user");
 		else window.localStorage.setItem("vive-avila-user", JSON.stringify({
@@ -131,69 +167,69 @@ export function App() {
 
 	const notificationDisplayMs = 5000;
 	function addNotification(n) {
-		setNotifications(notifications => [...notifications, n]);
-		setTimeout(() =>
-			setNotifications(notifications => notifications.slice(1)), notificationDisplayMs);
-	};
-
-	if (isFirstRender) {
-		onAuthStateChanged(firebaseAuth, async (userAuth) => {
-			if (!userAuth) return void setAndStoreUser();
-			if (userAuth.uid == user?.uid) return void setAndStoreUser({ ...user, auth: userAuth });
-			if (!userAuth.emailVerified) {
-				signOut(firebaseAuth);
-				try {
-					await sendEmailVerification(userAuth);
-					addNotification('Email de verificación enviado. Puede iniciar sesión después de hacer click en el link dentro de este.');
-				} catch (e) {
-					switch (e.code) {
-						case 'auth/too-many-requests':
-							addNotification('Error al comunicarse con el servidor');
-							return;
-					}
-				}
-				return;
-			}
-			const q = query(firebaseUsersCollection,
-				where("email", "==", userAuth.email),
-				limit(1)
-			);
-			const querySnapshot = await getDocs(q);
-			const userDoc = querySnapshot.docs[0];
-			if (!userDoc) return;
-			const dbUser = userDoc.data();
-			switch (dbUser.type) {
-				case UserType.student: setPage(() => MainPage); break;
-				case UserType.guide: setPage(() => GuideHome); break;
-				// TODO: admin home
-				case UserType.admin: setPage(() => MainPage); break;
-			}
-			setAndStoreUser({ ...dbUser, auth: userAuth, docRef: userDoc.ref });
-		});
+		setNotification(n);
+		setTimeout(() => setNotification(), notificationDisplayMs);
 	}
+
+	// Se corre esta función cada vez que el usuario inicia o cierra sesión
+	if (isFirstRender) onAuthStateChanged(firebaseAuth, async (userAuth) => {
+		if (!userAuth) return void setAndStoreUser();
+		// Para no recargar el usuario que ya cacheamos
+		if (userAuth.uid == user?.uid) return void setAndStoreUser({ ...user, auth: userAuth });
+		// No iniciamos sesión si el email no está verificado; mandamos un email de verificación nuevo
+		if (!userAuth.emailVerified) {
+			signOut(firebaseAuth);
+			try {
+				await sendEmailVerification(userAuth);
+				addNotification('Email de verificación enviado. Puede iniciar sesión después de hacer click en el link dentro de este.');
+			} catch (e) {
+				switch (e.code) {
+					case 'auth/too-many-requests':
+						addNotification('Error al comunicarse con el servidor');
+						return;
+				}
+			}
+			return;
+		}
+		const q = query(firebaseUsersCollection,
+			where("email", "==", userAuth.email),
+			limit(1)
+		);
+		const querySnapshot = await getDocs(q);
+		const userDoc = querySnapshot.docs[0];
+		if (!userDoc) return;
+		const dbUser = userDoc.data();
+		switch (dbUser.type) {
+			case UserType.student: setPage(() => MainPage); break;
+			case UserType.guide: setPage(() => GuideHome); break;
+			// TODO: admin home
+			case UserType.admin: setPage(() => MainPage); break;
+		}
+		setAndStoreUser({ ...dbUser, auth: userAuth, docRef: userDoc.ref });
+	});
 	isFirstRender = false;
 
+	// Sign In con Google funciona tanto para registrarse como para iniciar sesión
+	// Para no duplicar esta función, la ponemos acá
 	async function googleSignIn(e) {
 		e.preventDefault();
 		try {
 			const result = await signInWithPopup(firebaseAuth, firebaseGoogleProvider);
 			const userAuth = result.user;
-			const q = query(firebaseUsersCollection,
-				where("email", "==", userAuth.email),
-				limit(1)
-			);
+			const q = query(firebaseUsersCollection, where("email", "==", userAuth.email), limit(1));
 			const querySnapshot = await getCountFromServer(q);
 			if (querySnapshot.data().count > 0) return void setPage(() => MainPage);
+			// Si el usuario se está registrando, guardamos la data guardada en su cuenta de Google
 			let dbUser = {
 				uid: userAuth.uid,
 				username: userAuth.displayName,
 				email: userAuth.email,
+				phone: userAuth.phoneNumber ?? undefined,
+				pfp: userAuth.photoURL ?? undefined,
 				provider: UserProvider.google,
 			};
-			if (userAuth.phoneNumber) dbUser.phone = userAuth.phoneNumber;
-			if (userAuth.photoURL) dbUser.pfp = userAuth.photoURL;
-			setPage(() => MainPage);
 			addDoc(firebaseUsersCollection, dbUser);
+			setPage(() => MainPage);
 		} catch (e) {
 			switch (e.code) {
 				case 'auth/popup-closed-by-user':
@@ -207,12 +243,10 @@ export function App() {
 	}
 
 	return <>
-		<PageComponent setPage={setPage} user={user} setAndStoreUser={setAndStoreUser}
+		<Page setPage={setPage} user={user} setAndStoreUser={setAndStoreUser}
 			addNotification={addNotification} googleSignIn={googleSignIn}
 			excursionSeleccionada={excursionSeleccionada}
 			setExcursionSeleccionada={setExcursionSeleccionada} />
-		{notifications.length > 0 && notifications.map((text, idx) =>
-			<div className="notification" key={idx}>{text}</div>
-		)}
+		{notification && <div className="notification">{notification}</div>}
 	</>;
 }

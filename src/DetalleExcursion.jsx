@@ -1,19 +1,21 @@
-import React from 'react';
-import { Navbar, Footer } from './App';
+import React, { useEffect } from 'react';
+import { doc, getDoc } from 'firebase/firestore';
+import { Navbar, Footer, firebaseDb } from './App';
 import './DetalleExcursion.css';
 import { Excursiones } from './Excursiones';
 import { MainPage } from './MainPage';
 
-export function DetalleExcursion({ setPage, excursionSeleccionada }) {
-  if (!excursionSeleccionada) {
-    return (
-      <div>
-        <Navbar setPage={setPage} />
-        <p>No se ha seleccionado ninguna excursión.</p>
-        <Footer />
-      </div>
-    );
-  }
+export function DetalleExcursion({ setPage, excursionSeleccionada, setExcursionSeleccionada }) {
+  if (!excursionSeleccionada) return void useEffect(() => void (async () => {
+    const excursionId = window.location.pathname.split('/', 3)[2];
+    if (!excursionId) return void setPage(() => MainPage);
+    const excursionDocRef = doc(firebaseDb, 'pendingTrips', excursionId);
+    const excursionDoc = await getDoc(excursionDocRef);
+    if (!excursionDoc.exists()) return void setPage(() => MainPage);
+    setExcursionSeleccionada({ ...excursionDoc.data(), docRef: excursionDocRef });
+  })(), []);
+
+  useEffect(() => void window.history.pushState(null, "", "detalleExcursion/" + excursionSeleccionada.docRef.id), []);
 
   return (
     <div className="detalleexcursion-contenedor">

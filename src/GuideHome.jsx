@@ -4,6 +4,7 @@ import { query, getDocs, where, arrayRemove, updateDoc } from 'firebase/firestor
 import './GuideHome.css';
 
 export function GuideHome({ user, setPage, addNotification }) {
+  useEffect(() => void window.history.pushState(null, "", ""), []);
   const [tours, setTours] = useState([]);
 
   async function loadTours() {

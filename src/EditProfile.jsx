@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { updateDoc } from "firebase/firestore";
 import { updatePassword } from "firebase/auth";
 import { Footer } from "./App";
@@ -6,6 +6,7 @@ import { MainPage } from "./MainPage";
 // Edit Profile (por ahora) reusa Register.css
 
 export function EditProfile({ setPage, user, setAndStoreUser, addNotification }) {
+    useEffect(() => void window.history.pushState(null, "", "editProfile"), []);
     if (!user) return void setPage(() => MainPage);
     const [formUsername, setFormUsername] = useState(user.username);
     const [formPhone, setFormPhone] = useState(user.phone);
@@ -16,14 +17,8 @@ export function EditProfile({ setPage, user, setAndStoreUser, addNotification })
 
     async function uploadEdit(e) {
         e.preventDefault();
-        if (!formUsername ||
-            !formPhone ||
-            !formPfpBase64) return;
-        const fieldsToUpdate = {
-            username: formUsername,
-            phone: formPhone,
-            pfp: formPfpBase64,
-        };
+        if (!formUsername || !formPhone || !formPfpBase64) return;
+        const fieldsToUpdate = { username: formUsername, phone: formPhone, pfp: formPfpBase64 };
         if (formPassword) {
             if (!user.auth) return void addNotification('Error al comunicarse con el servidor');
             await updatePassword(user.auth, formPassword);
@@ -34,6 +29,7 @@ export function EditProfile({ setPage, user, setAndStoreUser, addNotification })
     }
 
     async function pfpChange(e) {
+        // Para guardar la imagen en Firestore, la convertimos a Base64
         setFormPfp();
         const file = e.target.files[0];
         const reader = new FileReader();

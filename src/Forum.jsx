@@ -4,6 +4,7 @@ import './Forum.css';
 import { addDoc, query, getDocs, where } from "firebase/firestore";
 
 export function Forum({ setPage, user }) {
+  useEffect(() => void window.history.pushState(null, "", "forum"), []);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [image, setImage] = useState();
@@ -15,6 +16,7 @@ export function Forum({ setPage, user }) {
       from: user.uid,
     };
 
+    // Si subimos una imagen, la convertimos a Base64 primero
     if (image) {
       const reader = new FileReader();
       reader.readAsDataURL(image);
@@ -23,6 +25,7 @@ export function Forum({ setPage, user }) {
         addDoc(firebaseForumMessagesCollection, newMessage);
         setImage();
       };
+      reader.onerror = () => void addNotification('Error al subir imagen');
     } else addDoc(firebaseForumMessagesCollection, newMessage);
 
     setMessages([...messages, newMessage]);
@@ -42,8 +45,7 @@ export function Forum({ setPage, user }) {
       const q = query(firebaseUsersCollection, where("uid", "==", docData[i].from));
       const querySnapshot = await getDocs(q);
       console.assert(querySnapshot.size == 1);
-      docData[i].from = querySnapshot.docs[0].data().username;
-      docData[i].from = docData[i].from == user.uid ? "Tú" : querySnapshot.docs[0].data().username();
+      docData[i].from = docData[i].from == user.uid ? "Tú" : querySnapshot.docs[0].data().username;
     }
     setMessages(docData);
   }

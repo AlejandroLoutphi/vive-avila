@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { addDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { firebaseAuth, firebaseUsersCollection, Footer } from "./App";
@@ -6,6 +6,7 @@ import './Register.css';
 import { Login } from "./Login";
 
 export function Register({ setPage, addNotification, googleSignIn }) {
+    useEffect(() => void window.history.pushState(null, "", "register"), []);
     const [formUsername, setFormUsername] = useState('');
     const [formPhone, setFormPhone] = useState('');
     const [formEmail, setFormEmail] = useState('');
@@ -48,9 +49,8 @@ export function Register({ setPage, addNotification, googleSignIn }) {
         }
     }
 
+    // Para guardar la imagen en Firestore, se convierte a Base64
     async function pfpChange(e) {
-        // TODO: placeholder image
-        // setFormPfp(idk some placeholder image);
         setFormPfp();
         setFormPfpBase64();
         const file = e.target.files[0];
