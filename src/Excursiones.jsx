@@ -7,7 +7,7 @@ import { MainPage } from './MainPage';
 
 export function Excursiones({ setPage, setExcursionSeleccionada }) {
   useEffect(() => void window.history.pushState(null, "", "excursiones"), []);
-  // Datos de ejemplo (simulados)
+  
   const [excursiones, setExcursiones] = useState([]);
 
   async function loadTours() {
