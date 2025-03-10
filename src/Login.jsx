@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { firebaseAuth, Footer } from "./App";
+import { firebaseAuth } from "./App";
 import './Login.css';
 import { Register } from "./Register";
 
 export function Login({ setPage, addNotification, googleSignIn }) {
-    useEffect(() => void window.history.pushState(null, "", "login"), []);
     const [formEmail, setFormEmail] = useState('');
     const [formPassword, setFormPassword] = useState('');
 
@@ -27,7 +26,6 @@ export function Login({ setPage, addNotification, googleSignIn }) {
                         addNotification('Error al comunicarse con el servidor');
                         return;
                     default:
-                        // TODO: quitar esto
                         addNotification('Error genérico');
                         console.log(e);
                         return;
@@ -35,38 +33,57 @@ export function Login({ setPage, addNotification, googleSignIn }) {
             });
     }
 
-    // TODO: add loading animation
-    return <>
-        <div className="login_big_container">
-            <h1 className="login_title title">¡Bienvenido de nuevo!</h1>
-            <form onSubmit={loginAccount} className="login_form user_form">
-                <h2 className="login_subtitle subtitle">Inicio de Sesión</h2>
-                <div className="login_form_section_email login_form_section">
-                    <h3 className="login_form_text">Correo Electrónico</h3>
-                    <input type="email" id="login_email" name="login_email"
-                        value={formEmail} onChange={(e) => setFormEmail(e.target.value)}
-                        className="login_email login_field" required minLength="3" maxLength="40" />
+    return (
+        <div className="body_login">
+            <button className="back_button" onClick={()=>setPage(() => MainPage)}>Regresar</button>
+            <div className="login_big_container">
+                <div className="login_content">
+                    <h1 className="login_title">¡Bienvenido de nuevo!</h1>
+                    <form onSubmit={loginAccount} className="login_form">
+                        <h2 className="login_subtitle">Inicio de Sesión</h2>
+                        <div className="login_form_section">
+                            <label htmlFor="login_email" className="login_form_text">Correo Electrónico</label>
+                            <input 
+                                type="email" 
+                                id="login_email" 
+                                name="login_email" 
+                                value={formEmail} 
+                                onChange={(e) => setFormEmail(e.target.value)} 
+                                required 
+                                minlength="3" 
+                                maxlength="40" 
+                            />
+                        </div>
+                        <div className="login_form_section">
+                            <label htmlFor="login_password" className="login_form_text">Contraseña</label>
+                            <input 
+                                type="password" 
+                                id="login_password" 
+                                name="login_password" 
+                                value={formPassword} 
+                                onChange={(e) => setFormPassword(e.target.value)} 
+                                required 
+                                minlength="6" 
+                                maxlength="40" 
+                            />
+                        </div>
+                        <button type="submit" className="button_1">Iniciar Sesión</button>
+                    </form>
+                    <div className="login_divider">
+                        <span className="divider_text">o continúa con</span>
+                    </div>
+                    <div className="login_divisor">
+                        <button type="button" className="login_google_button" onClick={googleSignIn}>
+                            <img src="google.png" alt="Google Logo" className="google_logo" />
+                            Inicia Sesión con Google
+                        </button>
+                    </div>
+                    <div className="login_to_register">
+                        ¿No tienes cuenta? <a onClick={() => setPage(() => Register)}>Regístrate</a>
+                    </div>
                 </div>
-                <div className="login_form_section_password login_form_section">
-                    <h3 className="login_form_text">Contraseña</h3>
-                    <input type="password" id="login_password" name="login_password"
-                        value={formPassword} onChange={(e) => setFormPassword(e.target.value)}
-                        className="login_password login_field" required minLength="6" maxLength="40" />
-                </div>
-                <button type="submit" className="login_submit_button button_1">Iniciar Sesión</button>
-            </form>
-            <div className="login_divisor">
-                <button type="button" onClick={googleSignIn}
-                    className="login_google_button login_button_1">
-                    Inicia Sesión con Google
-                </button>
+                <div className="login_img"></div>
             </div>
-            <h2 className="login_to_register">
-                ¿No tienes cuenta?
-                <a onClick={() => setPage(() => Register)}> Regístrate</a>
-            </h2 >
         </div>
-        <Footer />
-        <img className="register_img" />
-    </>;
+    );
 }
