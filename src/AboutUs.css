@@ -7,13 +7,14 @@
 	min-height: 425px;
 	width: 100%;
 	display: flex;
+	flex-direction: column;
 	max-height: 40%;
 }
 
 .aboutus_hero-background {
 	object-fit: cover;
 	overflow: hidden;
-	width: 80%;
+	width: 100%;
 	flex-shrink: 1;
 }
 
@@ -42,6 +43,12 @@
 	margin-top: -8px;
 }
 
+.aboutus_form {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+
 .aboutus_parteCentral {
 	background-color: #d9d9d9;
 	display: flex;
@@ -49,6 +56,8 @@
 	gap: 3%;
 	flex-wrap: wrap;
 	flex-direction: row;
+	padding-top: 5%;
+	padding-bottom: 5%;
 }
 
 .aboutus_parteCentral__der {
@@ -156,8 +165,6 @@
 
 	.aboutus_parteCentral {
 		flex-wrap: nowrap;
-		padding-top: 5%;
-		padding-bottom: 5%;
 	}
 
 	.aboutus_parteCentral__der,
@@ -206,7 +213,6 @@
 
 	}
 
-
 	.aboutus-parteCentral__der-inferior {
 		font-size: 250%;
 		color: black;
@@ -215,5 +221,13 @@
 		align-items: center;
 		margin-left: 22%;
 
+	}
+
+	.aboutus_hero-section {
+		flex-direction: row;
+	}
+
+	.aboutus_hero-background {
+		width: 80%;
 	}
 }

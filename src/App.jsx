@@ -131,7 +131,10 @@ export function Navbar({ setPage, user }) {
         )}
         {user ? (
           <div className="nav-dropdown-container">
-            <a className="nav-item">Perfil</a>
+            <a className="nav-item">
+              Perfil
+              {user.pfp && <div className="nav-pfp-wrapper"><img className="nav-pfp" src={user.pfp} /></div>}
+            </a>
             <div className="nav-dropdown">
               <a onClick={() => setPage(() => MainPage)} className="nav-item">
                 Mi Perfil

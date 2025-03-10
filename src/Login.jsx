@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { firebaseAuth } from "./App";
+import { firebaseAuth, Footer } from "./App";
 import './Login.css';
 import { Register } from "./Register";
+import { MainPage } from "./MainPage";
 
 export function Login({ setPage, addNotification, googleSignIn }) {
     const [formEmail, setFormEmail] = useState('');
@@ -35,36 +36,36 @@ export function Login({ setPage, addNotification, googleSignIn }) {
 
     return (
         <div className="body_login">
-            <button className="back_button" onClick={()=>setPage(() => MainPage)}>Regresar</button>
             <div className="login_big_container">
                 <div className="login_content">
+                    <a className="login_back" onClick={() => setPage(() => MainPage)}>Atrás</a>
                     <h1 className="login_title">¡Bienvenido de nuevo!</h1>
                     <form onSubmit={loginAccount} className="login_form">
                         <h2 className="login_subtitle">Inicio de Sesión</h2>
                         <div className="login_form_section">
                             <label htmlFor="login_email" className="login_form_text">Correo Electrónico</label>
-                            <input 
-                                type="email" 
-                                id="login_email" 
-                                name="login_email" 
-                                value={formEmail} 
-                                onChange={(e) => setFormEmail(e.target.value)} 
-                                required 
-                                minlength="3" 
-                                maxlength="40" 
+                            <input
+                                type="email"
+                                id="login_email"
+                                name="login_email"
+                                value={formEmail}
+                                onChange={(e) => setFormEmail(e.target.value)}
+                                required
+                                minlength="3"
+                                maxlength="40"
                             />
                         </div>
                         <div className="login_form_section">
                             <label htmlFor="login_password" className="login_form_text">Contraseña</label>
-                            <input 
-                                type="password" 
-                                id="login_password" 
-                                name="login_password" 
-                                value={formPassword} 
-                                onChange={(e) => setFormPassword(e.target.value)} 
-                                required 
-                                minlength="6" 
-                                maxlength="40" 
+                            <input
+                                type="password"
+                                id="login_password"
+                                name="login_password"
+                                value={formPassword}
+                                onChange={(e) => setFormPassword(e.target.value)}
+                                required
+                                minlength="6"
+                                maxlength="40"
                             />
                         </div>
                         <button type="submit" className="button_1">Iniciar Sesión</button>
@@ -84,6 +85,7 @@ export function Login({ setPage, addNotification, googleSignIn }) {
                 </div>
                 <div className="login_img"></div>
             </div>
+            <Footer />
         </div>
     );
 }

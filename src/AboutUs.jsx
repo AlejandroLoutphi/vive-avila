@@ -69,7 +69,7 @@ export function AboutUs({ setPage, addNotification, user }) {
                         Rellene los siguientes campos
                     </p>
                 </div>
-                <form onSubmit={sendForm} className="login_form user_form">
+                <form onSubmit={sendForm} className="aboutus_form user_form">
                     <div className="aboutus_parteCentral__der-texto">
                         <p>Email</p>
                         <input type="email" id="aboutus_email" name="aboutus_email"

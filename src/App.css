@@ -3,16 +3,11 @@
 	font-weight: normal !important;
 }
 
-button {
-	color: red;
-	background-color: blue;
-	padding: 10px;
-}
-
 a {
 	cursor: pointer;
 }
 
+html,
 body {
 	background-color: #212121;
 	justify-content: center;
@@ -20,6 +15,7 @@ body {
 	height: 100%;
 	width: 100%;
 	margin: 0;
+	overflow-x: hidden;
 }
 
 .root {
@@ -126,6 +122,21 @@ footer {
 	display: flex;
 }
 
+.nav-pfp-wrapper {
+	display: inline-block;
+	margin: 8px;
+	vertical-align: middle;
+}
+
+.nav-pfp {
+	display: block;
+	width: auto;
+	height: 30px;
+	margin: auto;
+	border-radius: 5px;
+	max-width: 60px;
+}
+
 @media (max-width: 991px) {
 	.navbar {
 		padding-left: 20px;
@@ -202,42 +213,48 @@ footer {
 	background-color: #64966d;
 	display: flex;
 	align-items: center;
-	padding: 4px 20px; /* Ajusta a tu gusto */
-  }
-  .nav-logo {
+	padding: 4px 20px;
+	/* Ajusta a tu gusto */
+}
+
+.nav-logo {
 	width: 204px;
 	cursor: pointer;
-  }
-  .nav-links {
+}
+
+.nav-links {
 	display: flex;
 	gap: 60px;
 	margin-left: 40px;
 	transition: transform 0.3s ease-in-out;
-  }
-  .nav-item {
+}
+
+.nav-item {
 	color: #fff;
 	text-decoration: none;
 	font-size: 40px;
 	cursor: pointer;
-  }
-  
- 
-  .burger {
+}
+
+
+.burger {
 	margin-left: auto;
 	cursor: pointer;
 	display: none;
-  }
-  .burger div {
+}
+
+.burger div {
 	width: 25px;
 	height: 3px;
 	margin: 5px;
 	background-color: #fff;
-  }
-  
-  .nav-dropdown-container {
+}
+
+.nav-dropdown-container {
 	position: relative;
-  }
-  .nav-dropdown {
+}
+
+.nav-dropdown {
 	display: none;
 	position: absolute;
 	top: 100%;
@@ -246,32 +263,37 @@ footer {
 	flex-direction: column;
 	padding: 10px;
 	border-radius: 2px;
-  }
-  .nav-dropdown-container:hover .nav-dropdown {
+	width: auto;
+	text-wrap-mode: nowrap;
+}
+
+.nav-dropdown-container:hover .nav-dropdown {
 	display: flex;
-  }
-  
-  @media (max-width: 991px) {
+}
+
+@media (max-width: 991px) {
 	.nav-links {
-	  position: absolute;
-	  top: 70px; 
-	  right: 0;
-	  flex-direction: column;
-	  background-color: #64966d;
-	  width: 100%;
-	  padding: 20px 0;
-	  align-items: center;
-	  gap: 20px;
-	  transform: translateX(100%);
+		position: absolute;
+		top: 70px;
+		right: 0;
+		flex-direction: column;
+		background-color: #64966d;
+		width: 100%;
+		padding: 20px 0;
+		align-items: center;
+		gap: 20px;
+		transform: translateX(100%);
 	}
+
 	.nav-links.open {
-	  transform: translateX(0%);
+		transform: translateX(0%);
 	}
+
 	.burger {
-	  display: block;
+		display: block;
 	}
+
 	.nav-item {
-	  font-size: 24px;
+		font-size: 24px;
 	}
-  }
-  
+}

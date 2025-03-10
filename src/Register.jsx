@@ -69,6 +69,7 @@ export function Register({ setPage, addNotification, googleSignIn }) {
     return <>
         <div className="register_container">
             <div className="register_content">
+                <a className="register_back" onClick={() => setPage(() => MainPage)}>Atrás</a>
                 <div className="center">
                     <h1 className="register_title title">¡Únete a nuevas experiencias!</h1>
                     <h2 className="register_subtitle subtitle">Registrar Usuario</h2>
@@ -127,6 +128,9 @@ export function Register({ setPage, addNotification, googleSignIn }) {
                         </button>
                     </div>
                 </form>
+                <div className="register_divider">
+                    <span className="divider_text">o continúa con</span>
+                </div>
                 <div className="divisor">
                     <button type="button" onClick={googleSignIn}
                         className="register_google_button button_1">
