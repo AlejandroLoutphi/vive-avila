@@ -9,7 +9,6 @@ export function AboutUs({ setPage, addNotification, user }) {
     const [formName, setFormName] = useState('');
     const [formPhone, setFormPhone] = useState('');
     const [formMessage, setFormMessage] = useState('');
-    const [formCheckbox, setFormCheckbox] = useState(false);
 
     async function sendForm(e) {
         e.preventDefault();
@@ -24,10 +23,10 @@ export function AboutUs({ setPage, addNotification, user }) {
 
     return <>
         <Navbar setPage={setPage} user={user} />
-        <div className="aboutus_parteSuperior">
-            <div className="aboutus_parteSuperior__contenido">
-                <p className="aboutus_parteSuperior__contenedor-título">Misión</p>
-                <p className="aboutus_parteSuperior__contenedor-texto">
+        <div className="aboutus_hero-section">
+            <div className="aboutus_hero-content">
+                <h1 className="aboutus_main-title">Misión</h1>
+                <h2 className="aboutus_subtitle">
                     Nuestra misión consiste en ofrecer una manera conveniente para que los
                     estudiantes de la Universidad Metropolitana puedan descubrir y embarcar
                     excursiones en el parque nacional el Ávila, junto con información
@@ -37,34 +36,36 @@ export function AboutUs({ setPage, addNotification, user }) {
                     nuestro país, fomentando valores fundamentales como consciencia
                     ambiental y amor por la naturaleza, con el objetivo de inspirar a
                     nuestros usuarios a conectarse profundamente con el entorno natural.
-                </p>
+                </h2>
             </div>
-            <div>
-                <img className="aboutus_parteSuperior__img"
-                    src="personasExplorando.webp" />
-            </div>
+            <img
+                loading="lazy"
+                src="personasExplorando.webp"
+                className="aboutus_hero-background"
+                alt="Hero background"
+            />
         </div>
         <div className="aboutus_parteCentral">
-            <div className="aboutus_parteCentral__izq parteCentral__izq-texto">
+            <div className="aboutus_parteCentral__izq">
                 <img
                     className="aboutus_parteCentral__izq-img"
                     src="https://cdn.pixabay.com/photo/2014/04/02/11/16/phone-305741_1280.png"
                     width={170}
                 />
                 <p className="aboutus_parteCentral__izq-título1">Teléfono:</p>
-                <p>tlf. (+58)424-8014532</p>
+                <p>(+58)424-8014532</p>
                 <img
                     className="aboutus_parteCentral__izq-img"
                     src="https://cdn-icons-png.flaticon.com/512/9840/9840614.png"
                     width={170}
                 />
                 <p className="aboutus_parteCentral__izq-título2">Email:</p>
-                <p>example@gmail.com</p>
+                <p>direccion@vive-avila.unimet.edu.ve</p>
             </div>
             <div className="aboutus_parteCentral__der">
                 <div>
                     <p className="aboutus_parteCentral__der-título">¿Deseas contactarnos?</p>
-                    <p className="aboutus_parteCentral__der-subtítulo">
+                    <p className="aboutus_parteCentral__der-subtitulo">
                         Rellene los siguientes campos
                     </p>
                 </div>
@@ -86,11 +87,6 @@ export function AboutUs({ setPage, addNotification, user }) {
                         <input type="text" id="aboutus_message" name="aboutus_message"
                             value={formMessage} onChange={(e) => setFormMessage(e.target.value)}
                             className="aboutus_parteCentral__der-input" required minLength="3" maxLength="40" />
-                    </div>
-                    <div className="aboutus_parteCentral__der-inferior">
-                        <input type="checkbox" className="aboutus_button1" required
-                            checked={formCheckbox} onChange={() => setFormCheckbox((b) => !b)} />
-                        <p>Acepto términos y condiciones</p>
                     </div>
                     <button className="aboutus_button2">Enviar</button>
                 </form>

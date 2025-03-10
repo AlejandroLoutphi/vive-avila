@@ -5,13 +5,16 @@ import './BlogGuide.css';
 
 function BlogArticle({ text }) {
     // Esto es para presentar la primera línea del artículo como el título
-    const firstNewLineIndex = text.indexOf("\n");
+    //const firstNewLineIndex = text.indexOf("\n");
+    const paragraphs = text.split('\n');
+    const title = paragraphs[0];
+    const body = paragraphs.slice(1);
     // Las condicionales son para handlear el caso en el que no haya \n
-    const title = firstNewLineIndex != -1 ? text.slice(0, firstNewLineIndex) : text;
-    const body = firstNewLineIndex != -1 ? text.slice(firstNewLineIndex) : '';
+    //const title = firstNewLineIndex != -1 ? text.slice(0, firstNewLineIndex) : text;
+    //const body = firstNewLineIndex != -1 ? text.slice(firstNewLineIndex) : '';
     return <div className="blog_article">
-        <h2 className="blog_article_title">{title}</h2>
-        <p className="blog_article_body">{body}</p>
+        <h2 className="blog_article_title">{title ?? ''}</h2>
+        {body.map((par, idx) => <p key={idx} className="blog_article_body">{par}</p>)}
     </div>
 }
 
@@ -44,10 +47,6 @@ export function BlogGuide({ setPage, user }) {
     useEffect(() => void getCountFromServer(query(firebaseBlogArticlesCollection))
         .then((querySnapshot) => void setTotalArticleCount(querySnapshot.data().count)), []);
 
-    const blogArticlesJsx = blogArticles.map((text, idx) =>
-        <li className="li_unformatted" key={idx}><BlogArticle text={text} /> </li>
-    );
-
     return <>
         <Navbar setPage={setPage} user={user} />
         <div className="blog_home-page">
@@ -67,12 +66,14 @@ export function BlogGuide({ setPage, user }) {
                 />
             </div>
             <div className="blog_main-content">
-                {blogArticlesJsx}
+                {blogArticles.map((text, idx) =>
+                    <li className="li_unformatted" key={idx}><BlogArticle text={text} /> </li>
+                )}
                 <button className='blog_load-more' hidden={showMoreHidden} onClick={showMoreArticles}>
                     Cargár más
                 </button>
             </div>
         </div>
         <Footer />
-    </>
+    </>;
 }
