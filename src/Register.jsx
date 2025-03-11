@@ -18,6 +18,8 @@ export function Register({ setPage, addNotification, googleSignIn }) {
 
     async function registerCreateAccount(e) {
         e.preventDefault();
+        if (!formEmail.endsWith("@correo.unimet.edu.ve") || !formEmail.endsWith("@unimet.edu.ve"))
+            return void addNotification("Error: Solo se permiten correos de la UNIMET");
         if (!formUsername || !formPhone || !formEmail || !formPassword) return;
         if (!formPfpBase64) return void addNotification("Debe subir una foto de perfil");
         try {

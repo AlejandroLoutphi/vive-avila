@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
 // NOTE: use firestore lite?
 import {
@@ -116,7 +116,7 @@ export function Navbar({ setPage, user }) {
         {(!user || user.type === UserType.student) && (
           <>
             <a onClick={() => setPage(() => BlogGuide)} className="nav-item">
-              Guia
+              Guía
             </a>
             <a onClick={() => setPage(() => Excursiones)} className="nav-item">
               Excursiones
@@ -235,6 +235,8 @@ export function App() {
         }
         return;
       }
+      if (!userAuth.email.endsWith("@correo.unimet.edu.ve") || !userAuth.email.endsWith("@unimet.edu.ve"))
+        return void addNotification("Error: Solo se permiten correos de la UNIMET");
       const q = query(
         firebaseUsersCollection,
         where("email", "==", userAuth.email),
@@ -264,6 +266,8 @@ export function App() {
     try {
       const result = await signInWithPopup(firebaseAuth, firebaseGoogleProvider);
       const userAuth = result.user;
+      if (!userAuth.email.endsWith("@correo.unimet.edu.ve") || !userAuth.email.endsWith("@unimet.edu.ve"))
+        return void addNotification("Error: Solo se permiten correos de la UNIMET");
       const q = query(
         firebaseUsersCollection,
         where("email", "==", userAuth.email),
@@ -275,8 +279,8 @@ export function App() {
         uid: userAuth.uid,
         username: userAuth.displayName,
         email: userAuth.email,
-        phone: userAuth.phoneNumber ?? undefined,
-        pfp: userAuth.photoURL ?? undefined,
+        phone: userAuth.phoneNumber,
+        pfp: userAuth.photoURL,
         provider: UserProvider.google,
       };
       addDoc(firebaseUsersCollection, dbUser);
