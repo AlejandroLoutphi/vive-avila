@@ -52,8 +52,8 @@ export function Login({ setPage, addNotification, googleSignIn }) {
                                 value={formEmail}
                                 onChange={(e) => setFormEmail(e.target.value)}
                                 required
-                                minlength="3"
-                                maxlength="40"
+                                minLength="3"
+                                maxLength="40"
                             />
                         </div>
                         <div className="login_form_section">
@@ -65,8 +65,8 @@ export function Login({ setPage, addNotification, googleSignIn }) {
                                 value={formPassword}
                                 onChange={(e) => setFormPassword(e.target.value)}
                                 required
-                                minlength="6"
-                                maxlength="40"
+                                minLength="6"
+                                maxLength="40"
                             />
                         </div>
                         <button type="submit" className="button_1">Iniciar Sesión</button>

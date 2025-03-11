@@ -133,7 +133,7 @@ export function Navbar({ setPage, user }) {
           <div className="nav-dropdown-container">
             <a className="nav-item">
               Perfil
-              {user.pfp && <div className="nav-pfp-wrapper"><img className="nav-pfp" src={user.pfp} /></div>}
+              {user.pfp && !user.provider && <div className="nav-pfp-wrapper"><img className="nav-pfp" src={user.pfp} /></div>}
             </a>
             <div className="nav-dropdown">
               <a onClick={() => setPage(() => MainPage)} className="nav-item">
@@ -235,7 +235,7 @@ export function App() {
         }
         return;
       }
-      if (!userAuth.email.endsWith("@correo.unimet.edu.ve") || !userAuth.email.endsWith("@unimet.edu.ve"))
+      if (!userAuth.email.endsWith("@correo.unimet.edu.ve") && !userAuth.email.endsWith("@unimet.edu.ve"))
         return void addNotification("Error: Solo se permiten correos de la UNIMET");
       const q = query(
         firebaseUsersCollection,
@@ -266,7 +266,7 @@ export function App() {
     try {
       const result = await signInWithPopup(firebaseAuth, firebaseGoogleProvider);
       const userAuth = result.user;
-      if (!userAuth.email.endsWith("@correo.unimet.edu.ve") || !userAuth.email.endsWith("@unimet.edu.ve"))
+      if (!userAuth.email.endsWith("@correo.unimet.edu.ve") && !userAuth.email.endsWith("@unimet.edu.ve"))
         return void addNotification("Error: Solo se permiten correos de la UNIMET");
       const q = query(
         firebaseUsersCollection,
@@ -311,5 +311,5 @@ export function App() {
       {notification && <div className="notification">{notification}</div>}
     </>
   );
- 
+
 }

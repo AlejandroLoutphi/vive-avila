@@ -18,7 +18,7 @@ export function Register({ setPage, addNotification, googleSignIn }) {
 
     async function registerCreateAccount(e) {
         e.preventDefault();
-        if (!formEmail.endsWith("@correo.unimet.edu.ve") || !formEmail.endsWith("@unimet.edu.ve"))
+        if (!formEmail.endsWith("@correo.unimet.edu.ve") && !formEmail.endsWith("@unimet.edu.ve"))
             return void addNotification("Error: Solo se permiten correos de la UNIMET");
         if (!formUsername || !formPhone || !formEmail || !formPassword) return;
         if (!formPfpBase64) return void addNotification("Debe subir una foto de perfil");
@@ -135,9 +135,9 @@ export function Register({ setPage, addNotification, googleSignIn }) {
                     <span className="divider_text">o continúa con</span>
                 </div>
                 <div className="divisor">
-                    <button type="button" onClick={googleSignIn}
-                        className="register_google_button button_1">
-                        Registrarse con Google
+                    <button type="button" className="register_google_button" onClick={googleSignIn}>
+                        <img src="google.png" alt="Google Logo" className="google_logo" />
+                        Inicia Sesión con Google
                     </button>
                 </div>
                 <h2 className="register_to_login">¿Ya tienes cuenta? <a
