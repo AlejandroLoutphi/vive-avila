@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { firebaseAuth, Footer } from "./App";
 import './Login.css';
@@ -6,6 +6,7 @@ import { Register } from "./Register";
 import { MainPage } from "./MainPage";
 
 export function Login({ setPage, addNotification, googleSignIn }) {
+    useEffect(() => void window.history.pushState(null, "", "login"), []);
     const [formEmail, setFormEmail] = useState('');
     const [formPassword, setFormPassword] = useState('');
 

@@ -4,6 +4,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { firebaseAuth, firebaseUsersCollection, Footer } from "./App";
 import './Register.css';
 import { Login } from "./Login";
+import { MainPage } from "./MainPage";
 
 export function Register({ setPage, addNotification, googleSignIn }) {
     useEffect(() => void window.history.pushState(null, "", "register"), []);
