@@ -30,12 +30,12 @@
     font-size: xx-large;
     text-decoration: underline;
     text-align: center;
-    margin-bottom: 7px;
+    margin-bottom: 10px;
 }
 
 .login_subtitle {
-    font-size: x-large;
-    margin: 10px 0;
+    font-size: 2em;
+    margin: 15px 0;
     text-align: center;
     text-decoration: underline;
 }
@@ -43,35 +43,36 @@
 .login_form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 25px;
     width: 100%;
     align-items: center;
 }
 
 .login_form_section {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     width: 100%;
 }
 
+.login_form_text{
+    font-size: 1.5em;
+}
 .login_form_section>input {
     width: 100%;
-    padding: 8px;
+    padding: 14px;
     border: none;
     border-radius: 5px;
     box-sizing: border-box;
-    font-size: 1em;
+    font-size: 1.2em;
 }
 
 .button_1 {
-    width: 100%;
-    padding: 10px;
-    background: #fffeb33b;
-    border: none;
-    color: black;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    margin-bottom: 15px;
+    font-size: 20px;
+    width: 40%;
+    height: 50px;
+    border-radius: 51px;
+    border-width: 0;
+    color:black ;
+    background-color: white;
 }
 
 .button_1:hover {
@@ -82,16 +83,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 15px;
     /* Espaciado entre imagen y texto */
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     background: white;
     border: none;
     color: black;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 1.2em;
 }
 
 .login_google_button:hover {
@@ -99,8 +100,8 @@
 }
 
 .google_logo {
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
 }
 
 .login_divider {
@@ -108,7 +109,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 15px 0;
+    margin: 20px 0;
     position: relative;
 }
 
@@ -121,18 +122,18 @@
 }
 
 .divider_text {
-    margin: 0 10px;
-    font-size: 0.9em;
+    margin: 0 15px;
+    font-size: 1.5em;
     color: white;
     background: #2e7d32;
-    padding: 0 10px;
+    padding: 0 15px;
     z-index: 1;
 }
 
 .login_to_register {
     text-align: center;
-    margin-top: 20px;
-    font-size: 1.2em;
+    margin-top: 25px;
+    font-size: 1.4em;
 }
 
 .login_to_register a {
