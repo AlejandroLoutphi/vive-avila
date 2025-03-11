@@ -94,6 +94,9 @@
 	text-align: left;
 	margin-left: 20px;
 }
+.aboutus_parteCentral__izq-texto{
+	font-size: 200%;
+}
 
 .aboutus_parteCentral p {
 	margin: 0;
@@ -112,6 +115,13 @@
 	margin-left: 0;
 	width: 30%;
 	height: auto;
+}
+.aboutUs_phone [type=number] {
+    -moz-appearance: textfield;
+}
+.aboutUs_phone::-webkit-outer-spin-button,
+.aboutUs_phone::-webkit-inner-spin-button {
+    -webkit-appearance: none;
 }
 
 .aboutus_parteInferior {

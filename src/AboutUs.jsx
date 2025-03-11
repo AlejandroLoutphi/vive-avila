@@ -53,14 +53,14 @@ export function AboutUs({ setPage, addNotification, user }) {
                     width={170}
                 />
                 <p className="aboutus_parteCentral__izq-título1">Teléfono:</p>
-                <p>(+58)424-8014532</p>
+                <p className='aboutus_parteCentral__izq-texto'>(+58)424-8014532</p>
                 <img
                     className="aboutus_parteCentral__izq-img"
                     src="https://cdn-icons-png.flaticon.com/512/9840/9840614.png"
                     width={170}
                 />
                 <p className="aboutus_parteCentral__izq-título2">Email:</p>
-                <p>direccion@vive-avila.unimet.edu.ve</p>
+                <p className='aboutus_parteCentral__izq-texto'>direccion@vive-avila.unimet.edu.ve</p>
             </div>
             <div className="aboutus_parteCentral__der">
                 <div>
