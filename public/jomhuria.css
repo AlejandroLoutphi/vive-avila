@@ -1,0 +1,18 @@
+@font-face {
+    font-family: 'Jomhuria';
+    src: url('Jomhuria-Regular.woff2') format('woff2'),
+        url('Jomhuria-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Josefin Slab';
+    src: url('JosefinSlab-Thin.woff2') format('woff2'),
+        url('JosefinSlab-Thin.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+

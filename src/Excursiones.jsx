@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Navbar, Footer, firebasePendingTripsCollection } from "./App";
-import { query, getDocs } from "firebase/firestore";
+import { Navbar, Footer, dbPendingTrips } from "./App";
 import "./Excursiones.css";
 import { DetalleExcursion } from "./DetalleExcursion";
 import { MainPage } from "./MainPage";
@@ -13,18 +12,8 @@ export function Excursiones({ setPage, setExcursionSeleccionada }) {
     const [searchTerm, setSearchTerm] = useState("");
 
     async function loadTours() {
-        try {
-            const q = query(firebasePendingTripsCollection);
-            const querySnapshot = await getDocs(q);
-            const excursionesData = querySnapshot.docs.map((doc) => ({
-                ...doc.data(),
-                docRef: doc.ref,
-                imagen: doc.data().imagen || DEFAULT_IMAGE,
-            }));
-            setExcursiones(excursionesData);
-        } catch (error) {
-            console.error("Error loading excursions:", error);
-        }
+        try { setExcursiones(await dbPendingTrips.get()); }
+        catch (error) { console.error("Error loading excursions:", error); }
     }
 
     const verDetalles = (excursion) => {
@@ -37,10 +26,7 @@ export function Excursiones({ setPage, setExcursionSeleccionada }) {
         setPage(() => MainPage);
     };
 
-    useEffect(() => {
-        loadTours();
-    }, []);
-
+    useEffect(() => void loadTours(), []);
     const reservedExcursions = [
         { id: 1, nombre: "Excursión A" },
         { id: 2, nombre: "Excursión B" },
@@ -108,7 +94,7 @@ export function Excursiones({ setPage, setExcursionSeleccionada }) {
                             </div>
                         </div>
                         <img
-                            src={exc.imagen}
+                            src={exc.imagen || DEFAULT_IMAGE}
                             alt={exc.nombre || "Imagen de excursión"}
                             className="excursion-imagen"
                             onError={(e) => {

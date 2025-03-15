@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { addDoc } from "firebase/firestore";
-import { Footer, Navbar, firebaseContactMessagesCollection } from './App';
+import { Footer, Navbar, dbContactMessages } from './App';
 import './AboutUs.css';
 
 export function AboutUs({ setPage, addNotification, user }) {
@@ -12,13 +11,17 @@ export function AboutUs({ setPage, addNotification, user }) {
 
     async function sendForm(e) {
         e.preventDefault();
-        await addDoc(firebaseContactMessagesCollection, {
+        await dbContactMessages.add({
             email: formEmail,
             name: formName,
             phone: formPhone,
             message: formMessage,
         });
         addNotification('Mensaje enviado');
+        setFormEmail('');
+        setFormName('');
+        setFormPhone('');
+        setFormMessage('');
     }
 
     return <>

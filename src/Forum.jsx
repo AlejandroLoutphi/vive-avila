@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Navbar, Footer, firebaseUsersCollection, firebaseForumMessagesCollection } from './App';
+import { Navbar, Footer, dbForumMessages, dbUsers } from './App';
 import './Forum.css';
-import { addDoc, query, getDocs, where } from "firebase/firestore";
+import { orderBy, Timestamp, where } from "firebase/firestore";
 
 export function Forum({ setPage, user }) {
   useEffect(() => void window.history.pushState(null, "", "forum"), []);
@@ -14,22 +14,23 @@ export function Forum({ setPage, user }) {
     const newMessage = {
       body: message,
       from: user.uid,
+      time: Timestamp.now()
     };
+
+    const sendMessage = () => {
+      dbForumMessages.add(newMessage);
+      setMessages([...messages, { ...newMessage, username: "Tú", pfp: user.pfp }]);
+      setMessage("");
+      setImage();
+    }
 
     // Si subimos una imagen, la convertimos a Base64 primero
     if (image) {
       const reader = new FileReader();
       reader.readAsDataURL(image);
-      reader.onload = () => {
-        newMessage.img = reader.result;
-        addDoc(firebaseForumMessagesCollection, newMessage);
-        setImage();
-      };
+      reader.onload = () => { newMessage.img = reader.result; sendMessage(); };
       reader.onerror = () => void addNotification('Error al subir imagen');
-    } else addDoc(firebaseForumMessagesCollection, newMessage);
-
-    setMessages([...messages, newMessage]);
-    setMessage("");
+    } else sendMessage();
   }
 
   const handleImageChange = (e) => {
@@ -37,17 +38,18 @@ export function Forum({ setPage, user }) {
   };
 
   async function loadMessages() {
-    // TODO: cambiar esto a consulta anidada
-    const q = query(firebaseForumMessagesCollection /* limit(10) */);
-    const querySnapshot = await getDocs(q);
-    const docData = querySnapshot.docs.map((doc) => ({ ...doc.data() }));
-    for (let i = 0; i < docData.length; i++) {
-      const q = query(firebaseUsersCollection, where("uid", "==", docData[i].from));
-      const querySnapshot = await getDocs(q);
-      console.assert(querySnapshot.size == 1);
-      docData[i].from = docData[i].from == user.uid ? "Tú" : querySnapshot.docs[0].data().username;
-    }
-    setMessages(docData);
+    const dbMessages = await dbForumMessages.get(orderBy("time")/* limit(10) */);
+    const uids = [...new Set(dbMessages.map((msg) => msg.from))];
+    let forumUsers = [];
+    // Tenemos que cargar los usuarios de 30 en 30 por limitaciones de Firestore
+    for (let i = 0; i < uids.length; i += 30)
+      forumUsers = forumUsers.concat(await dbUsers.get(where("uid", "in", uids.slice(i, i + 30))));
+    const userMap = Object.fromEntries(forumUsers.map((user) => [user.uid, user]));
+    setMessages(dbMessages.filter((msg) => userMap[msg.from]).map((msg) => ({
+      ...msg,
+      username: msg.from == user.uid ? "Tú" : userMap[msg.from].username,
+      pfp: userMap[msg.from]?.pfp
+    })));
   }
 
   useEffect(() => void loadMessages(), []);
@@ -61,8 +63,8 @@ export function Forum({ setPage, user }) {
       <div className="chat-container__forum">
         <ul className="ul__forum">
           {messages.map((message, i) => (
-            <li key={i} className={message.from === "Tú" ? "message-sent" : "message-received"}>
-              {message.from}: {message.body}
+            <li key={i} className={message.from === user.uid ? "message-sent" : "message-received"}>
+              {message.username}: {message.body}
               {message.img &&
                 <img src={message.img} alt="Enviado" className="chat-image__forum" />
               }
@@ -79,8 +81,7 @@ export function Forum({ setPage, user }) {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
-        <input
-          className="input__forum"
+        <input className="input__forum"
           type="file"
           accept="image/*"
           onChange={handleImageChange}
