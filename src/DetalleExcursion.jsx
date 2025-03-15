@@ -1,21 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
-import { Navbar, Footer, firebaseDb } from './App';
+import { Navbar, Footer, dbPendingTrips } from './App';
 import './DetalleExcursion.css';
 import { Excursiones } from './Excursiones';
 import { MainPage } from './MainPage';
 
-export function DetalleExcursion({ setPage, excursionSeleccionada }) {
-    if (!excursionSeleccionada) return void useEffect(() => void (async () => {
-        const excursionId = window.location.pathname.split('/', 3)[2];
-        if (!excursionId) return void setPage(() => MainPage);
-        const excursionDocRef = doc(firebaseDb, 'pendingTrips', excursionId);
-        const excursionDoc = await getDoc(excursionDocRef);
-        if (!excursionDoc.exists()) return void setPage(() => MainPage);
-        setExcursionSeleccionada({ ...excursionDoc.data(), docRef: excursionDocRef });
-      })(), []);
-    
-      useEffect(() => void window.history.pushState(null, "", "detalleExcursion/" + excursionSeleccionada.docRef.id), []);
+export function DetalleExcursion({ setPage, excursionSeleccionada, setExcursionSeleccionada }) {
+  if (!excursionSeleccionada) return void (async () => {
+    const excursionId = window.location.pathname.split('/', 3)[2];
+    if (!excursionId) return void setPage(() => MainPage);
+    const excursionDoc = await dbPendingTrips.doc(excursionId);
+    if (!excursionDoc) return void setPage(() => MainPage);
+    setExcursionSeleccionada(excursionDoc);
+  })();
+
+  useEffect(() => void window.history.pushState(null, "", "detalleExcursion/" + excursionSeleccionada.docRef.id), []);
   const excursion = excursionSeleccionada || {
     nombre: "Excursión al Pico Naiguatá",
     dificultad: 4,
@@ -108,7 +106,7 @@ export function DetalleExcursion({ setPage, excursionSeleccionada }) {
             </span>
           </div>
         </div>
-         <div className="detalleexcursion-header__gallery">
+        <div className="detalleexcursion-header__gallery">
           {Array.isArray(excursion.galeria) && excursion.galeria.map((imgUrl, idx) => (
             <img
               key={idx}
