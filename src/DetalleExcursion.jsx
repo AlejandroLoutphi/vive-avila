@@ -79,10 +79,10 @@ export function DetalleExcursion({ setPage, excursionSeleccionada }) {
 
       <header className="detalleexcursion-header">
         <div className="detalleexcursion-header__info">
-          <h1 className="detalleexcursion-header__title">{excursion.nombre}</h1>
+          <h1 className="detalleexcursion-header__title">{excursion.ruta}</h1>
           <div className="detalleexcursion-header__stats">
-            <div className="detalleexcursion-difficulty">
-              <span className="detalleexcursion-difficulty__label">Dificultad:</span>
+            <div className="detalleexcursion-difficulty detalleexcursion-stat">
+              <span className="detalleexcursion-difficulty__label ">Dificultad:</span>
               {Array.from({ length: 5 }).map((_, i) => (
                 <span
                   key={i}
@@ -91,7 +91,7 @@ export function DetalleExcursion({ setPage, excursionSeleccionada }) {
                 ></span>
               ))}
             </div>
-            <div className="detalleexcursion-stars">
+            <div className="detalleexcursion-stars detalleexcursion-stat">
               <span className="detalleexcursion-stars__label">Calif:</span>
               {Array.from({ length: 5 }).map((_, i) => {
                 const fullStar = i < Math.floor(excursion.estrellas);
@@ -103,7 +103,7 @@ export function DetalleExcursion({ setPage, excursionSeleccionada }) {
                 );
               })}
             </div>
-            <span className="detalleexcursion-duration">
+            <span className="detalleexcursion-duration detalleexcursion-stat">
               Duración: {excursion.duracion}
             </span>
           </div>

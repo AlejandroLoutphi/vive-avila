@@ -27,7 +27,31 @@
     color: #fff;
     padding: 20px 5%; 
     gap: 30px;
+    height: 200px;
+    min-height: fit-content;
   }
+  .detalleexcursion-header__stats{
+    padding: auto;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: start;
+  }
+  .detalleexcursion-stat{
+      background-color: #a7d0ac;
+      padding: 10px;
+      width: 200px;
+      height: 45px;
+      color: #000;
+      font-size: 30px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      vertical-align:auto;
+  }
+
+  
   
  
   .detalleexcursion-header__info {
@@ -43,23 +67,7 @@
     text-transform: uppercase;
   }
   
-
-  .detalleexcursion-header__stats {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 20px;
-  }
-  
  
-  .detalleexcursion-difficulty {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  .detalleexcursion-difficulty__label {
-    font-size: 1rem;
-  }
   .detalleexcursion-difficulty__circle {
     width: 15px;
     height: 15px;
@@ -67,26 +75,15 @@
     background-color: #000; 
   }
 
-  .detalleexcursion-stars {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .detalleexcursion-stars__label {
-    font-size: 1rem;
-  }
+ 
   .detalleexcursion-stars__star {
     color: #ffd700;
-    font-size: 1.2rem; 
+    font-size: 1.2rem;
+   
   }
   
 
-  .detalleexcursion-duration {
-    font-size: 1rem;
-    font-weight: bold;
-  }
-  
-  .detalleexcursion-header__gallery {
+    .detalleexcursion-header__gallery {
     flex: 1 1 400px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
