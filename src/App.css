@@ -18,6 +18,10 @@ body {
 	overflow-x: hidden;
 }
 
+iframe {
+	z-index: 0 !important;
+}
+
 .root {
 	display: flex;
 	flex-direction: column;

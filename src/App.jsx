@@ -74,6 +74,7 @@ export const dbContactMessages = new DbCollection("contactMessages");
 export const dbPendingTrips = new DbCollection("pendingTrips");
 export const dbBlogArticles = new DbCollection("blogArticles");
 export const dbForumMessages = new DbCollection("forumMessages");
+export const dbReservations = new DbCollection("reservations");
 
 const pageList = Object.freeze({
   "": () => MainPage,

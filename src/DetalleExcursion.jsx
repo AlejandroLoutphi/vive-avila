@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Navbar, Footer, dbPendingTrips } from './App';
+import React, { useState, useEffect, useRef } from 'react';
+import { Navbar, Footer, dbPendingTrips, dbReservations } from './App';
 import './DetalleExcursion.css';
-import { Excursiones } from './Excursiones';
 import { MainPage } from './MainPage';
 
-export function DetalleExcursion({ setPage, excursionSeleccionada, setExcursionSeleccionada }) {
+let isFirstRender = true;
+
+export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcursionSeleccionada }) {
   if (!excursionSeleccionada) return void (async () => {
     const excursionId = window.location.pathname.split('/', 3)[2];
     if (!excursionId) return void setPage(() => MainPage);
@@ -12,29 +13,55 @@ export function DetalleExcursion({ setPage, excursionSeleccionada, setExcursionS
     if (!excursionDoc) return void setPage(() => MainPage);
     setExcursionSeleccionada(excursionDoc);
   })();
-
   useEffect(() => void window.history.pushState(null, "", "detalleExcursion/" + excursionSeleccionada.docRef.id), []);
-  const excursion = excursionSeleccionada || {
-    nombre: "Excursión al Pico Naiguatá",
-    dificultad: 4,
-    estrellas: 4.5,
-    duracion: "6 horas",
-    galeria: [
-      "https://example.com/img1.jpg",
-      "https://example.com/img2.jpg",
-      "https://example.com/img3.jpg",
-      "https://example.com/img4.jpg"
-    ],
-    descripcion: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                  Vivamus tempus semper nisl, vitae tincidunt turpis pharetra vitae. 
-                  Aenean quis lorem venenatis, euismod metus in, posuere enim.`,
-    rutaDescripcion: `Aquí puedes ver la descripción de la ruta, 
-                      el itinerario, punto de partida y llegada, etc.`,
-    rutaMapa: "https://example.com/mapa-ruta.jpg",
-    puntosInteres: ["Quebrada Quintero", "Mirador Este", "Bosque Nublado"],
-    actividades: ["Fotografía", "Observación de aves", "Camping"],
-  };
 
+  const paymentButton = useRef();
+  const [formDate, setFormDate] = useState(new Date().toISOString().slice(0, 10));
+  const [formPeopleCount, setFormPeopleCount] = useState(1);
+  const formPeopleCountRef = useRef(formPeopleCount);
+  formPeopleCountRef.current = formPeopleCount;
+
+  function makePayPalButton() {
+    paymentButton.current.replaceChildren();
+    window.paypal.Buttons({
+      async createOrder(_, actions) {
+        return actions.order.create({
+          purchase_units: [{
+            description: "Excursion Vive-avila",
+            amount: {
+              currency_code: "USD",
+              value: excursionSeleccionada.pricePerPersonInCents * formPeopleCountRef.current / 100,
+            }
+          }]
+        });
+      },
+      async onApprove(_, actions) {
+        const order = await actions.order.capture();
+        dbReservations.add({
+          reservee: user.uid,
+          trip: excursionSeleccionada.docRef.id,
+          peopleCount: formPeopleCountRef.current,
+          paymentDate: order.create_time.slice(0, 10),
+        });
+      },
+    }).render(paymentButton.current);
+  }
+
+
+  // Cargamos el script de PayPal dinámicamente la primera vez que cargamos detalleExcursion
+  // makePayPalButton crea el botón de PayPal al cargar el script y al cambiar los datos
+  if (isFirstRender) {
+    const payPalScript = document.createElement("script");
+    // TODO: replace with non-sandbox PayPal link?
+    payPalScript.src = "https://www.paypal.com/sdk/js?client-id=Aef6VsJkghfASmbMFTEAcagFjZkBp-_vzKJ7EVWr5wQsfsBbTUVOBw1fCZFW_f8IcOqLaTAJPaAu_hfu";
+    payPalScript.addEventListener("load", makePayPalButton);
+    document.body.appendChild(payPalScript);
+  }
+  isFirstRender = false;
+
+  useEffect(() => window.paypal && void makePayPalButton(), []);
+
+  // TODO: replace with real reviews
   const [comentarios] = useState([
     {
       usuario: "Carlos",
@@ -66,6 +93,7 @@ export function DetalleExcursion({ setPage, excursionSeleccionada, setExcursionS
     setNuevaResena("");
   }
 
+  // TODO: fetch guides from firestore
   const guiasDisponibles = [
     { nombre: "Guía Pepe", img: "https://example.com/guia1.jpg" },
     { nombre: "Guía Rosa", img: "https://example.com/guia2.jpg" },
@@ -77,7 +105,7 @@ export function DetalleExcursion({ setPage, excursionSeleccionada, setExcursionS
 
       <header className="detalleexcursion-header">
         <div className="detalleexcursion-header__info">
-          <h1 className="detalleexcursion-header__title">{excursion.ruta}</h1>
+          <h1 className="detalleexcursion-header__title">{excursionSeleccionada.ruta}</h1>
           <div className="detalleexcursion-header__stats">
             <div className="detalleexcursion-difficulty detalleexcursion-stat">
               <span className="detalleexcursion-difficulty__label ">Dificultad:</span>
@@ -85,15 +113,15 @@ export function DetalleExcursion({ setPage, excursionSeleccionada, setExcursionS
                 <span
                   key={i}
                   className="detalleexcursion-difficulty__circle"
-                  style={{ opacity: i < excursion.dificultad ? 1 : 0.3 }}
+                  style={{ opacity: i < excursionSeleccionada.dificultad ? 1 : 0.3 }}
                 ></span>
               ))}
             </div>
             <div className="detalleexcursion-stars detalleexcursion-stat">
               <span className="detalleexcursion-stars__label">Calif:</span>
               {Array.from({ length: 5 }).map((_, i) => {
-                const fullStar = i < Math.floor(excursion.estrellas);
-                const halfStar = (i === Math.floor(excursion.estrellas)) && (excursion.estrellas % 1 >= 0.5);
+                const fullStar = i < Math.floor(excursionSeleccionada.estrellas);
+                const halfStar = (i === Math.floor(excursionSeleccionada.estrellas)) && (excursionSeleccionada.estrellas % 1 >= 0.5);
                 return (
                   <span key={i} className="detalleexcursion-stars__star">
                     {fullStar ? "★" : halfStar ? "☆" : "☆"}
@@ -102,12 +130,12 @@ export function DetalleExcursion({ setPage, excursionSeleccionada, setExcursionS
               })}
             </div>
             <span className="detalleexcursion-duration detalleexcursion-stat">
-              Duración: {excursion.duracion}
+              Duración: {excursionSeleccionada.duracion}
             </span>
           </div>
         </div>
         <div className="detalleexcursion-header__gallery">
-          {Array.isArray(excursion.galeria) && excursion.galeria.map((imgUrl, idx) => (
+          {Array.isArray(excursionSeleccionada.galeria) && excursionSeleccionada.galeria.map((imgUrl, idx) => (
             <img
               key={idx}
               className="detalleexcursion-gallery__img"
@@ -121,7 +149,7 @@ export function DetalleExcursion({ setPage, excursionSeleccionada, setExcursionS
       <section className="detalleexcursion-descripcion">
         <h2 className="detalleexcursion-descripcion__title">Descripción</h2>
         <div className="detalleexcursion-descripcion__box">
-          <p className="detalleexcursion-descripcion__texto">{excursion.descripcion}</p>
+          <p className="detalleexcursion-descripcion__texto">{excursionSeleccionada.descripcion}</p>
           <button
             className="detalleexcursion-descripcion__button"
             onClick={() => alert("Ver Galería")}
@@ -135,11 +163,11 @@ export function DetalleExcursion({ setPage, excursionSeleccionada, setExcursionS
         <h2 className="detalleexcursion-ruta__title">Ruta</h2>
         <div className="detalleexcursion-ruta__box">
           <div className="detalleexcursion-ruta__texto">
-            {excursion.rutaDescripcion}
+            {excursionSeleccionada.rutaDescripcion}
           </div>
           <img
             className="detalleexcursion-ruta__map"
-            src={excursion.rutaMapa}
+            src={excursionSeleccionada.rutaMapa}
             alt="Mapa de la ruta"
           />
         </div>
@@ -153,15 +181,15 @@ export function DetalleExcursion({ setPage, excursionSeleccionada, setExcursionS
           <div className="detalleexcursion-puntos__box">
             <h3 className="detalleexcursion-puntos__subtitle">Puntos de Interés</h3>
             <ul>
-              {excursion.puntosInteres &&
-                excursion.puntosInteres.map((p, i) => <li key={i}>{p}</li>)}
+              {excursionSeleccionada.puntosInteres &&
+                excursionSeleccionada.puntosInteres.map((p, i) => <li key={i}>{p}</li>)}
             </ul>
           </div>
           <div className="detalleexcursion-puntos__box">
             <h3 className="detalleexcursion-puntos__subtitle">Actividades</h3>
             <ul>
-              {excursion.actividades &&
-                excursion.actividades.map((a, i) => <li key={i}>{a}</li>)}
+              {excursionSeleccionada.actividades &&
+                excursionSeleccionada.actividades.map((a, i) => <li key={i}>{a}</li>)}
             </ul>
           </div>
         </div>
@@ -172,17 +200,11 @@ export function DetalleExcursion({ setPage, excursionSeleccionada, setExcursionS
         <div className="detalleexcursion-reserva__container">
           <div className="detalleexcursion-reserva__left">
             <h3 className="reserva-left__subtitle">Elige una fecha:</h3>
-            <input
-              type="date"
-              className="reserva-left__input"
-            />
+            <input type="date" className="reserva-left__input" value={formDate}
+              onChange={(e) => setFormDate(e.target.value)} />
             <h3 className="reserva-left__subtitle">Número de personas:</h3>
-            <input
-              type="number"
-              className="reserva-left__input"
-              min={1}
-              defaultValue={1}
-            />
+            <input type="number" className="reserva-left__input" min={1} value={formPeopleCount}
+              onChange={(e) => setFormPeopleCount(e.target.value)} />
             <h3 className="reserva-left__subtitle">Guía disponible:</h3>
             <div className="reserva-left__guides">
               {guiasDisponibles.map((g, i) => (
@@ -196,18 +218,12 @@ export function DetalleExcursion({ setPage, excursionSeleccionada, setExcursionS
           <div className="detalleexcursion-reserva__right">
             <div>
               <div className="factura-line">
-                <span>Viaje:</span> <span>$80.00</span>
-              </div>
-              <div className="factura-line">
-                <span>IVA:</span> <span>$5.00</span>
-              </div>
-              <div className="factura-line">
-                <strong>Total:</strong> <strong>$85.00</strong>
+                <span>Precio total de viaje:</span> <span>
+                  ${(excursionSeleccionada.pricePerPersonInCents * formPeopleCount / 100).toFixed(2)}
+                </span>
               </div>
             </div>
-            <button className="reserva-pay__button" onClick={() => alert("Procesar Pago")}>
-              Pagar Ahora
-            </button>
+            <div className="reserva-pay__button" ref={paymentButton}></div>
           </div>
         </div>
       </section>
@@ -220,7 +236,7 @@ export function DetalleExcursion({ setPage, excursionSeleccionada, setExcursionS
               <div className="comentario-card__header">
                 <span className="comentario-card__name">{c.usuario}</span>
                 <span className="comentario-card__stars">
-                  {Array.from({ length: c.calif }).map((_, i) => "★")}
+                  {Array.from({ length: c.calif }).map(() => "★")}
                 </span>
               </div>
               <p className="comentario-card__text">{c.texto}</p>
