@@ -25,7 +25,7 @@ export function BlogGuide({ setPage, user }) {
     const [showMoreHidden, setShowMoreHidden] = useState(false);
 
     async function loadBlogArticles(articleCount) {
-        const articles = await dbBlogArticles.get(orderBy('date', 'desc'), limit(articleCount));
+        const articles = await dbBlogArticles.get(orderBy('date'), limit(articleCount));
         setBlogArticles(articles.map((article) => article.text));
     }
 

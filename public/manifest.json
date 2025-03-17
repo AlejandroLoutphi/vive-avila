@@ -1,0 +1,10 @@
+{
+  "name": "Vive Ávila",
+  "short_name": "Vive Ávila",
+  "start_url": "/",
+  "icons": [],
+  "theme_color": "#ffffff",
+  "background_color": "#24892f",
+  "display": "fullscreen",
+  "orientation": "portrait"
+}

@@ -1,7 +1,8 @@
 import React from 'react';
 import './AdminTours.css';
+import { Footer, Navbar } from './App';
 
-export function AdminTours({ setPage, addNotification }) {
+export function AdminTours({ setPage, user, addNotification }) {
   const dummyTours = [
     {
       nombre: 'Excursión al Pico Naiguatá',
@@ -37,7 +38,8 @@ export function AdminTours({ setPage, addNotification }) {
     alert('Crear nuevo Tour');
   }
 
-  return (
+  return <>
+    <Navbar setPage={setPage} user={user} />
     <div className="admin-tours-container">
       <header className="admin-tours-banner">
         <h1 className="admin-tours-banner-title">ADMINISTRAR TOURS</h1>
@@ -85,5 +87,6 @@ export function AdminTours({ setPage, addNotification }) {
         </table>
       </section>
     </div>
-  );
+    <Footer />
+  </>;
 }

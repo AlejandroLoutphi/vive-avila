@@ -15,6 +15,8 @@ import { GuideHome } from "./GuideHome";
 import { Excursiones } from "./Excursiones";
 import { DetalleExcursion } from "./DetalleExcursion";
 import { Forum } from "./Forum";
+import { AdminPage } from "./AdminPage";
+import { AdminTours } from "./AdminTours";
 import "./App.css";
 
 // Setup de Firebase
@@ -128,7 +130,7 @@ export function Navbar({ setPage, user }) {
               setPage(() => GuideHome);
               break;
             case UserType.admin:
-              setPage(() => MainPage);
+              setPage(() => AdminPage);
               break;
           }
         }}>Inicio</a>
@@ -148,6 +150,10 @@ export function Navbar({ setPage, user }) {
             </a>
           </>
         }
+        {user && user.type === UserType.admin && <>
+          <a onClick={() => setPage(() => AdminTours)} className="nav-item">Tours</a>
+          <a onClick={() => setPage(() => AdminTours)} className="nav-item">Actividad</a>
+        </>}
         {user ? (
           <div className="nav-dropdown-container">
             <a className="nav-item">
@@ -260,7 +266,7 @@ export function App() {
       switch (dbUser.type) {
         case UserType.student: setPage(() => MainPage); break;
         case UserType.guide: setPage(() => GuideHome); break;
-        case UserType.admin: setPage(() => MainPage); break;
+        case UserType.admin: setPage(() => AdminPage); break;
       }
       setAndStoreUser({ ...dbUser, auth: userAuth });
     });
