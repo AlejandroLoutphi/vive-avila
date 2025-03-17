@@ -1,0 +1,106 @@
+.admin-tours-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #ffffff;
+    font-family: 'Jomhuria', cursive;
+  }
+  
+ 
+  .admin-tours-banner {
+    background-color: #24892f;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 50px;
+  }
+  
+  .admin-tours-banner-title {
+    font-size: 48px;
+    margin: 0;
+  }
+  
+  .admin-tours-new-button {
+    background-color: #fff;
+    color: #000;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    border-radius: 8px;
+    padding: 10px 20px;
+    height: 50px;
+  }
+  
+
+  .admin-tours-main {
+    padding: 30px 50px;
+  }
+  
+
+  .admin-tours-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  }
+  
+  .admin-tours-table thead {
+    background-color: #4c7742;
+    color: #fff;
+  }
+  
+  .admin-tours-table th,
+  .admin-tours-table td {
+    font-size: 24px;
+    text-align: center;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .admin-tours-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  
+ 
+  .admin-tours-edit-button,
+  .admin-tours-delete-button {
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  .admin-tours-edit-button {
+    background-color: #ffe066;
+    color: #000;
+  }
+  
+  .admin-tours-delete-button {
+    background-color: #ff5757;
+    color: #fff;
+  }
+  
+
+  @media (max-width: 700px) {
+    .admin-tours-banner-title {
+      font-size: 32px;
+    }
+    .admin-tours-new-button {
+      font-size: 18px;
+      height: 40px;
+    }
+    .admin-tours-table th,
+    .admin-tours-table td {
+      font-size: 18px;
+      padding: 10px;
+    }
+    .admin-tours-edit-button,
+    .admin-tours-delete-button {
+      font-size: 16px;
+      padding: 8px;
+    }
+  }
+  
