@@ -141,26 +141,6 @@ footer {
 	max-width: 60px;
 }
 
-@media (max-width: 991px) {
-	.navbar {
-		padding-left: 20px;
-		padding-right: 20px;
-	}
-
-	.nav-links {
-		flex-wrap: wrap;
-		gap: 20px;
-	}
-
-	.nav-item {
-		font-size: 20px;
-	}
-
-	.nav-drowdown {
-		padding-left: 5px;
-	}
-}
-
 @keyframes notification {
 	0% {
 		top: 0%;
@@ -275,7 +255,25 @@ footer {
 	display: flex;
 }
 
-@media (max-width: 991px) {
+@media (max-width: 1225px) {
+	.navbar {
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+
+	.nav-links {
+		flex-wrap: wrap;
+		gap: 20px;
+	}
+
+	.nav-item {
+		font-size: 20px;
+	}
+
+	.nav-drowdown {
+		padding-left: 5px;
+	}
+
 	.nav-links {
 		position: absolute;
 		top: 70px;

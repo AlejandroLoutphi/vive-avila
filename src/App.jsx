@@ -17,6 +17,7 @@ import { DetalleExcursion } from "./DetalleExcursion";
 import { Forum } from "./Forum";
 import { AdminPage } from "./AdminPage";
 import { AdminTours } from "./AdminTours";
+import { Gallery } from "./Gallery";
 import "./App.css";
 
 // Setup de Firebase
@@ -89,6 +90,7 @@ const pageList = Object.freeze({
   excursiones: () => Excursiones,
   detalleExcursion: () => DetalleExcursion,
   forum: () => Forum,
+  gallery: () => Gallery,
 });
 const pageString = window.location.pathname.split("/", 2)[1];
 const pageStartingValue =
@@ -145,6 +147,9 @@ export function Navbar({ setPage, user }) {
             </a>
             <a onClick={() => setPage(() => Forum)} className="nav-item">
               Foro
+            </a>
+            <a onClick={() => setPage(() => Gallery)} className="nav-item">
+              Galeria
             </a>
             <a onClick={() => setPage(() => AboutUs)} className="nav-item">
               Sobre Nosotros
