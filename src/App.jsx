@@ -18,6 +18,7 @@ import { Forum } from "./Forum";
 import { AdminPage } from "./AdminPage";
 import { AdminTours } from "./AdminTours";
 import { Gallery } from "./Gallery";
+import { MiPerfil } from "./MiPerfil";
 import "./App.css";
 
 // Setup de Firebase
@@ -91,6 +92,7 @@ const pageList = Object.freeze({
   detalleExcursion: () => DetalleExcursion,
   forum: () => Forum,
   gallery: () => Gallery,
+  miPerfil: () => MiPerfil,
 });
 const pageString = window.location.pathname.split("/", 2)[1];
 const pageStartingValue =
@@ -167,7 +169,7 @@ export function Navbar({ setPage, user }) {
               {user.pfp && !user.provider && <div className="nav-pfp-wrapper"><img className="nav-pfp" src={user.pfp} /></div>}
             </a>
             <div className="nav-dropdown">
-              <a onClick={() => setPage(() => MainPage)} className="nav-item">
+              <a onClick={() => setPage(() => MiPerfil)} className="nav-item">
                 Mi Perfil
               </a>
               {!user.provider && (
