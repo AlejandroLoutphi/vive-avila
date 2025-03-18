@@ -8,6 +8,7 @@ const DEFAULT_IMAGE = "../sobreNosotrosInc.jpg";
 
 export function Excursiones({ setPage, setExcursionSeleccionada }) {
     useEffect(() => void window.history.pushState(null, "", "excursiones"), []);
+    const [excursiones, setExcursiones] = useState([]);
     const excursiones = useRef([]);
     const [excursionesMostradas, setExcursionesMostradas] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
@@ -45,12 +46,15 @@ export function Excursiones({ setPage, setExcursionSeleccionada }) {
 
             {/* Hero Section */}
             <div className="excursiones-encabezado">
-                <h1>Excursiones</h1>
-                <p>
-                    Explora tus limites y acepta el reto, sera una experiencia
-                    inolvidable. Vuelvete uno con la naturaleza y aprecia la esencia de
-                    Caracas
-                </p>
+                <div className="excursiones-encabezado-l">
+                    <h1>Excursiones</h1>
+                    <p>
+                        Explora tus límites y acepta el desafío, será una experiencia
+                        inolvidable. Vuelvete uno con la naturaleza y aprecia la esencia de
+                        Caracas.
+                    </p>
+                </div>
+                <img src="excursiones avila.jpg"></img>
             </div>
 
             {/* Reserved Excursions Section */}

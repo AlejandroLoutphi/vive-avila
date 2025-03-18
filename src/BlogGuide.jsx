@@ -48,8 +48,8 @@ export function BlogGuide({ setPage, user }) {
                 <div className="blog_hero-content">
                     <h1 className="blog_main-title"> Guía </h1>
                     <h2 className="blog_subtitle">
-                        Más que un reto: una experiencia. Aquí tendras:
-                        Rutas, Reseñas, Personal y muchas otras cosas.
+                        Más que un reto: una experiencia. Aquí tendrás:
+                        rutas, reseñas, consejos y muchas otras cosas.
                     </h2>
                 </div>
                 <img
