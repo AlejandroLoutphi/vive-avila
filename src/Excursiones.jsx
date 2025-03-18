@@ -2,11 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { Navbar, Footer, dbPendingTrips } from "./App";
 import "./Excursiones.css";
 import { DetalleExcursion } from "./DetalleExcursion";
-import { MainPage } from "./MainPage";
 
 // TODO: replace default image
-const DEFAULT_IMAGE =
-    "https://media.discordapp.net/attachments/1213279888648306759/1350255980444778649/image.png?ex=67d61360&is=67d4c1e0&hm=f9734c9859010864c68e3c540e8c62fd1cd64af16c369c14616a29cd6a521221&=&format=webp&quality=lossless";
+const DEFAULT_IMAGE = "../sobreNosotrosInc.jpg";
 
 export function Excursiones({ setPage, setExcursionSeleccionada }) {
     useEffect(() => void window.history.pushState(null, "", "excursiones"), []);
@@ -25,11 +23,6 @@ export function Excursiones({ setPage, setExcursionSeleccionada }) {
     const verDetalles = (excursion) => {
         setExcursionSeleccionada(excursion);
         setPage(() => DetalleExcursion);
-    };
-
-    const verGaleria = (excursion) => {
-        setExcursionSeleccionada(excursion);
-        setPage(() => MainPage);
     };
 
     useEffect(() => void loadTours(), []);

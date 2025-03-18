@@ -2,7 +2,18 @@
   "name": "Vive Ávila",
   "short_name": "Vive Ávila",
   "start_url": "/",
-  "icons": [],
+  "icons": [
+    {
+      "src": "../app-logo192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "../app-logo512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
   "theme_color": "#ffffff",
   "background_color": "#24892f",
   "display": "fullscreen",

@@ -1,19 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Navbar, Footer, dbPendingTrips, dbReservations } from './App';
+import { Navbar, Footer, dbPendingTrips, dbReservations, dbReviews } from './App';
 import './DetalleExcursion.css';
+import { where } from "firebase/firestore";
 import { MainPage } from './MainPage';
 
 let isFirstRender = true;
 
 export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcursionSeleccionada }) {
-  if (!excursionSeleccionada) return void (async () => {
-    const excursionId = window.location.pathname.split('/', 3)[2];
-    if (!excursionId) return void setPage(() => MainPage);
-    const excursionDoc = await dbPendingTrips.doc(excursionId);
-    if (!excursionDoc) return void setPage(() => MainPage);
-    setExcursionSeleccionada(excursionDoc);
-  })();
-  useEffect(() => void window.history.pushState(null, "", "detalleExcursion/" + excursionSeleccionada.docRef.id), []);
+  useEffect(() => void (excursionSeleccionada &&
+    window.history.pushState(null, "", "detalleExcursion/" + excursionSeleccionada.docRef.id)), []);
+
+  const excursionId = excursionSeleccionada?.docRef?.id
+    ?? window.location.pathname.split('/', 3)[2];
 
   const paymentButton = useRef();
   const [formDate, setFormDate] = useState(new Date().toISOString().slice(0, 10));
@@ -22,6 +20,7 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
   formPeopleCountRef.current = formPeopleCount;
 
   function makePayPalButton() {
+    if (!paymentButton.current) return void setTimeout(makePayPalButton);
     paymentButton.current.replaceChildren();
     window.paypal.Buttons({
       async createOrder(_, actions) {
@@ -53,7 +52,8 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
   if (isFirstRender) {
     const payPalScript = document.createElement("script");
     // TODO: replace with non-sandbox PayPal link?
-    payPalScript.src = "https://www.paypal.com/sdk/js?client-id=Aef6VsJkghfASmbMFTEAcagFjZkBp-_vzKJ7EVWr5wQsfsBbTUVOBw1fCZFW_f8IcOqLaTAJPaAu_hfu";
+    payPalScript.src =
+      "https://www.paypal.com/sdk/js?client-id=Aef6VsJkghfASmbMFTEAcagFjZkBp-_vzKJ7EVWr5wQsfsBbTUVOBw1fCZFW_f8IcOqLaTAJPaAu_hfu";
     payPalScript.addEventListener("load", makePayPalButton);
     document.body.appendChild(payPalScript);
   }
@@ -61,36 +61,25 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
 
   useEffect(() => window.paypal && void makePayPalButton(), []);
 
-  // TODO: replace with real reviews
-  const [comentarios] = useState([
-    {
-      usuario: "Carlos",
-      calif: 5,
-      texto: "Excelente ruta, vistas increíbles."
-    },
-    {
-      usuario: "María",
-      calif: 4,
-      texto: "Me gustó, pero fue un poco exigente."
-    },
-    {
-      usuario: "Pedro",
-      calif: 3,
-      texto: "Podría estar mejor señalizada la ruta."
-    },
-    {
-      usuario: "Ana",
-      calif: 5,
-      texto: "Fascinante experiencia, volvería sin dudar."
-    },
-  ]);
+  const [reviews, setReviews] = useState([]);
 
-  const [nuevaCalif, setNuevaCalif] = useState(5);
-  const [nuevaResena, setNuevaResena] = useState("");
-  function enviarResena() {
-    alert(`Tu reseña (${nuevaCalif} estrellas): ${nuevaResena}`);
-    setNuevaCalif(5);
-    setNuevaResena("");
+  const fetchReviews = async () =>
+    setReviews(await dbReviews.get(where("route", "==", excursionId)));
+  useEffect(() => void fetchReviews(), [])
+
+  const [newRating, setNewRating] = useState(5);
+  const [newReview, setNewReview] = useState("");
+  async function sendReview() {
+    await dbReviews.add({
+      from: user.uid,
+      username: user.username,
+      route: excursionSeleccionada.docRef.id,
+      rating: newRating,
+      text: newReview,
+    });
+    fetchReviews();
+    setNewRating(5);
+    setNewReview("");
   }
 
   // TODO: fetch guides from firestore
@@ -98,6 +87,16 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
     { nombre: "Guía Pepe", img: "https://example.com/guia1.jpg" },
     { nombre: "Guía Rosa", img: "https://example.com/guia2.jpg" },
   ];
+
+  // Este código que sirve para redireccionar al usuario debe
+  // estar acá abajo para que siempre se llame la misma cantidad
+  // de React hooks en este componente
+  if (!excursionSeleccionada) return void (async () => {
+    if (!excursionId) return void setPage(() => MainPage);
+    const excursionDoc = await dbPendingTrips.doc(excursionId);
+    if (!excursionDoc) return void setPage(() => MainPage);
+    setExcursionSeleccionada(excursionDoc);
+  })();
 
   return (
     <div className="detalleexcursion-contenedor">
@@ -231,21 +230,21 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
       <section className="detalleexcursion-comentarios">
         <h2>Comentarios</h2>
         <div className="detalleexcursion-comentarios__cards">
-          {comentarios.map((c, idx) => (
+          {reviews.map((c, idx) => (
             <div className="comentario-card" key={idx}>
               <div className="comentario-card__header">
-                <span className="comentario-card__name">{c.usuario}</span>
+                <span className="comentario-card__name">{c.username}</span>
                 <span className="comentario-card__stars">
-                  {Array.from({ length: c.calif }).map(() => "★")}
+                  {Array.from({ length: c.rating }).map(() => "★")}
                 </span>
               </div>
-              <p className="comentario-card__text">{c.texto}</p>
+              <p className="comentario-card__text">{c.text}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="detalleexcursion-review">
+      {user && <section className="detalleexcursion-review">
         <div className="detalleexcursion-review__box">
           <h3 className="review-box__title">Escribe tu reseña</h3>
           <div className="review-box__stars">
@@ -253,23 +252,23 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
               <span
                 key={num}
                 style={{ cursor: "pointer", marginRight: "5px" }}
-                onClick={() => setNuevaCalif(num)}
+                onClick={() => setNewRating(num)}
               >
-                {num <= nuevaCalif ? "★" : "☆"}
+                {num <= newRating ? "★" : "☆"}
               </span>
             ))}
           </div>
           <textarea
             className="review-box__textarea"
             placeholder="Escribe aquí tus comentarios..."
-            value={nuevaResena}
-            onChange={e => setNuevaResena(e.target.value)}
+            value={newReview}
+            onChange={e => setNewReview(e.target.value)}
           />
-          <button className="review-box__button" onClick={enviarResena}>
+          <button className="review-box__button" onClick={sendReview}>
             Publicar
           </button>
         </div>
-      </section>
+      </section>}
 
       <Footer />
     </div>

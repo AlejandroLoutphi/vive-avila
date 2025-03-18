@@ -77,6 +77,7 @@ export const dbPendingTrips = new DbCollection("pendingTrips");
 export const dbBlogArticles = new DbCollection("blogArticles");
 export const dbForumMessages = new DbCollection("forumMessages");
 export const dbReservations = new DbCollection("reservations");
+export const dbReviews = new DbCollection("reviews");
 
 const pageList = Object.freeze({
   "": () => MainPage,
@@ -222,14 +223,13 @@ export function App() {
 
   function setAndStoreUser(u) {
     if (!u) window.localStorage.removeItem("vive-avila-user");
-    else
-      window.localStorage.setItem(
-        "vive-avila-user",
-        JSON.stringify({
-          ...u,
-          auth: undefined,
-        })
-      );
+    else window.localStorage.setItem(
+      "vive-avila-user",
+      JSON.stringify({
+        ...u,
+        auth: undefined,
+      })
+    );
     setUser(u);
   }
 
