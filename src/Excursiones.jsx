@@ -8,7 +8,6 @@ const DEFAULT_IMAGE = "../sobreNosotrosInc.jpg";
 
 export function Excursiones({ setPage, setExcursionSeleccionada }) {
     useEffect(() => void window.history.pushState(null, "", "excursiones"), []);
-    const [excursiones, setExcursiones] = useState([]);
     const excursiones = useRef([]);
     const [excursionesMostradas, setExcursionesMostradas] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");

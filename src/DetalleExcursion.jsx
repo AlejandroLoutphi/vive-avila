@@ -143,18 +143,15 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
             />
           ))}
         </div>
+        <img src='./hero-background.png' />
       </header>
 
       <section className="detalleexcursion-descripcion">
         <h2 className="detalleexcursion-descripcion__title">Descripción</h2>
+        <div className="detalleexcursion-descripcion__wrapper">
         <div className="detalleexcursion-descripcion__box">
           <p className="detalleexcursion-descripcion__texto">{excursionSeleccionada.descripcion}</p>
-          <button
-            className="detalleexcursion-descripcion__button"
-            onClick={() => alert("Ver Galería")}
-          >
-            Ver Galería
-          </button>
+        </div>
         </div>
       </section>
 

@@ -1,16 +1,4 @@
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: 'Roboto', sans-serif;
-  }
-  
- 
-  .detalleexcursion-contenedor {
+.detalleexcursion-contenedor {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -18,14 +6,13 @@
     
   }
   
-
   .detalleexcursion-header {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: row;
     justify-content: space-between;
     background-color: #24892f; 
     color: #fff;
-    padding: 20px 5%; 
+    
     gap: 30px;
     height: 200px;
     min-height: fit-content;
@@ -59,6 +46,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    padding: 20px; 
   }
 
   .detalleexcursion-header__title {
@@ -103,49 +91,39 @@
   
  
   .detalleexcursion-descripcion {
-    background-color: #24892f;
+    background-color: #64966d;
     color: #fff;
     text-align: center;
-    padding: 30px 5%;
   }
   
   .detalleexcursion-descripcion__title {
-    font-size: 1.8rem;
+    font-size: 60px;
     font-weight: bold;
     margin-bottom: 20px;
+    margin-top: 20px;
   }
   
  
   .detalleexcursion-descripcion__box {
     background-color: #fff;
     color: #333;
-    max-width: 1000px;
+    max-width: 80%;
+    min-height: 200px;
     margin: 0 auto;
-    border-radius: 8px;
     padding: 20px;
     position: relative;
+  }
+
+  .detalleexcursion-descripcion__wrapper {
+    background-image: url("personasExplorando.webp");
+    padding: 50px 0;
   }
   
 
   .detalleexcursion-descripcion__texto {
-    font-size: 1rem;
+    font-size: 40px;
     line-height: 1.5;
     margin-bottom: 20px;
-  }
-  
-
-  .detalleexcursion-descripcion__button {
-    display: inline-block;
-    float: right;
-    background-color: #24892f;
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  .detalleexcursion-descripcion__button:hover {
-    background-color: #1f6e28;
   }
   
 
