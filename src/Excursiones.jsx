@@ -9,6 +9,7 @@ const DEFAULT_IMAGE =
     "https://media.discordapp.net/attachments/1213279888648306759/1350255980444778649/image.png?ex=67d61360&is=67d4c1e0&hm=f9734c9859010864c68e3c540e8c62fd1cd64af16c369c14616a29cd6a521221&=&format=webp&quality=lossless";
 
 export function Excursiones({ setPage, setExcursionSeleccionada }) {
+    useEffect(() => void window.history.pushState(null, "", "excursiones"), []);
     const [excursiones, setExcursiones] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
 
@@ -53,12 +54,15 @@ export function Excursiones({ setPage, setExcursionSeleccionada }) {
 
             {/* Hero Section */}
             <div className="excursiones-encabezado">
-                <h1>Excursiones</h1>
-                <p>
-                    Explora tus limites y acepta el reto, sera una experiencia
-                    inolvidable. Vuelvete uno con la naturaleza y aprecia la esencia de
-                    Caracas
-                </p>
+                <div className="excursiones-encabezado-l">
+                    <h1>Excursiones</h1>
+                    <p>
+                        Explora tus límites y acepta el desafío, será una experiencia
+                        inolvidable. Vuelvete uno con la naturaleza y aprecia la esencia de
+                        Caracas.
+                    </p>
+                </div>
+                <img src="excursiones avila.jpg"></img>
             </div>
 
             {/* Reserved Excursions Section */}
