@@ -2,3 +2,5 @@ node_modules
 dist
 .firebase
 .vite
+.idea
+.git

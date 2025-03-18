@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { query, getDocs, orderBy, limit, getCountFromServer } from 'firebase/firestore';
-import { Footer, Navbar, firebaseBlogArticlesCollection } from './App';
+import { orderBy, limit } from 'firebase/firestore';
+import { Footer, Navbar, dbBlogArticles } from './App';
 import './BlogGuide.css';
 
 function BlogArticle({ text }) {
     // Esto es para presentar la primera línea del artículo como el título
-    //const firstNewLineIndex = text.indexOf("\n");
     const paragraphs = text.split('\n');
     const title = paragraphs[0];
     const body = paragraphs.slice(1);
-    // Las condicionales son para handlear el caso en el que no haya \n
-    //const title = firstNewLineIndex != -1 ? text.slice(0, firstNewLineIndex) : text;
-    //const body = firstNewLineIndex != -1 ? text.slice(firstNewLineIndex) : '';
     return <div className="blog_article">
         <h2 className="blog_article_title">{title ?? ''}</h2>
         {body.map((par, idx) => <p key={idx} className="blog_article_body">{par}</p>)}
@@ -29,9 +25,8 @@ export function BlogGuide({ setPage, user }) {
     const [showMoreHidden, setShowMoreHidden] = useState(false);
 
     async function loadBlogArticles(articleCount) {
-        const q = query(firebaseBlogArticlesCollection, orderBy('date', 'desc'), limit(articleCount));
-        const querySnapshot = await getDocs(q);
-        setBlogArticles(querySnapshot.docs.map((doc) => doc.data().text));
+        const articles = await dbBlogArticles.get(orderBy('date'), limit(articleCount));
+        setBlogArticles(articles.map((article) => article.text));
     }
 
     async function showMoreArticles() {
@@ -40,12 +35,11 @@ export function BlogGuide({ setPage, user }) {
         const newShownArticleCount = shownArticleCount + 4;
         await loadBlogArticles(newShownArticleCount);
         setShownArticleCount(newShownArticleCount);
-        setShowMoreHidden(false);
+        if (newShownArticleCount <= totalArticleCount) setShowMoreHidden(false);
     }
 
     useEffect(() => void loadBlogArticles(shownArticleCount), []);
-    useEffect(() => void getCountFromServer(query(firebaseBlogArticlesCollection))
-        .then((querySnapshot) => void setTotalArticleCount(querySnapshot.data().count)), []);
+    useEffect(() => void dbBlogArticles.count().then((c) => void setTotalArticleCount(c)), []);
 
     return <>
         <Navbar setPage={setPage} user={user} />
@@ -76,5 +70,5 @@ export function BlogGuide({ setPage, user }) {
         </div>
         <Footer />
     </>;
-    
+
 }

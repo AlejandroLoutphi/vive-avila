@@ -146,11 +146,18 @@
   height: 46px;
   background-color: #ffffff;
   border: none;
+  font-size: 36px;
 }
 
 @media (max-width: 991px) {
   .search-input {
-    width: 100%;
+    width: 300px;
+  }
+}
+
+@media (max-width: 500px) {
+  .search-input {
+    width: 200px;
   }
 }
 
@@ -252,6 +259,12 @@
   margin-top: 80px;
 }
 
+.excursiones-none {
+  font-size: 40px;
+  margin: auto;
+  padding-bottom: 40px;
+}
+
 /* Load more button */
 .load-more-container {
   display: flex;
@@ -274,5 +287,3 @@
   cursor: pointer;
   line-height: 1;
 }
-
-

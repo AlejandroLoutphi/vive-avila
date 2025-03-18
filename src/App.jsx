@@ -1,24 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { initializeApp } from "firebase/app";
 // NOTE: use firestore lite?
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-  limit,
-  getCountFromServer,
-} from "firebase/firestore";
-import {
-  signInWithPopup,
-  onAuthStateChanged,
-  getAuth,
-  GoogleAuthProvider,
-  sendEmailVerification,
-  signOut,
-} from "firebase/auth";
+import { getFirestore, collection, addDoc, doc, getDoc, getDocs, query, where, limit, getCountFromServer }
+  from "firebase/firestore";
+import { signInWithPopup, onAuthStateChanged, getAuth, GoogleAuthProvider, sendEmailVerification, signOut }
+  from "firebase/auth";
 import { MainPage } from "./MainPage";
 import { Register } from "./Register";
 import { EditProfile } from "./EditProfile";
@@ -29,6 +15,9 @@ import { GuideHome } from "./GuideHome";
 import { Excursiones } from "./Excursiones";
 import { DetalleExcursion } from "./DetalleExcursion";
 import { Forum } from "./Forum";
+import { AdminPage } from "./AdminPage";
+import { AdminTours } from "./AdminTours";
+import { Gallery } from "./Gallery";
 import "./App.css";
 
 // Setup de Firebase
@@ -46,11 +35,50 @@ export const firebaseDb = getFirestore(firebaseApp);
 export const firebaseAuth = getAuth(firebaseApp);
 export const firebaseGoogleProvider = new GoogleAuthProvider();
 
-export const firebaseUsersCollection = collection(firebaseDb, "users");
-export const firebaseContactMessagesCollection = collection(firebaseDb, "contactMessages");
-export const firebasePendingTripsCollection = collection(firebaseDb, "pendingTrips");
-export const firebaseBlogArticlesCollection = collection(firebaseDb, "blogArticles");
-export const firebaseForumMessagesCollection = collection(firebaseDb, "forumMessages");
+class DbCollection {
+  constructor(name) {
+    this.name = name;
+    this.collection = collection(firebaseDb, name);
+  }
+
+  async get(...constraints) {
+    const q = query(this.collection, ...constraints);
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map((doc) => ({ ...doc.data(), docRef: doc.ref }));
+  }
+
+  async getOne(...constraints) {
+    const q = query(this.collection, ...constraints, limit(1));
+    const querySnapshot = await getDocs(q);
+    const doc = querySnapshot.docs[0];
+    if (!doc) return;
+    return { ...doc.data(), docRef: doc.ref };
+  }
+
+  async doc(id) {
+    const dbDoc = await getDoc(doc(firebaseDb, this.name, id));
+    return dbDoc.exists() && { ...dbDoc.data(), docRef: dbDoc.ref };
+  }
+
+  async count(...constraints) {
+    const q = query(this.collection, ...constraints);
+    const querySnapshot = await getCountFromServer(q);
+    return querySnapshot.data().count;
+  }
+
+  async add(obj) {
+    const { docRef: _, ...dbObj } = obj
+    addDoc(this.collection, dbObj);
+  }
+}
+
+export const dbUsers = new DbCollection("users");
+export const dbContactMessages = new DbCollection("contactMessages");
+export const dbPendingTrips = new DbCollection("pendingTrips");
+export const dbBlogArticles = new DbCollection("blogArticles");
+export const dbForumMessages = new DbCollection("forumMessages");
+export const dbReservations = new DbCollection("reservations");
+export const dbReviews = new DbCollection("reviews");
 
 const pageList = Object.freeze({
   "": () => MainPage,
@@ -62,6 +90,7 @@ const pageList = Object.freeze({
   excursiones: () => Excursiones,
   detalleExcursion: () => DetalleExcursion,
   forum: () => Forum,
+  gallery: () => Gallery,
 });
 const pageString = window.location.pathname.split("/", 2)[1];
 const pageStartingValue =
@@ -94,26 +123,21 @@ export function Navbar({ setPage, user }) {
         alt="Navigation logo"
       />
       <div className={`nav-links ${isOpen ? "open" : ""}`}>
-        <a
-          className="nav-item"
-          onClick={() => {
-            if (!user) return void setPage(() => MainPage);
-            switch (user.type) {
-              case UserType.student:
-                setPage(() => MainPage);
-                break;
-              case UserType.guide:
-                setPage(() => GuideHome);
-                break;
-              case UserType.admin:
-                setPage(() => MainPage);
-                break;
-            }
-          }}
-        >
-          Inicio
-        </a>
-        {(!user || user.type === UserType.student) && (
+        <a className="nav-item" onClick={() => {
+          if (!user) return void setPage(() => MainPage);
+          switch (user.type) {
+            case UserType.student:
+              setPage(() => MainPage);
+              break;
+            case UserType.guide:
+              setPage(() => GuideHome);
+              break;
+            case UserType.admin:
+              setPage(() => AdminPage);
+              break;
+          }
+        }}>Inicio</a>
+        {(!user || user.type === UserType.student) &&
           <>
             <a onClick={() => setPage(() => BlogGuide)} className="nav-item">
               Guía
@@ -124,11 +148,18 @@ export function Navbar({ setPage, user }) {
             <a onClick={() => setPage(() => Forum)} className="nav-item">
               Foro
             </a>
+            <a onClick={() => setPage(() => Gallery)} className="nav-item">
+              Galeria
+            </a>
             <a onClick={() => setPage(() => AboutUs)} className="nav-item">
               Sobre Nosotros
             </a>
           </>
-        )}
+        }
+        {user && user.type === UserType.admin && <>
+          <a onClick={() => setPage(() => AdminTours)} className="nav-item">Tours</a>
+          <a onClick={() => setPage(() => AdminTours)} className="nav-item">Actividad</a>
+        </>}
         {user ? (
           <div className="nav-dropdown-container">
             <a className="nav-item">
@@ -197,14 +228,13 @@ export function App() {
 
   function setAndStoreUser(u) {
     if (!u) window.localStorage.removeItem("vive-avila-user");
-    else
-      window.localStorage.setItem(
-        "vive-avila-user",
-        JSON.stringify({
-          ...u,
-          auth: undefined,
-        })
-      );
+    else window.localStorage.setItem(
+      "vive-avila-user",
+      JSON.stringify({
+        ...u,
+        auth: undefined,
+      })
+    );
     setUser(u);
   }
 
@@ -237,27 +267,13 @@ export function App() {
       }
       if (!userAuth.email.endsWith("@correo.unimet.edu.ve") && !userAuth.email.endsWith("@unimet.edu.ve"))
         return void addNotification("Error: Solo se permiten correos de la UNIMET");
-      const q = query(
-        firebaseUsersCollection,
-        where("email", "==", userAuth.email),
-        limit(1)
-      );
-      const querySnapshot = await getDocs(q);
-      const userDoc = querySnapshot.docs[0];
-      if (!userDoc) return;
-      const dbUser = userDoc.data();
+      const dbUser = await dbUsers.getOne(where("email", "==", userAuth.email));
       switch (dbUser.type) {
-        case UserType.student:
-          setPage(() => MainPage);
-          break;
-        case UserType.guide:
-          setPage(() => GuideHome);
-          break;
-        case UserType.admin:
-          setPage(() => MainPage);
-          break;
+        case UserType.student: setPage(() => MainPage); break;
+        case UserType.guide: setPage(() => GuideHome); break;
+        case UserType.admin: setPage(() => AdminPage); break;
       }
-      setAndStoreUser({ ...dbUser, auth: userAuth, docRef: userDoc.ref });
+      setAndStoreUser({ ...dbUser, auth: userAuth });
     });
   isFirstRender = false;
 
@@ -268,22 +284,15 @@ export function App() {
       const userAuth = result.user;
       if (!userAuth.email.endsWith("@correo.unimet.edu.ve") && !userAuth.email.endsWith("@unimet.edu.ve"))
         return void addNotification("Error: Solo se permiten correos de la UNIMET");
-      const q = query(
-        firebaseUsersCollection,
-        where("email", "==", userAuth.email),
-        limit(1)
-      );
-      const querySnapshot = await getCountFromServer(q);
-      if (querySnapshot.data().count > 0) return void setPage(() => MainPage);
-      let dbUser = {
+      if (dbUsers.count(where("email", "==", userAuth.email))) return void setPage(() => MainPage);
+      dbUsers.add({
         uid: userAuth.uid,
         username: userAuth.displayName,
         email: userAuth.email,
         phone: userAuth.phoneNumber,
         pfp: userAuth.photoURL,
         provider: UserProvider.google,
-      };
-      addDoc(firebaseUsersCollection, dbUser);
+      });
       setPage(() => MainPage);
     } catch (e) {
       switch (e.code) {
@@ -297,19 +306,17 @@ export function App() {
     }
   }
 
-  return (
-    <>
-      <Page
-        setPage={setPage}
-        user={user}
-        setAndStoreUser={setAndStoreUser}
-        addNotification={addNotification}
-        googleSignIn={googleSignIn}
-        excursionSeleccionada={excursionSeleccionada}
-        setExcursionSeleccionada={setExcursionSeleccionada}
-      />
-      {notification && <div className="notification">{notification}</div>}
-    </>
-  );
+  return <>
+    <Page
+      setPage={setPage}
+      user={user}
+      setAndStoreUser={setAndStoreUser}
+      addNotification={addNotification}
+      googleSignIn={googleSignIn}
+      excursionSeleccionada={excursionSeleccionada}
+      setExcursionSeleccionada={setExcursionSeleccionada}
+    />
+    {notification && <div className="notification">{notification}</div>}
+  </>;
 
 }

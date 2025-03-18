@@ -1,27 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Navbar, Footer, firebasePendingTripsCollection } from './App';
-import { query, getDocs, where, arrayRemove, updateDoc } from 'firebase/firestore';
+import { Navbar, Footer, dbPendingTrips } from './App';
+import { where, arrayRemove, updateDoc } from 'firebase/firestore';
 import './GuideHome.css';
 
 export function GuideHome({ user, setPage, addNotification }) {
   useEffect(() => void window.history.pushState(null, "", ""), []);
   const [tours, setTours] = useState([]);
 
-  async function loadTours() {
-    const q = query(firebasePendingTripsCollection, where("guide", "array-contains", user.uid));
-    const querySnapshot = await getDocs(q);
-    setTours(querySnapshot.docs.map((doc) => ({ ...doc.data(), docRef: doc.ref })));
-  }
+  const loadTours = () =>
+    dbPendingTrips.get(where("guide", "array-contains", user.uid)).then((tours) => setTours(tours));
+  useEffect(() => void loadTours(), []);
 
   async function cancelTrip(trip) {
     if (!window.confirm("Cancelar viaje de: " + trip.titular)) return;
-    const guideSentinel = arrayRemove(user.uid);
-    await updateDoc(trip.docRef, { guides: guideSentinel });
+    await updateDoc(trip.docRef, { guides: arrayRemove(user.uid) });
     addNotification('Viaje cancelado');
     loadTours();
   }
-
-  useEffect(() => void loadTours(), []);
 
   return (
     <div className="guide-page-container">

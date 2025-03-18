@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { addDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { firebaseAuth, firebaseUsersCollection, Footer } from "./App";
+import { firebaseAuth, Footer } from "./App";
 import './Register.css';
 import { Login } from "./Login";
 import { MainPage } from "./MainPage";
@@ -25,15 +24,14 @@ export function Register({ setPage, addNotification, googleSignIn }) {
         try {
             const userCredential = await createUserWithEmailAndPassword(firebaseAuth, formEmail, formPassword);
             const userAuth = userCredential.user;
-            const dbUser = {
+            dbUsers.add({
                 uid: userAuth.uid,
                 username: formUsername,
                 phone: formPhone,
                 email: formEmail,
                 date: formDate,
                 pfp: formPfpBase64,
-            };
-            addDoc(firebaseUsersCollection, dbUser);
+            });
             setPage(() => Login);
         } catch (e) {
             switch (e.code) {
