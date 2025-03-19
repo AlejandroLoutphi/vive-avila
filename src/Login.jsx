@@ -13,6 +13,7 @@ export function Login({ setPage, addNotification, googleSignIn }) {
     async function loginAccount(e) {
         e.preventDefault();
         signInWithEmailAndPassword(firebaseAuth, formEmail, formPassword)
+            .then(console.log('hello'))
             .catch((e) => {
                 switch (e.code) {
                     case 'auth/invalid-credential':

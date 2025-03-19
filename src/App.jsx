@@ -251,6 +251,8 @@ export function App() {
       if (!userAuth) return void setAndStoreUser();
       if (userAuth.uid === user?.uid)
         return void setAndStoreUser({ ...user, auth: userAuth });
+      if (!userAuth.email.endsWith("@correo.unimet.edu.ve") && !userAuth.email.endsWith("@unimet.edu.ve"))
+        return void addNotification("Error: Solo se permiten correos de la UNIMET");
       if (!userAuth.emailVerified) {
         signOut(firebaseAuth);
         try {
@@ -267,8 +269,6 @@ export function App() {
         }
         return;
       }
-      if (!userAuth.email.endsWith("@correo.unimet.edu.ve") && !userAuth.email.endsWith("@unimet.edu.ve"))
-        return void addNotification("Error: Solo se permiten correos de la UNIMET");
       const dbUser = await dbUsers.getOne(where("email", "==", userAuth.email));
       switch (dbUser.type) {
         case UserType.student: setPage(() => MainPage); break;

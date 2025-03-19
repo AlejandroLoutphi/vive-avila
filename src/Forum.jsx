@@ -50,7 +50,7 @@ export function Forum({ setPage, user }) {
     const userMap = Object.fromEntries(forumUsers.map((user) => [user.uid, user]));
     setMessages(dbMessages.filter((msg) => userMap[msg.from]).map((msg) => ({
       ...msg,
-      username: msg.from === user.uid ? "Tú" : userMap[msg.from].username,
+      username: msg.from === user?.uid ? "Tú" : userMap[msg.from].username,
       pfp: userMap[msg.from].pfp
     })));
   })(), []);
@@ -107,7 +107,7 @@ export function Forum({ setPage, user }) {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="form__forum">
+      {user && <form onSubmit={handleSubmit} className="form__forum">
         <input
           className="input__forum"
           type="text"
@@ -125,7 +125,7 @@ export function Forum({ setPage, user }) {
         />
         <label htmlFor="file-upload" className="img-btn__forum">IMG</label>
         <button type="submit" className="button__forum">Enviar</button>
-      </form>
+      </form>}
 
       <Footer />
     </div>
