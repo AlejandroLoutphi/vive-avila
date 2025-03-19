@@ -1,4 +1,3 @@
-
 .main-container__forum {
   display: flex;
   flex-direction: column;
@@ -7,55 +6,51 @@
 
 
 .chat-container__forum {
-  background-color: #e9f5ec; 
-  padding: 20px; 
-  margin-bottom: 30px;
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  flex: 1;
-  overflow-y: auto;
+  background-color: #e9f5ec;
 }
-
 
 .form__forum {
   display: flex;
+  flex-wrap: wrap;
+  column-gap: 10px;
+  row-gap: 10px;
   justify-content: center;
   align-items: center;
-  padding: 20px; 
-  background-color: #25d366; 
+  padding: 20px;
+  background-color: #25d366;
   position: relative;
   margin-top: auto;
-  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.3);
-  font-size: 20px; 
+  font-size: 20px;
 }
-
 
 .input__forum {
-  flex: 1;
   padding: 15px;
-  margin-right: 15px;
   border: 1px solid #ccc;
   border-radius: 10px;
-  font-size: 18px; 
+  font-size: 18px;
+  flex: 1;
+  flex-shrink: 2;
 }
 
+.ul__forum {
+  padding: 0;
+}
 
 .button__forum {
   background-color: #ffffff;
   color: #000;
   border: 1px solid #ccc;
   border-radius: 10px;
-  padding: 15px 30px; 
+  padding: 15px 30px;
   cursor: pointer;
-  font-size: 18px; 
+  font-size: 18px;
   transition: background-color 0.3s;
 }
 
 .button__forum:hover {
-  background-color: #075e54; 
-  color: white; 
+  background-color: #075e54;
+  color: white;
 }
-
 
 .img-btn__forum {
   background-color: #ffffff;
@@ -65,7 +60,6 @@
   padding: 15px 30px;
   cursor: pointer;
   font-size: 18px;
-  margin-right: 15px;
   transition: background-color 0.3s;
 }
 
@@ -78,80 +72,69 @@
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  background-color: #2c2c2c; 
-  color: white; 
-  padding: 15px;
-  margin: 20px 0;
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  width: fit-content; 
-  min-height: auto; 
+  background-color: #2c2c2c;
+  color: white;
+  margin: 20px 20px;
+  min-height: fit-content;
+  height: 240px;
 }
-
 
 .username-banner {
   background-color: #25d366;
   color: white;
-  font-size: 18px; 
+  font-size: 18px;
   text-align: center;
   font-weight: bold;
   padding: 10px;
-  width: 100%; 
+  width: 100%;
+  height: 40px;
+  min-height: fit-content;
+  align-content: center;
   box-sizing: border-box;
-  border-radius: 5px 5px 0 0;
 }
-
 
 .message-profile {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  width: 250px; 
-  height: 250px; 
-  border-radius: 15px;
-  margin-right: 15px;
-  overflow: hidden;
-  flex-grow: 1; 
-
+  height: 100%;
+  width: 100px;
+  overflow: auto;
 }
 
 .message-profile img {
-  width: 100%;
-  height: 100%; 
-  object-fit: cover; 
+  height: 200px;
+  max-width: 100%;
+  object-fit: contain;
 }
 
 .message-content {
-  flex: 1;
-  max-width: 400px; 
-  background-color: #2c2c2c; 
-  border-radius: 15px;
-  padding: 15px; 
+  max-width: 400px;
+  background-color: #2c2c2c;
+  padding: 15px;
   word-wrap: break-word;
-  font-size: 18px; 
-  color: white; 
+  font-size: 18px;
+  color: white;
 }
-
 
 .message-body {
-  font-size: 18px; 
-  line-height: 1.6; 
+  font-size: 18px;
 }
 
-
 .message-img-container {
-  width: 250px; 
-  height: auto; 
-  border-radius: 15px;
+  width: 250px;
+  height: 100%;
   overflow: hidden;
-  flex-grow: 1; 
+  flex-grow: 1;
+  align-self: center;
 }
 
 .message-img {
   width: 100%;
-  height: 100%; 
-  object-fit: cover; 
+  height: 100%;
+  max-height: 240px;
+  object-fit: contain;
 }
 
 .full-image-container {
@@ -160,7 +143,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.8); 
+  background-color: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -189,8 +172,9 @@
 .close-image-btn:hover {
   background-color: red;
 }
+
 .message-time {
-  font-size: 0.85em; 
-  color: gray; 
-  margin-top: 2px; 
+  font-size: 0.85em;
+  color: gray;
+  margin-top: 2px;
 }

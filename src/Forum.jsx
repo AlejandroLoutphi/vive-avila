@@ -8,21 +8,19 @@ export function Forum({ setPage, user }) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [image, setImage] = useState();
-  const [fullImage, setFullImage] = useState(null);
+  const [fullImage, setFullImage] = useState();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const newMessage = {
       body: message,
       from: user.uid,
-      username: "Tú",
-      pfp: user.pfp,
       time: Timestamp.now(),
     };
 
     const sendMessage = () => {
       dbForumMessages.add(newMessage);
-      setMessages([...messages, newMessage]);
+      setMessages([...messages, { ...newMessage, username: "Tú", pfp: user.pfp }]);
       setMessage("");
       setImage();
     };
@@ -42,24 +40,25 @@ export function Forum({ setPage, user }) {
     setImage(e.target.files[0]);
   };
 
-  async function loadMessages() {
+  useEffect(() => void (async () => {
     const dbMessages = await dbForumMessages.get(orderBy("time"));
     const uids = [...new Set(dbMessages.map((msg) => msg.from))];
     let forumUsers = [];
+    // Tenemos que cargar los usuarios de 30 en 30 por limitaciones de Firestore
     for (let i = 0; i < uids.length; i += 30)
       forumUsers = forumUsers.concat(await dbUsers.get(where("uid", "in", uids.slice(i, i + 30))));
     const userMap = Object.fromEntries(forumUsers.map((user) => [user.uid, user]));
-    setMessages(dbMessages.map((msg) => ({
+    setMessages(dbMessages.filter((msg) => userMap[msg.from]).map((msg) => ({
       ...msg,
-      username: msg.from === user.uid ? "Tú" : userMap[msg.from]?.username,
-      pfp: userMap[msg.from]?.pfp
+      username: msg.from === user.uid ? "Tú" : userMap[msg.from].username,
+      pfp: userMap[msg.from].pfp
     })));
-  }
+  })(), []);
+
   const formatTimestamp = (timestamp) => {
-    const date = timestamp.toDate(); 
-    return date.toLocaleTimeString("es-VE", { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric'}); 
+    const date = timestamp.toDate();
+    return date.toLocaleTimeString("es-VE", { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' });
   };
-  useEffect(() => void loadMessages(), []);
 
   return (
     <div className="main-container__forum">
@@ -84,7 +83,7 @@ export function Forum({ setPage, user }) {
               </div>
               <div className="message-content">
                 <div className="message-body">{message.body}</div>
-                <div className="message-time">{formatTimestamp(message.time)}</div> 
+                <div className="message-time">{formatTimestamp(message.time)}</div>
               </div>
               {message.img && (
                 <div className="message-img-container">
