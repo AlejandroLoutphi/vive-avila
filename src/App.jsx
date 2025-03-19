@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { initializeApp } from "firebase/app";
 // NOTE: use firestore lite?
-import { getFirestore, collection, addDoc, doc, getDoc, getDocs, query, where, limit, getCountFromServer }
+import { getFirestore, collection, addDoc, doc, getDoc, getDocs, query, where, limit, getCountFromServer, updateDoc, arrayUnion, deleteField, getDocsFromServer }
   from "firebase/firestore";
 import { signInWithPopup, onAuthStateChanged, getAuth, GoogleAuthProvider, sendEmailVerification, signOut }
   from "firebase/auth";
@@ -15,6 +15,10 @@ import { GuideHome } from "./GuideHome";
 import { Excursiones } from "./Excursiones";
 import { DetalleExcursion } from "./DetalleExcursion";
 import { Forum } from "./Forum";
+import { AdminPage } from "./AdminPage";
+import { AdminTours } from "./AdminTours";
+import { Gallery } from "./Gallery";
+import { MiPerfil } from "./MiPerfil";
 import "./App.css";
 
 // Setup de Firebase
@@ -74,6 +78,8 @@ export const dbContactMessages = new DbCollection("contactMessages");
 export const dbPendingTrips = new DbCollection("pendingTrips");
 export const dbBlogArticles = new DbCollection("blogArticles");
 export const dbForumMessages = new DbCollection("forumMessages");
+export const dbReservations = new DbCollection("reservations");
+export const dbReviews = new DbCollection("reviews");
 
 const pageList = Object.freeze({
   "": () => MainPage,
@@ -85,6 +91,8 @@ const pageList = Object.freeze({
   excursiones: () => Excursiones,
   detalleExcursion: () => DetalleExcursion,
   forum: () => Forum,
+  gallery: () => Gallery,
+  miPerfil: () => MiPerfil,
 });
 const pageString = window.location.pathname.split("/", 2)[1];
 const pageStartingValue =
@@ -127,7 +135,7 @@ export function Navbar({ setPage, user }) {
               setPage(() => GuideHome);
               break;
             case UserType.admin:
-              setPage(() => MainPage);
+              setPage(() => AdminPage);
               break;
           }
         }}>Inicio</a>
@@ -142,11 +150,18 @@ export function Navbar({ setPage, user }) {
             <a onClick={() => setPage(() => Forum)} className="nav-item">
               Foro
             </a>
+            <a onClick={() => setPage(() => Gallery)} className="nav-item">
+              Galeria
+            </a>
             <a onClick={() => setPage(() => AboutUs)} className="nav-item">
               Sobre Nosotros
             </a>
           </>
         }
+        {user && user.type === UserType.admin && <>
+          <a onClick={() => setPage(() => AdminTours)} className="nav-item">Tours</a>
+          <a onClick={() => setPage(() => AdminTours)} className="nav-item">Actividad</a>
+        </>}
         {user ? (
           <div className="nav-dropdown-container">
             <a className="nav-item">
@@ -154,7 +169,7 @@ export function Navbar({ setPage, user }) {
               {user.pfp && !user.provider && <div className="nav-pfp-wrapper"><img className="nav-pfp" src={user.pfp} /></div>}
             </a>
             <div className="nav-dropdown">
-              <a onClick={() => setPage(() => MainPage)} className="nav-item">
+              <a onClick={() => setPage(() => MiPerfil)} className="nav-item">
                 Mi Perfil
               </a>
               {!user.provider && (
@@ -215,14 +230,13 @@ export function App() {
 
   function setAndStoreUser(u) {
     if (!u) window.localStorage.removeItem("vive-avila-user");
-    else
-      window.localStorage.setItem(
-        "vive-avila-user",
-        JSON.stringify({
-          ...u,
-          auth: undefined,
-        })
-      );
+    else window.localStorage.setItem(
+      "vive-avila-user",
+      JSON.stringify({
+        ...u,
+        auth: undefined,
+      })
+    );
     setUser(u);
   }
 
@@ -237,6 +251,8 @@ export function App() {
       if (!userAuth) return void setAndStoreUser();
       if (userAuth.uid === user?.uid)
         return void setAndStoreUser({ ...user, auth: userAuth });
+      if (!userAuth.email.endsWith("@correo.unimet.edu.ve") && !userAuth.email.endsWith("@unimet.edu.ve"))
+        return void addNotification("Error: Solo se permiten correos de la UNIMET");
       if (!userAuth.emailVerified) {
         signOut(firebaseAuth);
         try {
@@ -253,13 +269,11 @@ export function App() {
         }
         return;
       }
-      if (!userAuth.email.endsWith("@correo.unimet.edu.ve") && !userAuth.email.endsWith("@unimet.edu.ve"))
-        return void addNotification("Error: Solo se permiten correos de la UNIMET");
       const dbUser = await dbUsers.getOne(where("email", "==", userAuth.email));
       switch (dbUser.type) {
         case UserType.student: setPage(() => MainPage); break;
         case UserType.guide: setPage(() => GuideHome); break;
-        case UserType.admin: setPage(() => MainPage); break;
+        case UserType.admin: setPage(() => AdminPage); break;
       }
       setAndStoreUser({ ...dbUser, auth: userAuth });
     });
@@ -308,3 +322,14 @@ export function App() {
   </>;
 
 }
+
+// console also fix imports
+//updateDoc(doc(firebaseDb, "pendingTrips/WQU5qThbW6zEFM68BHwT"), {
+//  guide: arrayUnion({
+//    uid: "VArvN9FDYIDly0QM86zX",
+//    date: "2025-04-11",
+//  })
+//});
+//updateDoc(doc(firebaseDb, "users/9aGvt9H8J3Dj9UwBw7jE"), {
+//  type: deleteField("type"),
+//});

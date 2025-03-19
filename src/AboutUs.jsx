@@ -43,7 +43,7 @@ export function AboutUs({ setPage, addNotification, user }) {
             </div>
             <img
                 loading="lazy"
-                src="personasExplorando.webp"
+                src="/personasExplorando.webp"
                 className="aboutus_hero-background"
                 alt="Hero background"
             />
@@ -52,14 +52,14 @@ export function AboutUs({ setPage, addNotification, user }) {
             <div className="aboutus_parteCentral__izq">
                 <img
                     className="aboutus_parteCentral__izq-img"
-                    src="https://cdn.pixabay.com/photo/2014/04/02/11/16/phone-305741_1280.png"
+                    src="/phone-305741_1280.webp"
                     width={170}
                 />
                 <p className="aboutus_parteCentral__izq-título1">Teléfono:</p>
                 <p className='aboutus_parteCentral__izq-texto'>(+58)424-8014532</p>
                 <img
                     className="aboutus_parteCentral__izq-img"
-                    src="https://cdn-icons-png.flaticon.com/512/9840/9840614.png"
+                    src="/9840614.png"
                     width={170}
                 />
                 <p className="aboutus_parteCentral__izq-título2">Email:</p>
