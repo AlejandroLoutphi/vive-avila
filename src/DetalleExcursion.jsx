@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Navbar, Footer, dbPendingTrips, dbReservations, dbReviews } from './App';
+import { Navbar, Footer, dbPendingTrips, dbReservations, dbReviews, dbUsers } from './App';
 import './DetalleExcursion.css';
 import { where } from "firebase/firestore";
 import { MainPage } from './MainPage';
@@ -12,6 +12,15 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
 
   const excursionId = excursionSeleccionada?.docRef?.id
     ?? window.location.pathname.split('/', 3)[2];
+
+  useEffect(() => {
+    if (!excursionSeleccionada) return void (async () => {
+      if (!excursionId) return void setPage(() => MainPage);
+      const excursionDoc = await dbPendingTrips.doc(excursionId);
+      if (!excursionDoc) return void setPage(() => MainPage);
+      setExcursionSeleccionada(excursionDoc);
+    })()
+  }, []);
 
   const paymentButton = useRef();
   const [formDate, setFormDate] = useState(new Date().toISOString().slice(0, 10));
@@ -82,21 +91,13 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
     setNewReview("");
   }
 
-  // TODO: fetch guides from firestore
-  const guiasDisponibles = [
-    { nombre: "Guía Pepe", img: "https://example.com/guia1.jpg" },
-    { nombre: "Guía Rosa", img: "https://example.com/guia2.jpg" },
-  ];
-
-  // Este código que sirve para redireccionar al usuario debe
-  // estar acá abajo para que siempre se llame la misma cantidad
-  // de React hooks en este componente
-  if (!excursionSeleccionada) return void (async () => {
-    if (!excursionId) return void setPage(() => MainPage);
-    const excursionDoc = await dbPendingTrips.doc(excursionId);
-    if (!excursionDoc) return void setPage(() => MainPage);
-    setExcursionSeleccionada(excursionDoc);
-  })();
+  const [guides, setGuides] = useState([]);
+  useEffect(() => void (excursionSeleccionada && (async () => {
+    const guideList = await dbUsers.get(where("uid", "in", excursionSeleccionada.guide.map(g => g.uid)));
+    const guideMap = Object.fromEntries(guideList.map(g => [g.uid, g]));
+    setGuides(excursionSeleccionada.guide.map(g => ({ ...guideMap[g.uid], ...g })));
+  })()), [excursionSeleccionada]);
+  if (!excursionSeleccionada) return <></>;
 
   return (
     <div className="detalleexcursion-contenedor">
@@ -149,9 +150,9 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
       <section className="detalleexcursion-descripcion">
         <h2 className="detalleexcursion-descripcion__title">Descripción</h2>
         <div className="detalleexcursion-descripcion__wrapper">
-        <div className="detalleexcursion-descripcion__box">
-          <p className="detalleexcursion-descripcion__texto">{excursionSeleccionada.descripcion}</p>
-        </div>
+          <div className="detalleexcursion-descripcion__box">
+            <p className="detalleexcursion-descripcion__texto">{excursionSeleccionada.descripcion}</p>
+          </div>
         </div>
       </section>
 
@@ -203,10 +204,10 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
               onChange={(e) => setFormPeopleCount(e.target.value)} />
             <h3 className="reserva-left__subtitle">Guía disponible:</h3>
             <div className="reserva-left__guides">
-              {guiasDisponibles.map((g, i) => (
+              {guides.map((g, i) => (
                 <div className="guide-card" key={i}>
-                  <img src={g.img} alt={g.nombre} />
-                  <span className="guide-card__name">{g.nombre}</span>
+                  <img src={g.pfp} alt={g.username} />
+                  <span className="guide-card__name">{g.username}<br />{g.date}</span>
                 </div>
               ))}
             </div>

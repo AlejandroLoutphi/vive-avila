@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { initializeApp } from "firebase/app";
 // NOTE: use firestore lite?
-import { getFirestore, collection, addDoc, doc, getDoc, getDocs, query, where, limit, getCountFromServer }
+import { getFirestore, collection, addDoc, doc, getDoc, getDocs, query, where, limit, getCountFromServer, updateDoc, arrayUnion, deleteField, getDocsFromServer }
   from "firebase/firestore";
 import { signInWithPopup, onAuthStateChanged, getAuth, GoogleAuthProvider, sendEmailVerification, signOut }
   from "firebase/auth";
@@ -322,3 +322,14 @@ export function App() {
   </>;
 
 }
+
+// console also fix imports
+//updateDoc(doc(firebaseDb, "pendingTrips/WQU5qThbW6zEFM68BHwT"), {
+//  guide: arrayUnion({
+//    uid: "VArvN9FDYIDly0QM86zX",
+//    date: "2025-04-11",
+//  })
+//});
+//updateDoc(doc(firebaseDb, "users/9aGvt9H8J3Dj9UwBw7jE"), {
+//  type: deleteField("type"),
+//});

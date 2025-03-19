@@ -1,21 +1,28 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Navbar, Footer, dbPendingTrips } from "./App";
+import { Navbar, Footer, dbPendingTrips, dbReservations } from "./App";
+import { where } from "firebase/firestore";
 import "./Excursiones.css";
 import { DetalleExcursion } from "./DetalleExcursion";
 
 // TODO: replace default image
 const DEFAULT_IMAGE = "../sobreNosotrosInc.jpg";
 
-export function Excursiones({ setPage, setExcursionSeleccionada }) {
+export function Excursiones({ setPage, setExcursionSeleccionada, user }) {
     useEffect(() => void window.history.pushState(null, "", "excursiones"), []);
     const excursiones = useRef([]);
     const [excursionesMostradas, setExcursionesMostradas] = useState([]);
+    const [reservedExcursions, setReservedExcursions] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
 
     async function loadTours() {
         try {
-            excursiones.current = await dbPendingTrips.get();
-            setExcursionesMostradas(excursiones.current);
+            excursiones.current = await dbPendingTrips.get(where("date", ">=", new Date().toISOString().slice(0, 10)));
+            if (user) {
+                const reservations = await dbReservations.get(where("reservee", "==", user.uid));
+                const reservedTrips = reservations.map((res) => res.trip);
+                setReservedExcursions(excursiones.current.filter((exc) => reservedTrips.includes(exc.docRef.id)));
+                setExcursionesMostradas(excursiones.current.filter((exc) => !reservedTrips.includes(exc.docRef.id)));
+            } else setExcursionesMostradas(excursiones.current);
         }
         catch (error) { console.error("Error loading excursions:", error); }
     }
@@ -26,11 +33,6 @@ export function Excursiones({ setPage, setExcursionSeleccionada }) {
     };
 
     useEffect(() => void loadTours(), []);
-    const reservedExcursions = [
-        { id: 1, nombre: "Excursión A" },
-        { id: 2, nombre: "Excursión B" },
-        { id: 3, nombre: "Excursión C" },
-    ];
 
     function searchTours(e) {
         const searchWord = e.target.value;
@@ -41,7 +43,7 @@ export function Excursiones({ setPage, setExcursionSeleccionada }) {
 
     return (
         <div className="excursiones-contenedor">
-            <Navbar setPage={setPage} />
+            <Navbar user={user} setPage={setPage} />
 
             {/* Hero Section */}
             <div className="excursiones-encabezado">
@@ -56,22 +58,21 @@ export function Excursiones({ setPage, setExcursionSeleccionada }) {
                 <img src="excursiones avila.jpg"></img>
             </div>
 
-            {/* Reserved Excursions Section */}
-            <div className="reserved-excursions">
+            {user && <div className="reserved-excursions">
                 <div className="reserved-excursions-header">
                     <h2 className="reserved-excursions-title">Excursiones reservadas</h2>
                     <div className="reserved-excursions-list">
-                        {reservedExcursions.map((excursion) => (
-                            <div className="reserved-excursion-item" key={excursion.id}>
-                                <h3 className="reserved-excursion-name">{excursion.nombre}</h3>
-                                <button className="reserved-excursion-details">
+                        {reservedExcursions.map((exc) => (
+                            <div className="reserved-excursion-item" key={exc.docRef.id}>
+                                <h3 className="reserved-excursion-name">{exc.ruta}</h3>
+                                <button className="reserved-excursion-details" onClick={() => verDetalles(exc)}>
                                     Ver detalles
                                 </button>
                             </div>
                         ))}
                     </div>
                 </div>
-            </div>
+            </div>}
 
             {/* Search Section */}
             <div className="search-container">
