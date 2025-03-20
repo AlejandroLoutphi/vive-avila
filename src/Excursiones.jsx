@@ -37,7 +37,7 @@ export function Excursiones({ setPage, setExcursionSeleccionada, user }) {
         const searchWord = e.target.value;
         setSearchTerm(searchWord);
         setExcursionesMostradas(excursiones.current.filter((tour) =>
-            tour.ruta.toLowerCase().includes(searchWord)));
+            tour.ruta.toLowerCase().includes(searchWord.toLowerCase())));
     }
 
     return (

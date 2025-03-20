@@ -124,7 +124,7 @@
 }
 
 .detalleexcursion-descripcion__wrapper {
-  background-image: url("personasExplorando.webp");
+  background-image: url("../personasExplorando.webp");
   padding: 50px 0;
 }
 
@@ -193,7 +193,7 @@
 }
 
 .detalleexcursion-puntos__wrapper {
-  background-image: url(".//landscape.png");
+  background-image: url("../landscape.png");
   padding: 50px 0;
 
 }

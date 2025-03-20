@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, doc, getDoc, getDocs, query, where, limit, getCountFromServer, updateDoc, arrayUnion, deleteField, getDocsFromServer }
+import { getFirestore, collection, addDoc, doc, getDoc, getDocs, query, where, limit, getCountFromServer }
   from "firebase/firestore";
 import { signInWithPopup, onAuthStateChanged, getAuth, GoogleAuthProvider, sendEmailVerification, signOut }
   from "firebase/auth";
