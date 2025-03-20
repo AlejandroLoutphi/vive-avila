@@ -15,21 +15,6 @@ export function AdminPage({ setPage, user, addNotification }) {
   return (
     <div className="admin-page-container">
       <Navbar setPage={setPage} user={user} />
-      {/*
-      <nav className="admin-navbar">
-        <img
-          src="/nav-logo.png"
-          alt="Vive-Ávila Logo"
-          className="admin-nav-logo"
-        />
-        <div className="admin-nav-links">
-          <a className="admin-nav-item">Inicio</a>
-          <a className="admin-nav-item">Tours</a>
-          <a className="admin-nav-item">Actividad</a>
-          <a className="admin-nav-item">Perfil</a>
-        </div>
-      </nav>
-      */}
       <header className="admin-banner">
         <h1 className="admin-banner-title">HAS INICIADO SESION COMO ADMINISTRADOR</h1>
       </header>
