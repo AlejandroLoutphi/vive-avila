@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './AdminTours.css';
 import { Footer, Navbar, UserType } from './App';
 import { MainPage } from './MainPage';
@@ -6,20 +6,13 @@ import { MainPage } from './MainPage';
 export function AdminTours({ setPage, user }) {
   if (!(user?.type == UserType.admin)) setPage(() => MainPage);
   useEffect(() => void window.history.pushState(null, "", "adminTours"), []);
-  const dummyTours = [
+  const [dummyTours, setDummyTours] = useState([
     {
-      nombre: 'Excursión al Pico Naiguatá',
+      nombre: 'Sabas Nieves',
       fecha: '2025-03-22',
       capacidad: 10,
       precio: '$20',
       dificultad: 'Media'
-    },
-    {
-      nombre: 'Caminata a Los Venados',
-      fecha: '2025-04-10',
-      capacidad: 15,
-      precio: '$15',
-      dificultad: 'Baja'
     },
     {
       nombre: 'Pernocta en El Ávila',
@@ -28,14 +21,14 @@ export function AdminTours({ setPage, user }) {
       precio: '$25',
       dificultad: 'Alta'
     }
-  ];
+  ]);
 
   // Falta poner la logica para quitar y agregar Tours
   function handleEdit(tour) {
     alert('Editar: ' + tour.nombre);
   }
   function handleDelete(tour) {
-    alert('Eliminar: ' + tour.nombre);
+    setDummyTours((dummyTours) => dummyTours.filter((t) => t != tour));
   }
   function handleNewTour() {
     alert('Crear nuevo Tour');

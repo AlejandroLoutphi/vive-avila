@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import './AdminPage.css';
 import { dbBlogArticles, Footer, Navbar, UserType } from './App';
 import { MainPage } from './MainPage';
