@@ -1,309 +1,504 @@
-
 .detalleexcursion-contenedor {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: #ffffff;
-    font-family: 'Jomhuria', cursive;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: #fff;
 
-  .detalleexcursion-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    background-color: #24892f; 
-    color: #fff;
-    
-    gap: 30px;
-    height: 200px;
-    min-height: fit-content;
-  }
-  .detalleexcursion-header__stats{
-    padding: auto;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: start;
-  }
-  .detalleexcursion-stat{
-      background-color: #a7d0ac;
-      padding: 10px;
-      width: 200px;
-      height: 45px;
-      color: #000;
-      font-size: 30px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      vertical-align:auto;
-  }
+}
 
+.detalleexcursion-header {
+  display: flex;
+  flex-direction: row;
   
-  
- 
-  .detalleexcursion-header__info {
-    flex: 1 1 400px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 20px; 
-  }
+  justify-content: space-between;
+  background-color: #24892f;
+  color: #fff;
 
-  .detalleexcursion-header__title {
-    font-size: 2rem;
-    font-weight: bold;
-    text-transform: uppercase;
-  }
-  
- 
-  .detalleexcursion-difficulty__circle {
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background-color: #000; 
-  }
+  gap: 30px;
+  height: 200px;
+  min-height: fit-content;
+}
 
- 
-  .detalleexcursion-stars__star {
-    color: #ffd700;
-    font-size: 1.2rem;
-   
-  }
-  
 
-    .detalleexcursion-header__gallery {
-    flex: 1 1 400px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-    gap: 10px;
-    align-items: center;
-    justify-items: center;
+
+.detalleexcursion-header__stats {
+  padding: auto;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: start;
+}
+
+.detalleexcursion-stat {
+  background-color: #a7d0ac;
+  padding: 10px;
+  width: 150%;
+  height: 45px;
+  color: #000;
+  font-size: 40px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  vertical-align: auto;
+
+}
+
+.detalleexcursion-difficulty__label{
+  margin-right: 10%;
+}
+
+.detalleexcursion-stars__label{
+  margin-right: 2.5%;
+}
+
+
+.detalleexcursion-header__info {
+  flex: 1 1 400px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 3%;
+  margin-left: 1.5%;
+}
+
+.detalleexcursion-header__title {
+  font-size: 65px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-left: 7.5%;
+  margin-bottom: 0;
+}
+
+
+.detalleexcursion-difficulty__circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #000;
+
+}
+
+
+.detalleexcursion-stars__star {
+  color: #ffd700;
+  font-size: 2.75rem;
+
+}
+
+
+.detalleexcursion-header__gallery {
+  flex: 1 1 400px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 10px;
+  align-items: center;
+  justify-items: center;
+}
+
+
+.detalleexcursion-gallery__img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border: 3px solid #fff;
+  border-radius: 4px;
+}
+
+
+.detalleexcursion-descripcion {
+  background-color: #64966d;
+  color: #fff;
+  text-align: center;
+}
+
+.detalleexcursion-descripcion__title {
+  font-size: 60px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+
+.detalleexcursion-descripcion__box {
+  background-color: #fff;
+  color: #333;
+  max-width: 80%;
+  min-height: 200px;
+  margin: 0 auto;
+  padding: 20px;
+  position: relative;
+}
+
+.detalleexcursion-descripcion__wrapper {
+  background-image: url("personasExplorando.webp");
+  padding: 50px 0;
+}
+
+
+.detalleexcursion-descripcion__texto {
+  font-size: 40px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+
+.detalleexcursion-ruta {
+  background-color: #24892f;
+  color: #fff;
+  text-align: center;
+  padding: 30px 5%;
+}
+
+.detalleexcursion-ruta__title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+
+.detalleexcursion-ruta__box {
+  background-color: #fff;
+  color: #333;
+  max-width: 1000px;
+  margin: 0 auto;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.detalleexcursion-ruta__texto {
+  flex: 1 1 300px;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.detalleexcursion-ruta__map {
+  flex: 1 1 300px;
+  max-width: 400px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+
+.detalleexcursion-puntos {
+  background-color: #98bfa2;
+  color: #333;
+  text-align: center;
+  padding: 30px 5%;
+}
+
+.detalleexcursion-puntos__title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+
+.detalleexcursion-puntos__content {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.detalleexcursion-puntos__box {
+  flex: 1 1 400px;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: left;
+  min-height: 200px;
+}
+
+.detalleexcursion-puntos__subtitle {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+
+.detalleexcursion-reserva {
+  background-color: #fff;
+  color: #333;
+  text-align: center;
+  padding: 30px 5%;
+}
+
+.detalleexcursion-reserva__title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+
+.detalleexcursion-reserva__container {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+
+.detalleexcursion-reserva__left {
+  flex: 1 1 300px;
+  background-color: #24892f;
+  color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: left;
+}
+
+.reserva-left__subtitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 10px 0 5px;
+}
+
+.reserva-left__input {
+  width: 100%;
+  max-width: 250px;
+  padding: 6px;
+  border: none;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+
+.reserva-left__guides {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.guide-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.guide-card img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+}
+
+.guide-card__name {
+  font-size: 0.9rem;
+}
+
+
+.detalleexcursion-reserva__right {
+  flex: 1 1 300px;
+  background-color: #000;
+  color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.factura-line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+
+.reserva-pay__button {
+  background-color: #24892f;
+  color: #fff;
+  border: none;
+  padding: 10px 30px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  align-self: flex-end;
+  margin-top: 20px;
+}
+
+.reserva-pay__button:hover {
+  background-color: #1f6e28;
+}
+
+
+.detalleexcursion-comentarios {
+  background-color: #24892f;
+  color: #fff;
+  padding: 30px 5%;
+  text-align: center;
+}
+
+
+.detalleexcursion-comentarios__cards {
+  max-width: 1000px;
+  margin: 0 auto 30px auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 20px;
+}
+
+
+.comentario-card {
+  background-color: #333;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.comentario-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comentario-card__name {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.comentario-card__stars {
+  color: #ffd700;
+  font-size: 1rem;
+}
+
+.comentario-card__text {
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+
+.detalleexcursion-review {
+  background-color: #24892f;
+  color: #fff;
+  text-align: center;
+  padding: 30px 5%;
+}
+
+.detalleexcursion-review__box {
+  max-width: 1000px;
+  margin: 0 auto;
+  background-color: #fff;
+  color: #333;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: left;
+}
+
+.review-box__title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.review-box__stars {
+  color: #ffd700;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.review-box__textarea {
+  width: 100%;
+  min-height: 80px;
+  resize: vertical;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.review-box__button {
+  background-color: #24892f;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  float: right;
+}
+
+.review-box__button:hover {
+  background-color: #1f6e28;
+}
+
+@media (max-width: 600px) {
+
+  .detalleexcursion-descripcion__box,
+  .detalleexcursion-ruta__box,
+  .detalleexcursion-puntos__content,
+  .detalleexcursion-reserva__container,
+  .detalleexcursion-comentarios__cards,
+  .detalleexcursion-review__box {
+    padding: 15px;
   }
-  
 
   .detalleexcursion-gallery__img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border: 3px solid #fff;
-    border-radius: 4px;
-  }
-  
- 
-  .detalleexcursion-descripcion {
-    background-color: #64966d;
-    color: #fff;
-    text-align: center;
-  }
-  
-  .detalleexcursion-descripcion__title {
-    font-size: 60px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    margin-top: 20px;
-  }
-  
-  .admin-tours-new-button {
-    background-color: #fff;
-    color: #333;
-    max-width: 80%;
-    min-height: 200px;
-    margin: 0 auto;
-    padding: 20px;
-    position: relative;
+    width: 80px;
+    height: 80px;
   }
 
-  .detalleexcursion-descripcion__wrapper {
-    background-image: url("personasExplorando.webp");
-    padding: 50px 0;
+  .comentario-card__text {
+    font-size: 0.85rem;
   }
-  
 
-  .detalleexcursion-descripcion__texto {
-    font-size: 40px;
-    line-height: 1.5;
-    margin-bottom: 20px;
+  .review-box__textarea {
+    min-height: 60px;
   }
-  
+}
 
-  .detalleexcursion-ruta {
-    background-color: #24892f;
-    color: #fff;
-    text-align: center;
-    padding: 30px 5%;
-  }
-  
-  .detalleexcursion-ruta__title {
-    font-size: 1.8rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
-  
+.detalleexcursion-header-image{
+width: 55%;
+}
 
-  .detalleexcursion-ruta__box {
-    background-color: #fff;
-    color: #333;
-    max-width: 1000px;
-    margin: 0 auto;
-    border-radius: 8px;
-    padding: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  
-  .detalleexcursion-ruta__texto {
-    flex: 1 1 300px;
-    font-size: 1rem;
-    line-height: 1.5;
-  }
-  
-  .detalleexcursion-ruta__map {
-    flex: 1 1 300px;
-    max-width: 400px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    object-fit: cover;
-  }
-  
 
-  .detalleexcursion-puntos {
-    background-color: #98bfa2; 
-    color: #333;
-    text-align: center;
-    padding: 30px 5%;
-  }
-  
-  .detalleexcursion-puntos__title {
-    font-size: 1.8rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
-  
 
-  .detalleexcursion-puntos__content {
-    max-width: 1000px;
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  
-  .detalleexcursion-puntos__box {
-    flex: 1 1 400px;
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 20px;
-    text-align: left;
-    min-height: 200px;
-  }
-  
-  .detalleexcursion-puntos__subtitle {
-    font-size: 1.3rem;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
+.detalleexcursion-difficulty{
+gap: 5%;
+}
 
-  .detalleexcursion-reserva {
-    background-color: #fff;
-    color: #333;
-    text-align: center;
-    padding: 30px 5%;
+.detalleexcursion-stars{
+  gap: 4.2%;
   }
-  
-  .detalleexcursion-reserva__title {
-    font-size: 1.8rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
-  
-  
-  .detalleexcursion-reserva__container {
-    max-width: 1000px;
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  
- 
-  .detalleexcursion-reserva__left {
-    flex: 1 1 300px;
-    background-color: #24892f;
-    color: #fff;
-    border-radius: 8px;
-    padding: 10px 20px;
-    height: 50px;
-  }
-  
-  .admin-tours-main {
-    padding: 30px 50px;
-  }
-  
-  .admin-tours-table {
-    width: 100%;
-    border-collapse: collapse;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-  }
-  
-  .admin-tours-table thead {
-    background-color: #4c7742;
-    color: #fff;
-  }
-  
-  .admin-tours-table th,
-  .admin-tours-table td {
-    font-size: 24px;
-    text-align: center;
-    padding: 15px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .admin-tours-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-  }
-  
-  .admin-tours-edit-button,
-  .admin-tours-delete-button {
-    border: none;
-    cursor: pointer;
-    font-size: 20px;
-    padding: 10px;
-    border-radius: 5px;
-  }
-  
-  .admin-tours-edit-button {
-    background-color: #ffe066;
-    color: #000;
-  }
-  
-  .admin-tours-delete-button {
-    background-color: #ff5757;
-    color: #fff;
-  }
-  
-  @media (max-width: 700px) {
-    .admin-tours-banner-title {
-      font-size: 32px;
+
+
+  @media (max-width: 992px) {
+    .detalleexcursion-header {
+      flex-wrap: wrap;
+      
     }
-    .admin-tours-new-button {
-      font-size: 18px;
-      height: 40px;
-    }
-    .admin-tours-table th,
-    .admin-tours-table td {
-      font-size: 18px;
-      padding: 10px;
-    }
-    .admin-tours-edit-button,
-    .admin-tours-delete-button {
-      font-size: 16px;
-      padding: 8px;
-    }
-  }
+    .detalleexcursion-header-image{
+      width: 55%;
+      display: none;
+      }
   
+      .detalleexcursion-stat {
+        background-color: #a7d0ac;
+        padding: 10px;
+        width: 80%;
+        height: 45px;
+        color: #000;
+        font-size: 40px;
+        display: flex;
+        align-items: center;
+        
+        vertical-align: auto;
+      }
+  
+      .detalleexcursion-stars{
+        gap: 3%;
+        }
+    }

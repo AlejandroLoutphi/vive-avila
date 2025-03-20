@@ -118,15 +118,6 @@ export function Excursiones({ setPage, setExcursionSeleccionada, user }) {
                     </div>
                 )}
             </div>
-
-            {/* Load More Button */}
-            {excursionesMostradas.length !== 0 &&
-                <div className="load-more-container">
-                    <button className="load-more-button">Cargar más</button>
-                </div>
-            }
-
-
             <Footer />
         </div>
     );

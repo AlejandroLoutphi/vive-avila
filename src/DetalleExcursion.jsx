@@ -118,7 +118,7 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
               ))}
             </div>
             <div className="detalleexcursion-stars detalleexcursion-stat">
-              <span className="detalleexcursion-stars__label">Calif:</span>
+              <span className="detalleexcursion-stars__label">Calificaciones:</span>
               {Array.from({ length: 5 }).map((_, i) => {
                 const fullStar = i < Math.floor(excursionSeleccionada.estrellas);
                 const halfStar = (i === Math.floor(excursionSeleccionada.estrellas)) && (excursionSeleccionada.estrellas % 1 >= 0.5);
@@ -130,7 +130,7 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
               })}
             </div>
             <span className="detalleexcursion-duration detalleexcursion-stat">
-              Duración: {excursionSeleccionada.duracion}
+              Duración: ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ {excursionSeleccionada.duracion} horas
             </span>
           </div>
         </div>
@@ -144,7 +144,7 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
             />
           ))}
         </div>
-        <img src='./hero-background.png' />
+        <img src='./hero-background.png' className='detalleexcursion-header-image' />
       </header>
 
       <section className="detalleexcursion-descripcion">
