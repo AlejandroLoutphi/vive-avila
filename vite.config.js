@@ -19,6 +19,13 @@ export default defineConfig({
 			extensions: ['.js', '.jsx', '.ts', '.tsx']
 		})
 	],
+	optimizeDeps: {
+		esbuildOptions: {
+			loader: {
+				'.js': 'jsx',
+			},
+		},
+	},
 	esbuild: {
 		loader: 'jsx',
 		include: /src\/.*\.js$/,
