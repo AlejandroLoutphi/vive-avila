@@ -1,23 +1,13 @@
 import React from 'react';
 import './AdminActivity.css';
+import { Footer, Navbar } from './App';
 
-export function AdminActivity() {
+export function AdminActivity({ setPage, user }) {
   const dummyActivities = ["Nombre de viaje", "Nombre de viaje", "Nombre de viaje"];
 
   return (
     <div className="admin-activity-container">
-      <nav className="admin-navbar">
-        <img src="/nav-logo.png" alt="Logo" className="admin-nav-logo" />
-        <div className="admin-nav-links">
-          <a className="admin-nav-item">Inicio</a>
-          <a className="admin-nav-item">Tours</a>
-          <a className="admin-nav-item">Actividad</a>
-          <a className="admin-nav-item">Perfil</a>
-        </div>
-      </nav>
-
-      <div className="admin-subpath">Inicio/Actividad</div>
-
+      <Navbar setPage={setPage} user={user} />
       <header className="admin-banner">
         <h1 className="admin-banner-title">Actividad/Admin</h1>
       </header>
@@ -95,17 +85,7 @@ export function AdminActivity() {
           <button className="activity-newclass-btn">Cambiar Escala</button>
         </div>
       </section>
-
-      <footer className="admin-footer">
-        <div className="admin-footer-content">
-          <h2 className="admin-footer-title">Vive Ávila</h2>
-          <p className="admin-footer-info">
-            Más información
-            <br />
-            (+58)424-8014532
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

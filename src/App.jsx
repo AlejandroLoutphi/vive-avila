@@ -19,6 +19,7 @@ import { AdminPage } from "./AdminPage";
 import { AdminTours } from "./AdminTours";
 import { Gallery } from "./Gallery";
 import { MiPerfil } from "./MiPerfil";
+import { AdminActivity } from "./AdminActivity"
 import "./App.css";
 
 // Setup de Firebase
@@ -160,7 +161,7 @@ export function Navbar({ setPage, user }) {
         }
         {user && user.type === UserType.admin && <>
           <a onClick={() => setPage(() => AdminTours)} className="nav-item">Tours</a>
-          <a onClick={() => setPage(() => AdminTours)} className="nav-item">Actividad</a>
+          <a onClick={() => setPage(() => AdminActivity)} className="nav-item">Actividad</a>
         </>}
         {user ? (
           <div className="nav-dropdown-container">
