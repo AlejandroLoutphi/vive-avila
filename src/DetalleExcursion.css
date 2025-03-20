@@ -30,37 +30,45 @@
 .detalleexcursion-stat {
   background-color: #a7d0ac;
   padding: 10px;
-  width: 200px;
+  width: 150%;
   height: 45px;
   color: #000;
-  font-size: 30px;
+  font-size: 40px;
   display: flex;
   align-items: center;
   gap: 5px;
   vertical-align: auto;
+
 }
 
+.detalleexcursion-difficulty__label{
+  margin-right: 10%;
+}
 
+.detalleexcursion-stars__label{
+  margin-right: 2.5%;
+}
 
 
 .detalleexcursion-header__info {
   flex: 1 1 400px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 20px;
+  margin-bottom: 3%;
+  margin-left: 1.5%;
 }
 
 .detalleexcursion-header__title {
-  font-size: 2rem;
+  font-size: 65px;
   font-weight: bold;
   text-transform: uppercase;
+  margin-left: 7.5%;
+  margin-bottom: 0;
 }
 
-
 .detalleexcursion-difficulty__circle {
-  width: 15px;
-  height: 15px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background-color: #000;
 }
@@ -68,8 +76,7 @@
 
 .detalleexcursion-stars__star {
   color: #ffd700;
-  font-size: 1.2rem;
-
+  font-size: 2.75rem;
 }
 
 
@@ -267,8 +274,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 5px;
-  border-radius: 5px;
   gap: 5px;
 }
 
@@ -424,31 +429,6 @@
   background-color: #1f6e28;
 }
 
-
-@media (max-width: 992px) {
-  .detalleexcursion-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .detalleexcursion-header__gallery {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  .detalleexcursion-ruta__box {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .detalleexcursion-ruta__map {
-    max-width: 100%;
-  }
-
-  .detalleexcursion-reserva__container {
-    flex-direction: column;
-  }
-}
-
 @media (max-width: 600px) {
 
   .detalleexcursion-descripcion__box,
@@ -473,3 +453,45 @@
     min-height: 60px;
   }
 }
+.detalleexcursion-header-image{
+width: 55%;
+}
+
+
+
+.detalleexcursion-difficulty{
+gap: 5%;
+}
+
+.detalleexcursion-stars{
+  gap: 4.2%;
+  }
+
+
+  @media (max-width: 992px) {
+    .detalleexcursion-header {
+      flex-wrap: wrap;
+      
+    }
+    .detalleexcursion-header-image{
+      width: 55%;
+      display: none;
+      }
+  
+      .detalleexcursion-stat {
+        background-color: #a7d0ac;
+        padding: 10px;
+        width: 80%;
+        height: 45px;
+        color: #000;
+        font-size: 40px;
+        display: flex;
+        align-items: center;
+        
+        vertical-align: auto;
+      }
+  
+      .detalleexcursion-stars{
+        gap: 3%;
+        }
+    }

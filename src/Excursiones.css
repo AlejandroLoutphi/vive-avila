@@ -173,6 +173,7 @@
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   gap: 35px;
+  margin-bottom: 100px;
 }
 
 @media (max-width: 991px) {
@@ -227,6 +228,8 @@
   text-align: center;
   line-height: 1;
   padding: 6.5%;
+  margin: 0;
+  
 }
 
 .excursion-info p {
@@ -263,27 +266,4 @@
   font-size: 40px;
   margin: auto;
   padding-bottom: 40px;
-}
-
-/* Load more button */
-.load-more-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 48px;
-  margin-bottom: 48px;
-}
-
-.load-more-button {
-  background-color: #24892f;
-  color: #ffffff;
-  font-size: 40px;
-  font-family: "Jomhuria", cursive;
-  border-radius: 100px;
-  padding-left: 63px;
-  padding-right: 63px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  border: none;
-  cursor: pointer;
-  line-height: 1;
 }
