@@ -23,12 +23,13 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
   }, []);
 
   const paymentButton = useRef();
-  const [formDate, setFormDate] = useState(new Date().toISOString().slice(0, 10));
+  const [formGuide, setFormGuide] = useState();
   const [formPeopleCount, setFormPeopleCount] = useState(1);
   const formPeopleCountRef = useRef(formPeopleCount);
   formPeopleCountRef.current = formPeopleCount;
 
   function makePayPalButton() {
+    if (!excursionSeleccionada) return;
     if (!paymentButton.current) return void setTimeout(makePayPalButton);
     paymentButton.current.replaceChildren();
     window.paypal.Buttons({
@@ -50,6 +51,7 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
           trip: excursionSeleccionada.docRef.id,
           peopleCount: formPeopleCountRef.current,
           paymentDate: order.create_time.slice(0, 10),
+          index: formGuide,
         });
       },
     }).render(paymentButton.current);
@@ -68,8 +70,6 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
   }
   isFirstRender = false;
 
-  useEffect(() => window.paypal && void makePayPalButton(), []);
-
   const [reviews, setReviews] = useState([]);
 
   const fetchReviews = async () =>
@@ -85,6 +85,7 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
       route: excursionSeleccionada.docRef.id,
       rating: newRating,
       text: newReview,
+      index: formGuide,
     });
     fetchReviews();
     setNewRating(5);
@@ -92,11 +93,25 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
   }
 
   const [guides, setGuides] = useState([]);
-  useEffect(() => void (excursionSeleccionada && (async () => {
+  const [hasReserved, setHasReserved] = useState(false);
+  useEffect(() => void (excursionSeleccionada && user && (async () => {
     const guideList = await dbUsers.get(where("uid", "in", excursionSeleccionada.guide.map(g => g.uid)));
     const guideMap = Object.fromEntries(guideList.map(g => [g.uid, g]));
     setGuides(excursionSeleccionada.guide.map(g => ({ ...guideMap[g.uid], ...g })));
+    const reservationsDocs = await dbReservations.get(
+      where("reservee", "==", user.uid),
+      where("trip", "==", excursionSeleccionada.docRef.id)
+    );
+    const areReservationsNew = reservationsDocs.map((res) =>
+      excursionSeleccionada.guide[res.index].date >= new Date().toISOString().slice(0, 10));
+    if (areReservationsNew.includes(true)) {
+      setFormGuide(reservationsDocs[areReservationsNew.indexOf(true)].index);
+      setHasReserved(true);
+    }
   })()), [excursionSeleccionada]);
+
+  useEffect(() => window.paypal && void makePayPalButton(), [excursionSeleccionada]);
+
   if (!excursionSeleccionada) return <></>;
 
   return (
@@ -192,22 +207,21 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
         </div>
       </section>
 
-      <section className="detalleexcursion-reserva">
+      {user && <section className="detalleexcursion-reserva">
         <h2 className="detalleexcursion-reserva__title">Reserva y Pago</h2>
         <div className="detalleexcursion-reserva__container">
           <div className="detalleexcursion-reserva__left">
-            <h3 className="reserva-left__subtitle">Elige una fecha:</h3>
-            <input type="date" className="reserva-left__input" value={formDate}
-              onChange={(e) => setFormDate(e.target.value)} />
             <h3 className="reserva-left__subtitle">Número de personas:</h3>
             <input type="number" className="reserva-left__input" min={1} value={formPeopleCount}
               onChange={(e) => setFormPeopleCount(e.target.value)} />
-            <h3 className="reserva-left__subtitle">Guía disponible:</h3>
+            <h3 className="reserva-left__subtitle">Seleccionar Guía y fecha:</h3>
             <div className="reserva-left__guides">
               {guides.map((g, i) => (
-                <div className="guide-card" key={i}>
+                <div className="guide-card"
+                  style={{ background: formGuide == i ? '#64966d' : 'none' }}
+                  key={i} onClick={() => setFormGuide(i)}>
                   <img src={g.pfp} alt={g.username} />
-                  <span className="guide-card__name">{g.username}<br />{g.date}</span>
+                  <span className="guide-card__name">{g.username}<br />{new Date(g.date).toLocaleDateString()}</span>
                 </div>
               ))}
             </div>
@@ -220,10 +234,18 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
                 </span>
               </div>
             </div>
-            <div className="reserva-pay__button" ref={paymentButton}></div>
+            <div className="reserva-pay__button"
+              hidden={hasReserved || (Number.isInteger(Number(formPeopleCount)) && (formGuide !== undefined))}>
+              Seleccione un guía, fecha y número de personas para proceder con la reserva
+            </div>
+            <div className="reserva-pay__button"
+              hidden={!hasReserved}>Excursión reservada</div>
+            <div className="reserva-pay__button"
+              hidden={hasReserved || !(Number.isInteger(Number(formPeopleCount)) && (formGuide !== undefined))}
+              ref={paymentButton}></div>
           </div>
         </div>
-      </section>
+      </section>}
 
       <section className="detalleexcursion-comentarios">
         <h2>Comentarios</h2>

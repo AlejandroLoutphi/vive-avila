@@ -9,7 +9,6 @@
 .detalleexcursion-header {
   display: flex;
   flex-direction: row;
-  
   justify-content: space-between;
   background-color: #24892f;
   color: #fff;
@@ -18,8 +17,6 @@
   height: 200px;
   min-height: fit-content;
 }
-
-
 
 .detalleexcursion-header__stats {
   padding: auto;
@@ -69,20 +66,17 @@
   margin-bottom: 0;
 }
 
-
 .detalleexcursion-difficulty__circle {
   width: 30px;
   height: 30px;
   border-radius: 50%;
   background-color: #000;
-
 }
 
 
 .detalleexcursion-stars__star {
   color: #ffd700;
   font-size: 2.75rem;
-
 }
 
 
@@ -459,7 +453,6 @@
     min-height: 60px;
   }
 }
-
 .detalleexcursion-header-image{
 width: 55%;
 }
