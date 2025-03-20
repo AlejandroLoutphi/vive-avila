@@ -42,7 +42,7 @@ export function Gallery({ user, setPage }) {
         <div className="gallery_hero-layout">
           <div className="gallery_text-column">
             <div className="gallery_text-container">
-              <h1 className="gallery_main-title">Galería</h1>
+              <h1 className="gallery_main-title">GALERÍA DE FOTOS</h1>
             </div>
           </div>
         </div>

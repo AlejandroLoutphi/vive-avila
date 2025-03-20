@@ -5,32 +5,6 @@
     font-family: 'Jomhuria', cursive;
   }
   
-  .admin-navbar {
-    background-color: #4c7742;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 50px;
-    height: 70px;
-  }
-  
-  .admin-nav-logo {
-    height: 55px;
-    cursor: pointer;
-  }
-  
-  .admin-nav-links {
-    display: flex;
-    gap: 40px;
-  }
-  
-  .admin-nav-item {
-    color: #fff;
-    font-size: 32px;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  
   .admin-banner {
     background-color: #24892f;
     text-align: center;
@@ -52,8 +26,9 @@
   }
   
   .admin-stats-box {
-    background-color: #6aaa64;
-    width: 300px;
+    background-color: #64966d;
+    width: 25%;
+    height: 450px;
     padding: 20px;
     text-align: center;
     color: #fff;
@@ -61,18 +36,18 @@
   }
   
   .admin-stats-box-title {
-    font-size: 40px;
+    font-size: 80px;
     margin: 0;
   }
   
   .admin-stats-divider {
     border: 0;
     border-bottom: 1px solid #fff;
-    margin: 10px 0;
+    margin: 35px 0;
   }
   
   .admin-stats-box p {
-    font-size: 28px;
+    font-size: 50px;
     margin: 8px 0;
   }
   
@@ -119,35 +94,7 @@
     border-radius: 8px;
   }
   
-  .admin-footer {
-    background-color: #212121;
-    color: #fff;
-    padding: 40px 80px;
-  }
-  
-  .admin-footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    text-align: center;
-  }
-  
-  .admin-footer-title {
-    font-size: 44px;
-    margin: 0;
-    text-transform: uppercase;
-  }
-  
-  .admin-footer-info {
-    font-size: 30px;
-    margin-top: 20px;
-  }
-  
   @media (max-width: 700px) {
-    .admin-navbar {
-      flex-direction: column;
-      height: auto;
-      gap: 10px;
-    }
     .admin-banner-title {
       font-size: 32px;
     }
@@ -168,12 +115,6 @@
       font-size: 20px;
       width: 100px;
       height: 45px;
-    }
-    .admin-footer-title {
-      font-size: 28px;
-    }
-    .admin-footer-info {
-      font-size: 18px;
     }
   }
   

@@ -113,6 +113,7 @@ export function Forum({ setPage, user }) {
           type="text"
           placeholder="Escribe tu mensaje..."
           value={message}
+          minLength={1}
           maxLength={1300}
           onChange={(e) => setMessage(e.target.value)}
         />

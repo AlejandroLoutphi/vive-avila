@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import './AdminPage.css';
 import { dbBlogArticles, Footer, Navbar, UserType } from './App';
 import { MainPage } from './MainPage';
@@ -25,7 +25,7 @@ export function AdminPage({ setPage, user, addNotification }) {
         <div className="admin-stats-box">
           <h2 className="admin-stats-box-title">Viajes</h2>
           <hr className="admin-stats-divider" />
-          <p>Viajes vendidos: <span>0</span></p>
+          <p>Viajes vendidos:‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎  <span>0</span></p>
           <p>Ingresos: <span>00,00$</span></p>
           <p>Guias: <span>-0%</span></p>
           <hr className="admin-stats-divider" />
