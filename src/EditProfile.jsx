@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { updateDoc } from "firebase/firestore";
 import { updatePassword } from "firebase/auth";
-import { Footer } from "./App";
+import { Footer, UserType } from "./App";
 import { MainPage } from "./MainPage";
+import { GuideHome } from "./GuideHome";
+import { AdminPage } from "./AdminPage";
 // Edit Profile (por ahora) reusa Register.css
 
 export function EditProfile({ setPage, user, setAndStoreUser, addNotification }) {
@@ -28,6 +30,20 @@ export function EditProfile({ setPage, user, setAndStoreUser, addNotification })
         setAndStoreUser({ ...user, ...fieldsToUpdate });
     }
 
+    function goToMainPage() {
+        switch (user.type) {
+            case UserType.student:
+                setPage(() => MainPage);
+                break;
+            case UserType.guide:
+                setPage(() => GuideHome);
+                break;
+            case UserType.admin:
+                setPage(() => AdminPage);
+                break;
+        }
+    }
+
     async function pfpChange(e) {
         // Para guardar la imagen en Firestore, la convertimos a Base64
         setFormPfp();
@@ -46,7 +62,7 @@ export function EditProfile({ setPage, user, setAndStoreUser, addNotification })
     return <>
         <div className="register_container">
             <div className="register_content">
-                <a className="register_back" onClick={() => setPage(() => MainPage)}>Atrás</a>
+                <a className="register_back" onClick={goToMainPage}>Atrás</a>
                 <div className="center">
                     <h1 className="register_title title">Cambia los detalles de su perfil</h1>
                 </div>

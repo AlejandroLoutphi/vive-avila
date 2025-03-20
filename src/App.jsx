@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { initializeApp } from "firebase/app";
-// NOTE: use firestore lite?
 import { getFirestore, collection, addDoc, doc, getDoc, getDocs, query, where, limit, getCountFromServer, updateDoc, arrayUnion, deleteField, getDocsFromServer }
   from "firebase/firestore";
 import { signInWithPopup, onAuthStateChanged, getAuth, GoogleAuthProvider, sendEmailVerification, signOut }
@@ -163,7 +162,7 @@ export function Navbar({ setPage, user }) {
         }
         {user && user.type === UserType.admin && <>
           <a onClick={() => setPage(() => AdminTours)} className="nav-item">Tours</a>
-          <a onClick={() => setPage(() => AdminTours)} className="nav-item">Actividad</a>
+          <a onClick={() => setPage(() => AdminActivity)} className="nav-item">Actividad</a>
         </>}
         {user ? (
           <div className="nav-dropdown-container">
@@ -321,19 +320,4 @@ export function App() {
     />
     {notification && <div className="notification">{notification}</div>}
   </>;
-
 }
-
-// console also fix imports
-//updateDoc(doc(firebaseDb, "pendingTrips/WQU5qThbW6zEFM68BHwT"), {
-//  guide: arrayUnion({
-//    uid: "VArvN9FDYIDly0QM86zX",
-//    date: "2025-04-11",
-//  })
-//});
-//updateDoc(doc(firebaseDb, "users/9aGvt9H8J3Dj9UwBw7jE"), {
-//  type: deleteField("type"),
-//});
-//updateDoc(doc(firebaseDb, "users/hGBgZvewgbiiSPFTmr65"), {
-//  type: UserType.admin,
-//});
