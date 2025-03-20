@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './AdminTours.css';
 import { Footer, Navbar, UserType } from './App';
 import { MainPage } from './MainPage';

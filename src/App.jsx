@@ -175,11 +175,9 @@ export function Navbar({ setPage, user }) {
               <a onClick={() => setPage(() => MiPerfil)} className="nav-item">
                 Mi Perfil
               </a>
-              {!user.provider && (
-                <a onClick={() => setPage(() => EditProfile)} className="nav-item">
-                  Editar Perfil
-                </a>
-              )}
+              <a onClick={() => setPage(() => EditProfile)} className="nav-item">
+                Editar Perfil
+              </a>
               <a
                 onClick={() => {
                   signOut(firebaseAuth);
@@ -289,7 +287,7 @@ export function App() {
       const userAuth = result.user;
       if (!userAuth.email.endsWith("@correo.unimet.edu.ve") && !userAuth.email.endsWith("@unimet.edu.ve"))
         return void addNotification("Error: Solo se permiten correos de la UNIMET");
-      if (dbUsers.count(where("email", "==", userAuth.email))) return void setPage(() => MainPage);
+      if (await dbUsers.count(where("email", "==", userAuth.email))) return void setPage(() => MainPage);
       dbUsers.add({
         uid: userAuth.uid,
         username: userAuth.displayName,
@@ -335,4 +333,7 @@ export function App() {
 //});
 //updateDoc(doc(firebaseDb, "users/9aGvt9H8J3Dj9UwBw7jE"), {
 //  type: deleteField("type"),
+//});
+//updateDoc(doc(firebaseDb, "users/hGBgZvewgbiiSPFTmr65"), {
+//  type: UserType.admin,
 //});

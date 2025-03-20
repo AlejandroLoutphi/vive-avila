@@ -65,13 +65,13 @@ export function EditProfile({ setPage, user, setAndStoreUser, addNotification })
                                 value={formPhone} onChange={(e) => setFormPhone(e.target.value)}
                                 className="register_phone register_field" required minLength="3" maxLength="40" />
                         </div>
-                        <div className="register_form_section_password register_form_section">
+                        {!user.provider && <div className="register_form_section_password register_form_section">
                             <label className="register_form_text" htmlFor="editProfile_password">Contraseña</label>
                             <input type="password" id="editProfile_password" name="register_password"
                                 value={formPassword} onChange={(e) => setFormPassword(e.target.value)}
                                 className="register_password register_field" minLength="6" maxLength="40"
                                 placeholder="(sin cambios)" />
-                        </div>
+                        </div>}
                     </div>
                     <div className="divisor">
                         <div className="register_form_section_pfp register_form_section">

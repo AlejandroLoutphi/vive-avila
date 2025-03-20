@@ -7,9 +7,8 @@ import { EditProfile } from "./EditProfile";
 import { AboutUs } from "./AboutUs";
 
 export function MiPerfil({ setPage, user, addNotification }) {
+  if (!user) setPage(() => MainPage);
   useEffect(() => void window.history.pushState(null, "", "profile"), []);
-  const [profilePicture] = useState(user.pfp || "default-profile.png");
-  const [name] = useState(user.username || "Nombre Apellido");
 
   function navigateTo(page) {
     if (page === "logout") {
@@ -30,11 +29,11 @@ export function MiPerfil({ setPage, user, addNotification }) {
 
       <div className="central-Miperfil">
         <img
-          src={profilePicture}
+          src={user.pfp}
           className="img_central"
           alt="Foto de perfil"
         />
-        <p className="central-name">{name}</p>
+        <p className="central-name">{user.username}</p>
       </div>
 
       <div className="lower-Miperfil">
