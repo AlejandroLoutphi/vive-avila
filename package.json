@@ -33,6 +33,8 @@
   },
   "devDependencies": {
     "@babel/preset-react": "^7.26.3",
+    "@swc/core": "^1.11.11",
+    "@swc/helpers": "^0.5.15",
     "@vitejs/plugin-react-swc": "^3.8.1",
     "vite": "^6.2.2",
     "workbox-webpack-plugin": "^7.3.0"

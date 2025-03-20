@@ -11,27 +11,39 @@ export default defineConfig({
 			workbox: {
 				clientsClaim: true,
 				skipWaiting: true,
+				globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest}']
 			},
 		}),
 		babel({
 			babelHelpers: 'bundled',
-			extensions: ['.js', '.jsx', '.ts', '.tsx'],
-		}),
+			extensions: ['.js', '.jsx', '.ts', '.tsx']
+		})
 	],
+	optimizeDeps: {
+		esbuildOptions: {
+			loader: {
+				'.js': 'jsx',
+			},
+		},
+	},
+	esbuild: {
+		loader: 'jsx',
+		include: /src\/.*\.js$/,
+	},
 	css: {
 		preprocessorOptions: {
 			css: {
-				additionalData: `@import "./src/styles/global.css";`,
-			},
-		},
+				additionalData: `@import "./src/styles/global.css";`
+			}
+		}
 	},
 	build: {
 		rollupOptions: {
 			input: './src/index.js',
 			output: {
 				dir: 'dist',
-				format: 'es',
-			},
-		},
-	},
+				format: 'es'
+			}
+		}
+	}
 });
