@@ -1,21 +1,16 @@
 import React from 'react';
 import './AdminActivity.css';
+import { Navbar, Footer, UserType } from './App';
+import { MainPage } from './MainPage';
 
-export function AdminActivity() {
+export function AdminActivity({ setPage, user }) {
+  if (!(user?.type == UserType.guide)) setPage(() => MainPage);
+  useEffect(() => void window.history.pushState(null, "", "adminTours"), []);
   const dummyActivities = ["Nombre de viaje", "Nombre de viaje", "Nombre de viaje"];
 
   return (
     <div className="admin-activity-container">
-      <nav className="admin-navbar">
-        <img src="/nav-logo.png" alt="Logo" className="admin-nav-logo" />
-        <div className="admin-nav-links">
-          <a className="admin-nav-item">Inicio</a>
-          <a className="admin-nav-item">Tours</a>
-          <a className="admin-nav-item">Actividad</a>
-          <a className="admin-nav-item">Perfil</a>
-        </div>
-      </nav>
-
+      <Navbar setPage={setPage} user={user} />
       <div className="admin-subpath">Inicio/Actividad</div>
 
       <header className="admin-banner">
@@ -95,17 +90,7 @@ export function AdminActivity() {
           <button className="activity-newclass-btn">Cambiar Escala</button>
         </div>
       </section>
-
-      <footer className="admin-footer">
-        <div className="admin-footer-content">
-          <h2 className="admin-footer-title">Vive Ávila</h2>
-          <p className="admin-footer-info">
-            Más información
-            <br />
-            (+58)424-8014532
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

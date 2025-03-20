@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Navbar, Footer, dbPendingTrips } from './App';
+import { Navbar, Footer, dbPendingTrips, UserType } from './App';
 import { where, arrayRemove, updateDoc } from 'firebase/firestore';
 import './GuideHome.css';
+import { MainPage } from './MainPage';
 
 export function GuideHome({ user, setPage, addNotification }) {
+  if (!(user?.type == UserType.guide)) setPage(() => MainPage);
   useEffect(() => void window.history.pushState(null, "", ""), []);
   const [tours, setTours] = useState([]);
 

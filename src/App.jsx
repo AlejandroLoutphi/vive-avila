@@ -20,6 +20,7 @@ import { AdminTours } from "./AdminTours";
 import { Gallery } from "./Gallery";
 import { MiPerfil } from "./MiPerfil";
 import "./App.css";
+import { AdminActivity } from "./AdminActivity";
 
 // Setup de Firebase
 const firebaseConfig = {
@@ -92,7 +93,9 @@ const pageList = Object.freeze({
   detalleExcursion: () => DetalleExcursion,
   forum: () => Forum,
   gallery: () => Gallery,
-  miPerfil: () => MiPerfil,
+  profile: () => MiPerfil,
+  adminTours: () => AdminTours,
+  adminActivity: () => AdminActivity,
 });
 const pageString = window.location.pathname.split("/", 2)[1];
 const pageStartingValue =

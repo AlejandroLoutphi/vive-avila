@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import './AdminPage.css';
-import { dbBlogArticles, Footer, Navbar } from './App';
+import { dbBlogArticles, Footer, Navbar, UserType } from './App';
+import { MainPage } from './MainPage';
 
 export function AdminPage({ setPage, user, addNotification }) {
+  if (!(user?.type == UserType.guide)) setPage(() => MainPage);
+  useEffect(() => void window.history.pushState(null, "", ""), []);
   const [newBlogPost, setNewBlogPost] = useState('');
 
   async function handlePostBlog() {

@@ -1,8 +1,11 @@
 import React from 'react';
 import './AdminTours.css';
-import { Footer, Navbar } from './App';
+import { Footer, Navbar, UserType } from './App';
+import { MainPage } from './MainPage';
 
-export function AdminTours({ setPage, user, addNotification }) {
+export function AdminTours({ setPage, user }) {
+  if (!(user?.type == UserType.guide)) setPage(() => MainPage);
+  useEffect(() => void window.history.pushState(null, "", "adminTours"), []);
   const dummyTours = [
     {
       nombre: 'Excursión al Pico Naiguatá',
