@@ -11,7 +11,6 @@ export function MiPerfil({ setPage, user, addNotification }) {
   const [profilePicture] = useState(user.pfp || "default-profile.png");
   const [name] = useState(user.username || "Nombre Apellido");
 
-
   function navigateTo(page) {
     if (page === "logout") {
       signOut(getAuth())

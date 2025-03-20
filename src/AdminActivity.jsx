@@ -4,7 +4,7 @@ import { Navbar, Footer, UserType } from './App';
 import { MainPage } from './MainPage';
 
 export function AdminActivity({ setPage, user }) {
-  if (!(user?.type == UserType.guide)) setPage(() => MainPage);
+  if (!(user?.type == UserType.admin)) setPage(() => MainPage);
   useEffect(() => void window.history.pushState(null, "", "adminTours"), []);
   const dummyActivities = ["Nombre de viaje", "Nombre de viaje", "Nombre de viaje"];
 

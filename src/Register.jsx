@@ -42,7 +42,6 @@ export function Register({ setPage, addNotification, googleSignIn }) {
                     addNotification('Error: ese email ya ha sido registrado');
                     return;
                 default:
-                    // TODO: quitar esto
                     addNotification('Error genérico');
                     console.log(e);
                     return;
@@ -66,7 +65,6 @@ export function Register({ setPage, addNotification, googleSignIn }) {
         reader.onerror = () => void addNotification('Error al subir imagen');
     }
 
-    // TODO: add loading animation
     return <>
         <div className="register_container">
             <div className="register_content">

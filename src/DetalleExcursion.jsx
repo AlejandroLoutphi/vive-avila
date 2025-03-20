@@ -57,12 +57,10 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
     }).render(paymentButton.current);
   }
 
-
   // Cargamos el script de PayPal dinámicamente la primera vez que cargamos detalleExcursion
   // makePayPalButton crea el botón de PayPal al cargar el script y al cambiar los datos
   if (isFirstRender) {
     const payPalScript = document.createElement("script");
-    // TODO: replace with non-sandbox PayPal link?
     payPalScript.src =
       "https://www.paypal.com/sdk/js?client-id=Aef6VsJkghfASmbMFTEAcagFjZkBp-_vzKJ7EVWr5wQsfsBbTUVOBw1fCZFW_f8IcOqLaTAJPaAu_hfu";
     payPalScript.addEventListener("load", makePayPalButton);

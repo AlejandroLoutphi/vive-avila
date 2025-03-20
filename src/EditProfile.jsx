@@ -43,7 +43,6 @@ export function EditProfile({ setPage, user, setAndStoreUser, addNotification })
         reader.onerror = () => void addNotification('Error al subir imagen');
     }
 
-    // TODO: add loading animation
     return <>
         <div className="register_container">
             <div className="register_content">

@@ -4,7 +4,7 @@ import { Footer, Navbar, UserType } from './App';
 import { MainPage } from './MainPage';
 
 export function AdminTours({ setPage, user }) {
-  if (!(user?.type == UserType.guide)) setPage(() => MainPage);
+  if (!(user?.type == UserType.admin)) setPage(() => MainPage);
   useEffect(() => void window.history.pushState(null, "", "adminTours"), []);
   const dummyTours = [
     {

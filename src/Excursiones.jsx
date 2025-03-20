@@ -4,7 +4,6 @@ import { where } from "firebase/firestore";
 import "./Excursiones.css";
 import { DetalleExcursion } from "./DetalleExcursion";
 
-// TODO: replace default image
 const DEFAULT_IMAGE = "../sobreNosotrosInc.jpg";
 
 export function Excursiones({ setPage, setExcursionSeleccionada, user }) {
