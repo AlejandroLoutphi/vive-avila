@@ -30,7 +30,7 @@
 }
 
 .central-name {
-    font-size: 1.5em;
+    font-size: 35px;
     font-weight: bold;
     color: #333;
 }
@@ -58,7 +58,7 @@
     padding: 8px; 
     border-radius: 5px;
     text-align: center;
-    font-size: 1.1em; 
+    font-size: 40px; 
 }
 
 .lower-right {
@@ -78,7 +78,7 @@
 }
 
 .lower-right__Editarperfil, .lower-right__Ayuda, .lower-right__Cerrarsesion {
-    font-size: 1.2em;
+    font-size: 40px;
     margin: 0;
     cursor: pointer; 
     transition: color 0.3s;

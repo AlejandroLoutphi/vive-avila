@@ -19,17 +19,17 @@ export function AdminPage({ setPage, user, addNotification }) {
     <div className="admin-page-container">
       <Navbar setPage={setPage} user={user} />
       <header className="admin-banner">
-        <h1 className="admin-banner-title">HAS INICIADO SESION COMO ADMINISTRADOR</h1>
+        <h1 className="admin-banner-title">HAS INICIADO SESIÓN COMO ADMINISTRADOR</h1>
       </header>
       <section className="admin-main-content">
         <div className="admin-stats-box">
           <h2 className="admin-stats-box-title">Viajes</h2>
           <hr className="admin-stats-divider" />
           <p>Viajes vendidos:‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎  <span>0</span></p>
-          <p>Ingresos: <span>00,00$</span></p>
-          <p>Guias: <span>-0%</span></p>
+          <p>Ingresos: ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ <span>00,00$</span></p>
+          <p>Guias: ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎  <span>-0%</span></p>
           <hr className="admin-stats-divider" />
-          <p>Total: <span>00,00</span></p>
+          <p>Total: <span>00,00$</span></p>
         </div>
       </section>
       <section className="admin-blog-publisher">

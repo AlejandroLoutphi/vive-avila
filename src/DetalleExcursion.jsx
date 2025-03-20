@@ -169,50 +169,38 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
         </div>
       </section>
 
-      <section className="detalleexcursion-ruta">
-        <h2 className="detalleexcursion-ruta__title">Ruta</h2>
-        <div className="detalleexcursion-ruta__box">
-          <div className="detalleexcursion-ruta__texto">
-            {excursionSeleccionada.rutaDescripcion}
-          </div>
-          <img
-            className="detalleexcursion-ruta__map"
-            src={excursionSeleccionada.rutaMapa}
-            alt="Mapa de la ruta"
-          />
-        </div>
-      </section>
-
       <section className="detalleexcursion-puntos">
         <h2 className="detalleexcursion-puntos__title">
           Puntos de Interés y Actividades
         </h2>
+        <div className="detalleexcursion-puntos__wrapper">
         <div className="detalleexcursion-puntos__content">
           <div className="detalleexcursion-puntos__box">
             <h3 className="detalleexcursion-puntos__subtitle">Puntos de Interés</h3>
             <ul>
-              {excursionSeleccionada.puntosInteres &&
-                excursionSeleccionada.puntosInteres.map((p, i) => <li key={i}>{p}</li>)}
+              {excursionSeleccionada.puntosDeInteres}
             </ul>
           </div>
           <div className="detalleexcursion-puntos__box">
             <h3 className="detalleexcursion-puntos__subtitle">Actividades</h3>
             <ul>
-              {excursionSeleccionada.actividades &&
-                excursionSeleccionada.actividades.map((a, i) => <li key={i}>{a}</li>)}
+              {excursionSeleccionada.actividades}
             </ul>
           </div>
         </div>
+      </div>
       </section>
 
       {user && <section className="detalleexcursion-reserva">
-        <h2 className="detalleexcursion-reserva__title">Reserva y Pago</h2>
+        <h2 className="detalleexcursion-reserva__title">Reserva</h2>
         <div className="detalleexcursion-reserva__container">
           <div className="detalleexcursion-reserva__left">
+            <h4 className='detalleexcursion-reserva__fyg'>Fecha y Guía</h4>
+          <hr className="detalleexcursion-divider" />
             <h3 className="reserva-left__subtitle">Número de personas:</h3>
             <input type="number" className="reserva-left__input" min={1} value={formPeopleCount}
               onChange={(e) => setFormPeopleCount(e.target.value)} />
-            <h3 className="reserva-left__subtitle">Seleccionar Guía y fecha:</h3>
+            <h3 className="reserva-left__subtitle">Seleccionar guía y fecha:</h3>
             <div className="reserva-left__guides">
               {guides.map((g, i) => (
                 <div className="guide-card"
@@ -225,9 +213,13 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
             </div>
           </div>
           <div className="detalleexcursion-reserva__right">
+          <h4 className='detalleexcursion-reserva__fyg'>Factura</h4>
+          <hr className="detalleexcursion-divider" />
+          <h3 className="reserva-left__subtitle">Viaje: ${(excursionSeleccionada.pricePerPersonInCents / 100).toFixed(2)}</h3>
+          <hr className="detalleexcursion-divider" />
             <div>
               <div className="factura-line">
-                <span>Precio total de viaje:</span> <span>
+                <span>Total: </span> <span>
                   ${(excursionSeleccionada.pricePerPersonInCents * formPeopleCount / 100).toFixed(2)}
                 </span>
               </div>
@@ -246,7 +238,6 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
       </section>}
 
       <section className="detalleexcursion-comentarios">
-        <h2>Comentarios</h2>
         <div className="detalleexcursion-comentarios__cards">
           {reviews.map((c, idx) => (
             <div className="comentario-card" key={idx}>
@@ -264,7 +255,7 @@ export function DetalleExcursion({ user, setPage, excursionSeleccionada, setExcu
 
       {user && <section className="detalleexcursion-review">
         <div className="detalleexcursion-review__box">
-          <h3 className="review-box__title">Escribe tu reseña</h3>
+          <h3 className="review-box__title">Escriba su reseña</h3>
           <div className="review-box__stars">
             {[1, 2, 3, 4, 5].map(num => (
               <span

@@ -23,7 +23,7 @@
 
 .register_form_text {
 	display: block;
-	font-size: 1.17em;
+	font-size: 26px;
 	margin-block-start: 1em;
 	margin-block-end: 1em;
 	margin-inline-start: 0px;
@@ -172,4 +172,9 @@
 	.register_img {
 		display: none;
 	}
+}
+
+.register_field{
+
+	font-size: 20px;
 }

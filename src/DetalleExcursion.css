@@ -41,11 +41,11 @@
 
 }
 
-.detalleexcursion-difficulty__label{
+.detalleexcursion-difficulty__label {
   margin-right: 10%;
 }
 
-.detalleexcursion-stars__label{
+.detalleexcursion-stars__label {
   margin-right: 2.5%;
 }
 
@@ -136,98 +136,88 @@
 }
 
 
-.detalleexcursion-ruta {
-  background-color: #24892f;
-  color: #fff;
-  text-align: center;
-  padding: 30px 5%;
-}
-
-.detalleexcursion-ruta__title {
-  font-size: 1.8rem;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-
-.detalleexcursion-ruta__box {
-  background-color: #fff;
-  color: #333;
-  max-width: 1000px;
-  margin: 0 auto;
-  border-radius: 8px;
-  padding: 20px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.detalleexcursion-ruta__texto {
-  flex: 1 1 300px;
-  font-size: 1rem;
-  line-height: 1.5;
-}
-
-.detalleexcursion-ruta__map {
-  flex: 1 1 300px;
-  max-width: 400px;
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  object-fit: cover;
-}
-
-
 .detalleexcursion-puntos {
-  background-color: #98bfa2;
-  color: #333;
+  background-color: #64966d;
+  color: white;
   text-align: center;
-  padding: 30px 5%;
+
 }
 
 .detalleexcursion-puntos__title {
-  font-size: 1.8rem;
+  font-size: 60px;
   font-weight: bold;
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 
 .detalleexcursion-puntos__content {
-  max-width: 1000px;
   margin: 0 auto;
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  gap: 30%;
+  max-width: 1000px;
+}
+
+@media(max-width: 991px) {
+  .detalleexcursion-puntos__content {
+    flex-wrap: wrap;
+  }
+
+
 }
 
 .detalleexcursion-puntos__box {
-  flex: 1 1 400px;
   background-color: #fff;
   border-radius: 8px;
   padding: 20px;
   text-align: left;
   min-height: 200px;
+  width: 2000px;
+}
+
+.detalleexcursion-puntos__box ul {
+  font-size: 21px;
+  color: black;
+  margin: 0;
+  padding: 0;
+  text-align: justify;
 }
 
 .detalleexcursion-puntos__subtitle {
-  font-size: 1.3rem;
+  font-size: 40px;
   font-weight: bold;
+  margin-top: 0;
+  color: blue;
+  text-decoration: underline;
   margin-bottom: 10px;
 }
 
+.detalleexcursion-puntos__wrapper {
+  background-image: url(".//landscape.png");
+  padding: 50px 0;
+
+}
 
 .detalleexcursion-reserva {
   background-color: #fff;
-  color: #333;
+  color: black;
   text-align: center;
   padding: 30px 5%;
 }
 
 .detalleexcursion-reserva__title {
-  font-size: 1.8rem;
+  font-size: 60px;
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-top: 0;
+  text-decoration: underline;
 }
 
+.detalleexcursion-reserva__fyg {
+  text-align: center;
+  font-size: 60px;
+  margin: 0;
+  padding: 0;
+}
 
 .detalleexcursion-reserva__container {
   max-width: 1000px;
@@ -237,10 +227,15 @@
   gap: 20px;
 }
 
+.detalleexcursion-divider {
+  border: 0;
+  border-bottom: 1px solid #fff;
+  margin: 0;
+}
 
 .detalleexcursion-reserva__left {
   flex: 1 1 300px;
-  background-color: #24892f;
+  background-color: #64966d;
   color: #fff;
   border-radius: 8px;
   padding: 20px;
@@ -248,7 +243,7 @@
 }
 
 .reserva-left__subtitle {
-  font-size: 1.2rem;
+  font-size: 45px;
   font-weight: bold;
   margin: 10px 0 5px;
 }
@@ -260,6 +255,7 @@
   border: none;
   border-radius: 4px;
   margin-bottom: 10px;
+  font-size: 45px;
 }
 
 
@@ -286,7 +282,8 @@
 }
 
 .guide-card__name {
-  font-size: 0.9rem;
+  font-size: 25px;
+  text-align: center;
 }
 
 
@@ -296,7 +293,7 @@
   color: #fff;
   border-radius: 8px;
   padding: 20px;
-  display: flex;
+  display: block;
   flex-direction: column;
   justify-content: space-between;
 }
@@ -306,6 +303,10 @@
   justify-content: space-between;
   margin-bottom: 8px;
   font-size: 1rem;
+}
+
+.factura-line span {
+  font-size: 45px;
 }
 
 
@@ -327,7 +328,7 @@
 
 
 .detalleexcursion-comentarios {
-  background-color: #24892f;
+  background-color: #64966d;
   color: #fff;
   padding: 30px 5%;
   text-align: center;
@@ -360,17 +361,17 @@
 }
 
 .comentario-card__name {
-  font-size: 1rem;
+  font-size: 30px;
   font-weight: bold;
 }
 
 .comentario-card__stars {
   color: #ffd700;
-  font-size: 1rem;
+  font-size: 30px;
 }
 
 .comentario-card__text {
-  font-size: 0.9rem;
+  font-size: 30px;
   line-height: 1.4;
 }
 
@@ -389,18 +390,20 @@
   color: #333;
   border-radius: 8px;
   padding: 20px;
+  padding-top: 1px;
+  padding-bottom: 50px;
   text-align: left;
 }
 
 .review-box__title {
-  font-size: 1.2rem;
+  font-size: 30px;
   font-weight: bold;
   margin-bottom: 10px;
 }
 
 .review-box__stars {
   color: #ffd700;
-  font-size: 1.1rem;
+  font-size: 30px;
   margin-bottom: 10px;
 }
 
@@ -411,7 +414,7 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 8px;
-  font-size: 1rem;
+  font-size: 20px;
   margin-bottom: 10px;
 }
 
@@ -423,6 +426,8 @@
   border-radius: 4px;
   cursor: pointer;
   float: right;
+  font-size: 25px;
+
 }
 
 .review-box__button:hover {
@@ -453,45 +458,47 @@
     min-height: 60px;
   }
 }
-.detalleexcursion-header-image{
-width: 55%;
+
+.detalleexcursion-header-image {
+  width: 55%;
 }
 
 
 
-.detalleexcursion-difficulty{
-gap: 5%;
+.detalleexcursion-difficulty {
+  gap: 5%;
 }
 
-.detalleexcursion-stars{
+.detalleexcursion-stars {
   gap: 4.2%;
+}
+
+
+@media (max-width: 992px) {
+  .detalleexcursion-header {
+    flex-wrap: wrap;
+
   }
 
+  .detalleexcursion-header-image {
+    width: 55%;
+    display: none;
+  }
 
-  @media (max-width: 992px) {
-    .detalleexcursion-header {
-      flex-wrap: wrap;
-      
-    }
-    .detalleexcursion-header-image{
-      width: 55%;
-      display: none;
-      }
-  
-      .detalleexcursion-stat {
-        background-color: #a7d0ac;
-        padding: 10px;
-        width: 80%;
-        height: 45px;
-        color: #000;
-        font-size: 40px;
-        display: flex;
-        align-items: center;
-        
-        vertical-align: auto;
-      }
-  
-      .detalleexcursion-stars{
-        gap: 3%;
-        }
-    }
+  .detalleexcursion-stat {
+    background-color: #a7d0ac;
+    padding: 10px;
+    width: 80%;
+    height: 45px;
+    color: #000;
+    font-size: 40px;
+    display: flex;
+    align-items: center;
+
+    vertical-align: auto;
+  }
+
+  .detalleexcursion-stars {
+    gap: 3%;
+  }
+}

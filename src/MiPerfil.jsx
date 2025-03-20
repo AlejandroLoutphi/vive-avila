@@ -40,13 +40,13 @@ export function MiPerfil({ setPage, user, addNotification }) {
 
         <div className="lower-left">
           <div className="lower-left__viajes">
-            <p className="lower-viajes">Viajes: 10</p>
+            <p className="lower-viajes">Viajes: ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎   0</p>
           </div>
           <div className="lower-left__Kmrecorridos">
-            <p className="lower-Kmrecorridos">Km recorridos: 120</p>
+            <p className="lower-Kmrecorridos">Km recorridos: ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ 0 Km</p>
           </div>
           <div className="lower-left__puntos">
-            <p className="lower-puntos">Puntos: 50</p>
+            <p className="lower-puntos">Puntos: ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ 0 pts</p>
           </div>
         </div>
 
