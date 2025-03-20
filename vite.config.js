@@ -11,7 +11,8 @@ export default defineConfig({
 			workbox: {
 				clientsClaim: true,
 				skipWaiting: true,
-				globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest}']
+				globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest}'],
+				maximumFileSizeToCacheInBytes: 200000000000,
 			},
 		}),
 		babel({
@@ -39,7 +40,10 @@ export default defineConfig({
 	},
 	build: {
 		rollupOptions: {
-			input: './src/index.js',
+			input: {
+				main: 'index.html',
+				app: './src/index.js'
+			},
 			output: {
 				dir: 'dist',
 				format: 'es'
